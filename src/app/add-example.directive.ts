@@ -39,12 +39,12 @@ export class AddExampleDirective {
 
     var client = new XMLHttpRequest();
     var client2 = new XMLHttpRequest();
-    client.open('GET', 'http://localhost:4201/temp.js');
+    client.open('GET', 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/temp.js');
     client.onreadystatechange = function() {
       alert(client.responseText);
     }
     client.send();
-    client2.open('GET', 'http://localhost:4201/temp.html');
+    client2.open('GET', 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/temp.html');
     client2.onreadystatechange = function() {
       alert(client2.responseText);
     }
