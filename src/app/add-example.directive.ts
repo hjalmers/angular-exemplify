@@ -1,5 +1,7 @@
-import {Directive, ElementRef, Renderer} from '@angular/core';
-import {Input} from '@angular/core';
+import {Directive, ElementRef, Renderer, AfterContentInit} from '@angular/core';
+import {Input, ViewContainerRef } from '@angular/core';
+declare var Reflect:any;
+
 
 import { Injectable } from '@angular/core';
 
@@ -15,11 +17,10 @@ export class WindowRef {
   }
 }
 
-
 @Directive({
   selector: '[AddExample]'
 })
-export class AddExampleDirective {
+export class AddExampleDirective implements AfterContentInit{
 
   @Input() target:string = 'element';
   @Input() source:string = 'element';
@@ -27,26 +28,33 @@ export class AddExampleDirective {
 
   private showMarkup: Function;
   private copyMarkup: Function;
-  private code;
+  private hostElement;
   private element;
   private renderer;
   private window;
-  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef) {
-    this.element = el;
-    this.code = el.nativeElement;
+  private parentComponentMetadata;
+  private elementId;
+  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef) {
+
+    // get parent component
+    this.parentComponentMetadata = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
+
+    this.hostElement = el.nativeElement;
     this.renderer = renderer;
     this.window = winRef.nativeWindow;
+    this.elementId = this.hostElement.getAttribute("id");
+
 
     var client = new XMLHttpRequest();
     var client2 = new XMLHttpRequest();
     client.open('GET', 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/temp.js');
     client.onreadystatechange = function() {
-      alert(client.responseText);
+      //alert(client.responseText);
     }
     client.send();
     client2.open('GET', 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/temp.html');
     client2.onreadystatechange = function() {
-      alert(client2.responseText);
+      //alert(client2.responseText);
     }
     client2.send();
   }
@@ -79,16 +87,14 @@ export class AddExampleDirective {
   };
 
   ngAfterContentInit() {
-
     /** Get host element */
-    const hostElem = this.element.nativeElement;
     let example;
     switch(this.target){
       case 'parent':
-        example = this.renderer.createElement(hostElem.parentNode.parentNode, 'div');
+        example = this.renderer.createElement(this.hostElement.parentNode.parentNode, 'div');
         break;
       default:
-        example = this.renderer.createElement(hostElem.parentNode, 'div');
+        example = this.renderer.createElement(this.hostElement.parentNode, 'div');
         break;
     }
     if(this.customClass){
@@ -108,26 +114,35 @@ export class AddExampleDirective {
     this.renderer.setElementClass(copy, 'link-copy-markup',true);
 
     /** Create markup example */
-    const pre = this.renderer.createElement(example, 'pre');
-    let code = this.renderer.createElement(pre, 'code');
-    this.renderer.setElementClass(pre, 'markup-example',true);
-    this.renderer.setElementStyle(pre, 'display','none');
+    var parser = new DOMParser();
+    var parentComponentTemplate = parser.parseFromString(this.parentComponentMetadata[0].template,"text/html");
+    let markupExampleCode = parentComponentTemplate.getElementById(this.elementId);
+    markupExampleCode.removeAttribute("addexample");
+    markupExampleCode.removeAttribute("id");
 
     /** Add markup content */
-    let text = '';
+    let markupExampleString:string;
     switch(this.source){
       case 'child':
-        text = this.code.innerHTML.replace(/ng-[\w-'="-]+/g,'').replace(/_ngcontent[\w-'="-]+/g,'').replace(/[ ]>/g,'>').replace(/[ ]>/g,'>');
+        markupExampleString = markupExampleCode.innerHTML;
         break;
       default:
-        text = this.code.outerHTML.replace(/addexample=""/,'').replace(/ng-[\w-'="-]+/g,'').replace(/_ngcontent[\w-'="-]+/g,'').replace(/[ ][ ]/g,' ').replace(/[ ]>/g,'>');
+        markupExampleString = markupExampleCode.outerHTML;
         break;
     }
-    this.renderer.createText(code,text);
+
+    const pre = this.renderer.createElement(example, 'pre');
+    const code = this.renderer.createElement(pre, 'code');
+    this.renderer.setElementClass(pre, 'markup-example',true);
+    this.renderer.setElementStyle(pre, 'display','none');
+    this.renderer.createText(code,markupExampleString);
+
 
     /** Add click listener for toggling markup example */
     this.showMarkup = this.renderer.listen(link, 'click', (event) => {
+
       event.preventDefault();
+
       if(!this.showExample) {
         this.renderer.setElementStyle(pre, 'display','block');
         this.showExample = true;
@@ -142,7 +157,7 @@ export class AddExampleDirective {
     /** Add click listener for copying markup example */
     this.copyMarkup = this.renderer.listen(copy, 'click', (event) => {
       event.preventDefault();
-      this.copyToClipboard(text);
+      this.copyToClipboard(markupExampleString);
     });
   }
 
