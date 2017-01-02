@@ -2,21 +2,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
-import {AddExampleDirective, WindowRef} from './add-example.directive';
+import { CodeExampleModule } from "../code-example/code-example.module";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AddExampleDirective
+    AppComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    CodeExampleModule
   ],
-  providers: [WindowRef],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

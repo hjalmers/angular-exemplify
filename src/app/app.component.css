@@ -1,0 +1,9 @@
+.btn-custom {
+  background: lightseagreen;
+  border: teal;
+}
+
+.btn-custom:active {
+  background: teal;
+  border: teal;
+}

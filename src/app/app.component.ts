@@ -7,17 +7,24 @@ import {Component, ViewEncapsulation} from '@angular/core';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AppComponent {
-  title = 'app works!';
-  component = this;
+  title = 'Application title!';
+  externalSources = [{
+    name:'module.ts',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts'
+  },{
+    name:'component.ts',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.ts'
+  },{
+    name:'css',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css',
+    language:'css'
+  }];
+
 
   constructor(){
   }
 
   signIn = function(){
-
     console.log('you clicked sign in');
-    console.log(Object.getPrototypeOf(this).name);
-    console.log(this.constructor);
-    console.log(this.constructor.templateUrl);
   }
 }
