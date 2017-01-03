@@ -30,8 +30,11 @@ export class AddExampleDirective implements AfterContentInit{
   @Input() usePrism:boolean = true;
   @Input() navStyle:string = 'inline';
   @Input() keepInputs:boolean = false;
+  @Input() nested:boolean = false;
+  @Input() visibility:boolean = true;
 
   private copyMarkup: Function;
+  private hideMarkup: Function;
   private hostElement;
   private element;
   private renderer;
@@ -46,6 +49,7 @@ export class AddExampleDirective implements AfterContentInit{
   private prism;
   private copyContent;
   private lastClass;
+  private toggleState;
   constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:SourceService) {
 
     this.hostElement = el.nativeElement;
@@ -101,6 +105,10 @@ export class AddExampleDirective implements AfterContentInit{
 
     /** create nav element to hold links */
     const nav = this.renderer.createElement(hostElement, 'ul');
+    const func = this.renderer.createElement(nav, 'div');
+    const funcSpan = this.renderer.createElement(func, 'span');
+    this.renderer.createText(funcSpan,'Example:');
+    this.renderer.setElementClass(funcSpan, ('exemplify-label'),true);
     this.renderer.setElementClass(nav, ('nav'),true);
     this.renderer.setElementClass(nav, ('nav-'+this.navStyle),true);
 
@@ -121,12 +129,17 @@ export class AddExampleDirective implements AfterContentInit{
       // wait until all sources have loaded...
       Observable.forkJoin(links).subscribe(
         res => {
-          this.addCopy(hostElement,nav);
-
+          this.addCopy(hostElement,func);
+          this.addHide(hostElement,func);
+          // ...add code container
+          this.addCodeContainer(hostElement);
         }
       );
     } else {
-      this.addCopy(hostElement,nav);
+      this.addCopy(hostElement,func);
+      this.addHide(hostElement,func);
+      // ...add code container
+      this.addCodeContainer(hostElement);
     }
 
   }
@@ -160,6 +173,7 @@ export class AddExampleDirective implements AfterContentInit{
     } else {
       this.renderer.setText(this.codeP,code);
     }
+    this.toggleVisibility(this.pre,true);
   };
 
   private addLink = function(hostElement,name:string,code?:any,language?:string) {
@@ -191,6 +205,23 @@ export class AddExampleDirective implements AfterContentInit{
     return renderElement;
   };
 
+  private addHide = function(hostElement,navElement) {
+    /** Create link for copying markup */
+    this.toggleState = this.renderer.createElement(navElement, 'a');
+    let toggleState = this.renderer.createText(this.toggleState,'Hide');
+    this.renderer.setElementAttribute(this.toggleState,'href','#');
+    this.renderer.setElementClass(this.toggleState, 'link-hide',true);
+    this.renderer.setElementClass(this.toggleState, 'text-muted',true);
+
+    /** Add click listener for copying markup example */
+    this.hideMarkup = this.renderer.listen(this.toggleState, 'click', (event) => {
+      event.preventDefault();
+      //let content = this.parser.parseFromString(this.code.innerHTML,"text/html").body.childNodes[0].textContent;
+      this.toggleVisibility(toggleState);
+    });
+    this.activeListeners.push(this.hideMarkup);
+  };
+
   private addCopy = function(hostElement,navElement) {
     /** Create link for copying markup */
     const copy = this.renderer.createElement(navElement, 'a');
@@ -206,9 +237,6 @@ export class AddExampleDirective implements AfterContentInit{
       this.copyToClipboard(this.copyContent);
     });
     this.activeListeners.push(this.copyMarkup);
-
-    // ...add code container
-    this.addCodeContainer(hostElement);
   };
 
 
@@ -218,8 +246,9 @@ export class AddExampleDirective implements AfterContentInit{
 
     let markupExampleCode;
 
+    console.log(markupExampleCode);
     // check if directive is nested...
-    if((<any>this._viewContainerRef)._element.parentView.parentIndex === 0){
+    if(!this.nested){
      markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
 
     } else {
@@ -231,7 +260,11 @@ export class AddExampleDirective implements AfterContentInit{
     } else {
 
       markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[addexample]')[0];
-      console.log('no id attribute set for example element, returning first match.');
+      console.log('Exemplify warning! No id set for example element, returning first match.');
+    }
+    if(typeof markupExampleCode === 'undefined'){
+      console.log('Exemplify warning! Component not found, have you applied ngIf*? If so try adding [nested]="true"');
+      return
     }
     if(this.keepInputs !== true) {
       markupExampleCode.removeAttribute("addexample");
@@ -242,6 +275,7 @@ export class AddExampleDirective implements AfterContentInit{
       markupExampleCode.removeAttribute("[customclass]");
       markupExampleCode.removeAttribute("[navstyle]");
       markupExampleCode.removeAttribute("[useprism]");
+      markupExampleCode.removeAttribute("[nested]");
     }
 
     /** Add markup content */
@@ -277,6 +311,27 @@ export class AddExampleDirective implements AfterContentInit{
     if(this.activeItem) {
       this.renderer.setElementClass(this.activeItem, 'active');
     }
+  };
+
+  private toggleVisibility = function(element, forceShow?:boolean) {
+    if(forceShow){
+      this.renderer.setElementStyle(this.pre, 'display','block');
+      this.toggleState.innerHTML = "Hide";
+      this.visibility = true;
+      return
+    }
+    if(this.visibility){
+      this.removeActiveClass();
+      this.renderer.setElementStyle(this.pre, 'display','none');
+    } else {
+      if(this.activeItem) {
+        this.renderer.setElementClass(this.activeItem, 'active', true);
+      }
+      this.renderer.setElementStyle(this.pre, 'display','block');
+    }
+    this.visibility = !this.visibility;
+    this.renderer.setText(element,this.visibility ? 'Hide':'Show');
+
   };
 
   ngOnDestroy() {

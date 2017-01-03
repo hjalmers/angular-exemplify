@@ -26,6 +26,7 @@ Run `npm install bootstrap@4.0.0-alpha.5`
 Please note the instructions below are for projects based on angular-cli, you might need to set up things differently if you're using something else.
 
 **Include scripts and styles in build**
+
 If you want to use angular exemplify together with prism, make sure to add the prism script and one of the prism theme css files to your `angular-cli.json` config, bootstrap.css is optional:
 
 ```
@@ -46,7 +47,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
-import { ExemplifyModule } from "../exemplify/exemplify.module";
+import { ExemplifyModule } from "angular-exemplify";
 
 @NgModule({
   declarations: [
@@ -83,8 +84,10 @@ View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and 
 | usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                    | true              |
 | navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info. | 'inline'          |
 | keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                     | false             |
+| nested          | boolean | is example element nested inside `*ngIf` etc.                                                                                                                         | false             |
 
 **Using external sources**
+
 To keep the examples in sync with your code you should reference the source files. Here's an example based on a app published and deployed to github pages.
 
 ```

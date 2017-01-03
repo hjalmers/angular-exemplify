@@ -8,20 +8,24 @@
   padding-top: 6px;
 }
 
-.exemplify-wrapper a.link-copy {
+.exemplify-wrapper .exemplify-label {
+  font-weight: bold;
+}
+
+.exemplify-wrapper ul.nav.nav-inline {
+  display: inline-block;
+  width: 100%;
+}
+.exemplify-wrapper ul.nav div {
+  margin-bottom: 4px;
+}
+
+.exemplify-wrapper ul.nav div > a {
   float: right;
-  z-index: 1;
-  position: relative;
+}
+.exemplify-wrapper ul.nav div > a + a {
   margin-right: 6px;
 }
-
-.exemplify-wrapper ul.nav:not(.nav-inline) a.link-copy {
-  top: 20px;
-  right: 20px;
-  float: none;
-  position: absolute;
-}
-
 .exemplify-wrapper .token.tag {
   display: inline-block;
   padding: 0;

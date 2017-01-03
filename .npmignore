@@ -1,6 +1,7 @@
 *
-!/generic-table/**/*
-!/src/generic-table/**/*
+!exemplify/**/*
+!/exemplify/**/*
+!/src/exemplify/**/*
 !/src/index.ts
 !/index.js
 !/index.js.map
