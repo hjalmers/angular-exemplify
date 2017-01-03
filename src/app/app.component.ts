@@ -9,13 +9,13 @@ import {Component, ViewEncapsulation} from '@angular/core';
 export class AppComponent {
   title = 'Application title!';
   externalSources = [{
-    name:'module.ts',
+    name:'app.module.ts',
     src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts'
   },{
-    name:'component.ts',
+    name:'app.component.ts',
     src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.ts'
   },{
-    name:'css',
+    name:'app.component.css',
     src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css',
     language:'css'
   }];

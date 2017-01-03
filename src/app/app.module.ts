@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
-import { CodeExampleModule } from "../code-example/code-example.module";
+import { ExemplifyModule } from "../exemplify/exemplify.module";
 
 @NgModule({
   declarations: [
@@ -13,7 +13,7 @@ import { CodeExampleModule } from "../code-example/code-example.module";
     BrowserModule,
     FormsModule,
     HttpModule,
-    CodeExampleModule
+    ExemplifyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

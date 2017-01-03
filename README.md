@@ -1,31 +1,102 @@
-# AngularMarkupExample
+# Angular Exemplify
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.24.
+A simple directive for adding code examples based on actual code and markup! Just add `AddExample` to your element and you're done:D
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### View [example](https://hjalmers.github.io/angular-exemplify/)
 
-## Code scaffolding
+## Dependencies
+- [Prism](http://prismjs.com/) - for highlighting (optional)
+- [Bootstrap4](https://v4-alpha.getbootstrap.com/) - for basic styling (optional)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
+Please note that you don't have to use prism and/or bootstrap with angular exemplify although it's recommended.
 
-## Build
+## Installation and usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Run `npm install --save angular-exemplify`
 
-## Running unit tests
+**If you want to use together with prism**
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm install prismjs`
 
-## Running end-to-end tests
+**If you want to use together with bootstrap 4**
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+Run `npm install bootstrap@4.0.0-alpha.5`
 
-## Deploying to Github Pages
+### Usage in angular-cli project
+Please note the instructions below are for projects based on angular-cli, you might need to set up things differently if you're using something else.
 
-Run `ng github-pages:deploy` to deploy to Github Pages.
+**Include scripts and styles in build**
+If you want to use angular exemplify together with prism, make sure to add the prism script and one of the prism theme css files to your `angular-cli.json` config, bootstrap.css is optional:
 
-## Further help
+```
+"styles": [
+  "../node_modules/bootstrap/dist/css/bootstrap.css",
+  "../node_modules/prismjs/themes/prism-coy.css",
+  "styles.css"
+],
+"scripts": [
+  "../node_modules/prismjs/prism.js"
+],
+```
 
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+**Import ExemplifyModule**
+```
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { AppComponent } from './app.component';
+import { ExemplifyModule } from "../exemplify/exemplify.module";
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    ExemplifyModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+### Basic usage
+Add `AddExample` to your element like this:
+```
+<button AddExample class="btn btn-primary" (click)="doSomething()">Action</button>
+```
+
+View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and more examples.
+
+### Options
+
+| Attribute       | Type    | Usage/description                                                                                                                                                     | Default           |
+|:----------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+| target          | element | attach example to this element, use local variable                                                                                                                    | directive element |
+| source          | string  | where to get the markup, 'element' or its 'child'                                                                                                                     | 'element'         |
+| customClass     | string  | class name added to the directive element                                                                                                                             |                   |
+| externalSources | array   | an array of objects specifying external soruces                                                                                                                       |                   |
+| usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                    | true              |
+| navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info. | 'inline'          |
+| keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                     | false             |
+
+**Using external sources**
+To keep the examples in sync with your code you should reference the source files. Here's an example based on a app published and deployed to github pages.
+
+```
+externalSources = [{
+    name:'app.module.ts',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts'
+  },{
+    name:'app.component.ts',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.ts'
+  },{
+    name:'app.component.css',
+    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css',
+    language:'css'
+  }]
+```

@@ -11,4 +11,4 @@ import {WindowRef, AddExampleDirective} from "./directives/add-example.directive
   declarations: [AddExampleDirective],
   exports: [AddExampleDirective]
 })
-export class CodeExampleModule { }
+export class ExemplifyModule { }

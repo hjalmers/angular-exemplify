@@ -19,8 +19,8 @@
       "mobile": false,
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/prismjs/themes/prism-coy.css",
         "styles.css"
-
       ],
       "scripts": [
         "../node_modules/prismjs/prism.js"

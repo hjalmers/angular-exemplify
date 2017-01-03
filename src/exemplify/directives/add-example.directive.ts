@@ -2,8 +2,6 @@ import {Directive, ElementRef, Renderer, AfterContentInit} from '@angular/core';
 import {Input, ViewContainerRef } from '@angular/core';
 declare var Reflect:any;
 
-
-
 import { Injectable } from '@angular/core';
 import {SourceService} from "../services/source.service";
 import {Observable} from "rxjs";
@@ -27,8 +25,8 @@ export class AddExampleDirective implements AfterContentInit{
 
   @Input() target;
   @Input() source:string = 'element';
-  @Input() customClass:any = false;
-  @Input() externalSources:Array<any>;
+  @Input() customClass:string;
+  @Input() externalSources:Array<ExternalSource>;
   @Input() usePrism:boolean = true;
   @Input() navStyle:string = 'inline';
   @Input() keepInputs:boolean = false;
@@ -96,7 +94,7 @@ export class AddExampleDirective implements AfterContentInit{
       hostElement = this.renderer.createElement(this.hostElement, 'div');
     }
 
-    this.renderer.setElementClass(hostElement,'example-code-container',true);
+    this.renderer.setElementClass(hostElement,'exemplify-wrapper',true);
     if(this.customClass){
       this.renderer.setElementClass(hostElement, this.customClass,true);
     }
@@ -135,7 +133,7 @@ export class AddExampleDirective implements AfterContentInit{
 
   private showCode = function(code:string,language:string = 'markup'){
     this.copyContent = code;
-    if(this.usePrism) {
+    if(this.usePrism && this.prism) {
       // remove last used class name (needed to clear class)
       if(this.lastClass){
         this.renderer.setElementClass(this.pre, 'language-'+this.lastClass,false);
@@ -158,7 +156,7 @@ export class AddExampleDirective implements AfterContentInit{
           language = 'markup';
           break;
       }
-      this.code.innerHTML = this.prism.highlight(code,this.window.Prism.languages[language]);
+      this.code.innerHTML = this.prism.highlight(code,this.prism.languages[language]);
     } else {
       this.renderer.setText(this.codeP,code);
     }
@@ -283,7 +281,6 @@ export class AddExampleDirective implements AfterContentInit{
 
   ngOnDestroy() {
 
-
     /** Remove click listeners */
     this.removeListeners();
 
@@ -291,3 +288,8 @@ export class AddExampleDirective implements AfterContentInit{
 
 }
 
+export interface ExternalSource {
+  src: string;
+  name: string;
+  language?: string;
+}
