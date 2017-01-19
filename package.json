@@ -14,7 +14,7 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor",
-    "clean": "rimraf exemplify \"index.@(js|js.map|d.ts|metadata.json)\"",
+    "clean": "rimraf exemplify \"index.@(js|js.map|d.ts|metadata.json|ngsummary.json)\"",
     "clean:factory": "rimraf \"exemplify/**/*.ngfactory.ts\"",
     "copy:css": "copyfiles -f src/exemplify/css/exemplify.css exemplify/css",
     "prebuild": "npm run -s clean",
