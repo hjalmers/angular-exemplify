@@ -1,6 +1,6 @@
 # Angular Exemplify
 
-A simple directive for adding code examples based on actual code and markup! Just add `AddExample` to your element and you're done:D
+A simple angular 2+ directive for adding code examples based on actual code and markup! Just add `AddExample` to your element and you're done:D
 
 ### View [example](https://hjalmers.github.io/angular-exemplify/)
 
@@ -12,15 +12,15 @@ Please note that you don't have to use prism and/or bootstrap with angular exemp
 
 ## Installation and usage
 
-Run `npm install --save angular-exemplify`
+Run `npm install angular-exemplify --save-dev`
 
 **If you want to use together with prism**
 
-Run `npm install prismjs`
+Run `npm install prismjs --save-dev`
 
 **If you want to use together with bootstrap 4**
 
-Run `npm install bootstrap@4.0.0-alpha.5`
+Run `npm install bootstrap@4.0.0-alpha.6`
 
 ### Usage in angular-cli project
 Please note the instructions below are for projects based on angular-cli, you might need to set up things differently if you're using something else.
@@ -33,6 +33,7 @@ If you want to use angular exemplify together with prism, make sure to add the p
 "styles": [
   "../node_modules/bootstrap/dist/css/bootstrap.css",
   "../node_modules/prismjs/themes/prism-coy.css",
+  "../node_modules/angular-exemplify/exemplify/css/exemplify.css",
   "styles.css"
 ],
 "scripts": [
@@ -66,10 +67,12 @@ export class AppModule { }
 ```
 
 ### Basic usage
-Add `AddExample` to your element like this:
+Add `exemplify` to your element like this:
 ```
-<button AddExample class="btn btn-primary" (click)="doSomething()">Action</button>
+<button exemplify="myExample" class="btn btn-primary" (click)="doSomething()">Action</button>
 ```
+
+Where `myExample` should be a unique identifier for your example.
 
 View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and more examples.
 
@@ -80,11 +83,14 @@ View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and 
 | target          | element | attach example to this element, use local variable                                                                                                                    | directive element |
 | source          | string  | where to get the markup, 'element' or its 'child'                                                                                                                     | 'element'         |
 | customClass     | string  | class name added to the directive element                                                                                                                             |                   |
-| externalSources | array   | an array of objects specifying external soruces                                                                                                                       |                   |
+| externalSources | array   | an array of objects specifying external sources                                                                                                                       |                   |
 | usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                    | true              |
 | navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info. | 'inline'          |
 | keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                     | false             |
 | nested          | boolean | is example element nested inside `*ngIf` etc.                                                                                                                         | false             |
+| angularInputs   | array   | an array with input strings used by angular components in the example (only necessary for inputs that are written using camel case), see issue #1 for more info.      |                   |
+| texts           | object  | override default texts by passing an object containing one or more of the following properties: `heading`,`markup`,`show`,`hide`,`copy`                               |                   |
+
 
 **Using external sources**
 

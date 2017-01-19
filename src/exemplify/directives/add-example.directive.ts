@@ -19,7 +19,7 @@ export class WindowRef {
 }
 
 @Directive({
-  selector: '[AddExample]'
+  selector: '[exemplify]'
 })
 export class AddExampleDirective implements AfterContentInit{
 
@@ -32,6 +32,9 @@ export class AddExampleDirective implements AfterContentInit{
   @Input() keepInputs:boolean = false;
   @Input() nested:boolean = false;
   @Input() visibility:boolean = true;
+  @Input() texts:ExemplifyTexts;
+  @Input('exemplify') exemplifyId: string;
+  @Input() angularInputs: Array<string>;
 
   private copyMarkup: Function;
   private hideMarkup: Function;
@@ -50,12 +53,21 @@ export class AddExampleDirective implements AfterContentInit{
   private copyContent;
   private lastClass;
   private toggleState;
+  private defaultTexts:ExemplifyTexts= {
+    heading:"Code:",
+    markup:"markup",
+    copy:"Copy",
+    show:"Show",
+    hide:"Hide",
+  }
   constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:SourceService) {
 
     this.hostElement = el.nativeElement;
     this.renderer = renderer;
     this.window = winRef.nativeWindow;
     this.elementId = this.hostElement.getAttribute("id");
+
+    console.log(el);
     this.parser = new DOMParser();
     this.prism = winRef.nativeWindow.Prism;
 
@@ -89,6 +101,7 @@ export class AddExampleDirective implements AfterContentInit{
 
 
   ngAfterContentInit() {
+    this.texts = <ExemplifyTexts>this.extend(this.defaultTexts,this.texts);
 
     /** Get host element */
     let hostElement;
@@ -103,18 +116,21 @@ export class AddExampleDirective implements AfterContentInit{
       this.renderer.setElementClass(hostElement, this.customClass,true);
     }
 
-    /** create nav element to hold links */
-    const nav = this.renderer.createElement(hostElement, 'ul');
-    const func = this.renderer.createElement(nav, 'div');
+    /** create div element to hold heading, hide/show and copy */
+    const func = this.renderer.createElement(hostElement, 'div');
+    this.renderer.setElementClass(func, ('exemplify-bar'),true);
     const funcSpan = this.renderer.createElement(func, 'span');
-    this.renderer.createText(funcSpan,'Example:');
+    this.renderer.createText(funcSpan,this.texts.heading);
     this.renderer.setElementClass(funcSpan, ('exemplify-label'),true);
-    this.renderer.setElementClass(nav, ('nav'),true);
-    this.renderer.setElementClass(nav, ('nav-'+this.navStyle),true);
+
 
     if(this.externalSources) {
+      /** create nav element to hold links */
+      const nav = this.renderer.createElement(hostElement, 'ul');
+      this.renderer.setElementClass(nav, ('nav'),true);
+      this.renderer.setElementClass(nav, ('nav-'+this.navStyle),true);
       /** Create link for toggling markup */
-      this.addLink(nav,'html', this.getHtmlMarkup());
+      this.addLink(nav,this.texts.markup, this.getHtmlMarkup());
 
       let links:Array<Observable<string>> = [];
       for (let i = 0; i < this.externalSources.length;i++) {
@@ -208,7 +224,7 @@ export class AddExampleDirective implements AfterContentInit{
   private addHide = function(hostElement,navElement) {
     /** Create link for copying markup */
     this.toggleState = this.renderer.createElement(navElement, 'a');
-    let toggleState = this.renderer.createText(this.toggleState,'Hide');
+    let toggleState = this.renderer.createText(this.toggleState,this.texts.hide);
     this.renderer.setElementAttribute(this.toggleState,'href','#');
     this.renderer.setElementClass(this.toggleState, 'link-hide',true);
     this.renderer.setElementClass(this.toggleState, 'text-muted',true);
@@ -225,7 +241,7 @@ export class AddExampleDirective implements AfterContentInit{
   private addCopy = function(hostElement,navElement) {
     /** Create link for copying markup */
     const copy = this.renderer.createElement(navElement, 'a');
-    this.renderer.createText(copy,'Copy');
+    this.renderer.createText(copy,this.texts.copy);
     this.renderer.setElementAttribute(copy,'href','#');
     this.renderer.setElementClass(copy, 'link-copy',true);
     this.renderer.setElementClass(copy, 'text-muted',true);
@@ -246,7 +262,6 @@ export class AddExampleDirective implements AfterContentInit{
 
     let markupExampleCode;
 
-    console.log(markupExampleCode);
     // check if directive is nested...
     if(!this.nested){
      markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
@@ -257,17 +272,25 @@ export class AddExampleDirective implements AfterContentInit{
 
     if(this.elementId) {
       markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").getElementById(this.elementId);
-    } else {
+    } else if(this.exemplifyId){
 
-      markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[addexample]')[0];
+      const selector = '[exemplify="' +this.exemplifyId + '"]';
+      const content = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll(selector);
+      if(content.length > 1) {
+        console.log('Exemplify warning! Multiple elements are using: "' + this.exemplifyId + '" as a identifier for the example, it should be a unique id. Returning first match.');
+      }
+      markupExampleCode = content[0];
+
+    } else {
       console.log('Exemplify warning! No id set for example element, returning first match.');
+      markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[exemplify]')[0];
     }
     if(typeof markupExampleCode === 'undefined'){
       console.log('Exemplify warning! Component not found, have you applied ngIf*? If so try adding [nested]="true"');
       return
     }
     if(this.keepInputs !== true) {
-      markupExampleCode.removeAttribute("addexample");
+      markupExampleCode.removeAttribute("exemplify");
       markupExampleCode.removeAttribute("id");
       markupExampleCode.removeAttribute("[externalsources]");
       markupExampleCode.removeAttribute("[source]");
@@ -276,6 +299,7 @@ export class AddExampleDirective implements AfterContentInit{
       markupExampleCode.removeAttribute("[navstyle]");
       markupExampleCode.removeAttribute("[useprism]");
       markupExampleCode.removeAttribute("[nested]");
+      markupExampleCode.removeAttribute("[angularinputs]");
     }
 
     /** Add markup content */
@@ -287,6 +311,19 @@ export class AddExampleDirective implements AfterContentInit{
       default:
         markupExampleString = markupExampleCode.outerHTML;
         break;
+    }
+    if(this.keepInputs === true) {
+      // keep original format ie. avoid attributes being transformed into lowercase
+      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[angularinputs]=/,'[angularInputs]=');
+    }
+    if(this.angularInputs) {
+
+      // loop through items to and reset their casing, useful for inputs that will be converted to lower case otherwise
+      for(let i = 0; i < this.angularInputs.length; i++) {
+        const lower = new RegExp('\\['+this.angularInputs[i].toLowerCase()+']',"g");
+        markupExampleString = markupExampleString.replace(lower,'['+this.angularInputs[i]+']');
+      }
+
     }
     return markupExampleString;
   };
@@ -316,7 +353,7 @@ export class AddExampleDirective implements AfterContentInit{
   private toggleVisibility = function(element, forceShow?:boolean) {
     if(forceShow){
       this.renderer.setElementStyle(this.pre, 'display','block');
-      this.toggleState.innerHTML = "Hide";
+      this.toggleState.innerHTML = this.texts.hide;
       this.visibility = true;
       return
     }
@@ -330,8 +367,18 @@ export class AddExampleDirective implements AfterContentInit{
       this.renderer.setElementStyle(this.pre, 'display','block');
     }
     this.visibility = !this.visibility;
-    this.renderer.setText(element,this.visibility ? 'Hide':'Show');
+    this.renderer.setText(element,this.visibility ? this.texts.hide:this.texts.show);
 
+  };
+
+  /**
+   *  Extend object function.
+   */
+  private extend =function(a:Object, b:Object){
+    for(let key in b)
+      if(b.hasOwnProperty(key))
+        a[key] = b[key];
+    return a;
   };
 
   ngOnDestroy() {
@@ -347,4 +394,12 @@ export interface ExternalSource {
   src: string;
   name: string;
   language?: string;
+}
+
+export interface ExemplifyTexts {
+  heading?:string;
+  markup?:string;
+  copy?:string;
+  show?:string;
+  hide?:string;
 }

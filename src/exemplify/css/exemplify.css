@@ -15,11 +15,14 @@
   margin-bottom: 4px;
 }
 
-.exemplify-wrapper ul.nav div > a {
+.exemplify-wrapper > div.exemplify-bar > a {
   float: right;
 }
-.exemplify-wrapper ul.nav div > a + a {
+.exemplify-wrapper > div.exemplify-bar > a + a {
   margin-right: 6px;
+}
+.exemplify-wrapper > div.exemplify-bar {
+  margin-bottom: 6px;
 }
 .exemplify-wrapper .token.tag {
   display: inline-block;
@@ -27,5 +30,4 @@
   font-size: inherit;
   font-weight: normal;
   line-height: 1;
-
 }
