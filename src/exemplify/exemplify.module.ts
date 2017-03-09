@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {SourceService} from "./services/source.service";
-import {WindowRef, AddExampleDirective} from "./directives/add-example.directive";
+import {ExmplifySourceService} from "./services/source.service";
+import {WindowRef, ExemplifyDirective} from "./directives/exemplify.directive";
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  providers: [WindowRef, SourceService],
-  declarations: [AddExampleDirective],
-  exports: [AddExampleDirective]
+  providers: [WindowRef, ExmplifySourceService],
+  declarations: [ExemplifyDirective],
+  exports: [ExemplifyDirective]
 })
 export class ExemplifyModule { }

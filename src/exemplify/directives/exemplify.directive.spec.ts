@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { AddExampleDirective } from './add-example.directive';
+import { ExemplifyDirective } from './exemplify.directive';
 
-describe('Directive: AddExample', () => {
+describe('Directive: Exemplify', () => {
   it('should create an instance', () => {
-    let directive = new AddExampleDirective();
+    let directive = new ExemplifyDirective();
     expect(directive).toBeTruthy();
   });
 });

@@ -15,12 +15,6 @@
   margin-bottom: 4px;
 }
 
-.exemplify-wrapper > div.exemplify-bar > a {
-  float: right;
-}
-.exemplify-wrapper > div.exemplify-bar > a + a {
-  margin-right: 6px;
-}
 .exemplify-wrapper > div.exemplify-bar {
   margin-bottom: 6px;
 }
@@ -30,4 +24,34 @@
   font-size: inherit;
   font-weight: normal;
   line-height: 1;
+}
+
+.exemplify-wrapper > .exemplify-bar {
+  display: flex;
+}
+
+.exemplify-wrapper > .exemplify-bar a.link-copy {
+  order: 2;
+}
+
+.exemplify-wrapper > .exemplify-bar a.link-hide {
+  order: 1;
+}
+
+.exemplify-wrapper > .exemplify-bar > a {
+  margin-left: 6px;
+}
+
+.exemplify-wrapper pre.markup-example code {
+  animation: fade-in 1000ms ease-in-out;
+  opacity: 1;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

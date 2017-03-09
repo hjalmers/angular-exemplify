@@ -3,7 +3,7 @@ import {Input, ViewContainerRef } from '@angular/core';
 declare var Reflect:any;
 
 import { Injectable } from '@angular/core';
-import {SourceService} from "../services/source.service";
+import {ExmplifySourceService} from "../services/source.service";
 import {Observable} from "rxjs";
 
 function _window() : any {
@@ -21,7 +21,7 @@ export class WindowRef {
 @Directive({
   selector: '[exemplify]'
 })
-export class AddExampleDirective implements AfterContentInit{
+export class ExemplifyDirective implements AfterContentInit{
 
   @Input() target;
   @Input() source:string = 'element';
@@ -31,11 +31,10 @@ export class AddExampleDirective implements AfterContentInit{
   @Input() navStyle:string = 'inline';
   @Input() keepInputs:boolean = false;
   @Input() nested:boolean = false;
-  @Input() visibility:boolean = true;
+  @Input('show') visibility:boolean = false;
   @Input() texts:ExemplifyTexts;
   @Input('exemplify') exemplifyId: string;
-  @Input() escapeStrings: Array<string>;
-
+  @Input() escapeStrings: Array<string> = [];
 
   private copyMarkup: Function;
   private hideMarkup: Function;
@@ -61,14 +60,15 @@ export class AddExampleDirective implements AfterContentInit{
     show:"Show",
     hide:"Hide",
   };
-  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:SourceService) {
+  private escapeAngularDirectives = [
+    '*ngIf','*ngFor','*ngPluralCase','*ngSwitchCase','*ngSwitchDefault','ngClass','ngPlural','ngStyle','ngSwitch','ngTemplateOutlet','[ngIf]','[ngFor]','[ngForOf]','[ngPluralCase]','[ngSwitchCase]','[ngSwitchDefault]'
+  ];
+  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:ExmplifySourceService) {
 
     this.hostElement = el.nativeElement;
     this.renderer = renderer;
     this.window = winRef.nativeWindow;
     this.elementId = this.hostElement.getAttribute("id");
-
-    console.log(el);
     this.parser = new DOMParser();
     this.prism = winRef.nativeWindow.Prism;
 
@@ -103,6 +103,9 @@ export class AddExampleDirective implements AfterContentInit{
 
   ngAfterContentInit() {
     this.texts = <ExemplifyTexts>this.extend(this.defaultTexts,this.texts);
+
+    // add angular directives to the list of strings to escape
+    this.escapeStrings.push(...this.escapeAngularDirectives);
 
     /** Get host element */
     let hostElement;
@@ -161,7 +164,7 @@ export class AddExampleDirective implements AfterContentInit{
 
   }
 
-  private showCode = function(code:string,language:string = 'markup'){
+  private showCode = function(code:string,language:string = 'markup', forceShow?:boolean){
     this.copyContent = code;
     if(this.usePrism && this.prism) {
       // remove last used class name (needed to clear class)
@@ -190,7 +193,7 @@ export class AddExampleDirective implements AfterContentInit{
     } else {
       this.renderer.setText(this.codeP,code);
     }
-    this.toggleVisibility(this.pre,true);
+    this.toggleVisibility(this.pre,forceShow ? forceShow:this.visibility);
   };
 
   private addLink = function(hostElement,name:string,code?:any,language?:string) {
@@ -205,7 +208,9 @@ export class AddExampleDirective implements AfterContentInit{
     this.renderer.setElementClass(renderElement, 'link-' + name.toLowerCase().replace(/[ ._]/g,'-'),true);
 
     if(this.activeListeners.length === 0){
-      this.renderer.setElementClass(renderElement, 'active',true);
+      if(this.visibility) {
+        this.renderer.setElementClass(renderElement, 'active',true);
+      }
       this.activeItem = renderElement;
     }
 
@@ -214,7 +219,7 @@ export class AddExampleDirective implements AfterContentInit{
       this.removeActiveClass();
 
       this.renderer.setElementClass(renderElement, 'active',true);
-      this.showCode(code,language);
+      this.showCode(code,language,true);
       this.activeItem = renderElement;
       event.preventDefault();
     });
@@ -228,7 +233,6 @@ export class AddExampleDirective implements AfterContentInit{
     let toggleState = this.renderer.createText(this.toggleState,this.texts.hide);
     this.renderer.setElementAttribute(this.toggleState,'href','#');
     this.renderer.setElementClass(this.toggleState, 'link-hide',true);
-    this.renderer.setElementClass(this.toggleState, 'text-muted',true);
 
     /** Add click listener for copying markup example */
     this.hideMarkup = this.renderer.listen(this.toggleState, 'click', (event) => {
@@ -245,7 +249,6 @@ export class AddExampleDirective implements AfterContentInit{
     this.renderer.createText(copy,this.texts.copy);
     this.renderer.setElementAttribute(copy,'href','#');
     this.renderer.setElementClass(copy, 'link-copy',true);
-    this.renderer.setElementClass(copy, 'text-muted',true);
 
     /** Add click listener for copying markup example */
     this.copyMarkup = this.renderer.listen(copy, 'click', (event) => {
@@ -301,6 +304,7 @@ export class AddExampleDirective implements AfterContentInit{
       markupExampleCode.removeAttribute("[useprism]");
       markupExampleCode.removeAttribute("[nested]");
       markupExampleCode.removeAttribute("[escapestrings]");
+      markupExampleCode.removeAttribute("[show]");
     }
 
     /** Add markup content */
@@ -315,13 +319,13 @@ export class AddExampleDirective implements AfterContentInit{
     }
     if(this.keepInputs === true) {
       // keep original format ie. avoid attributes being transformed into lowercase
-      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[escapeStrings]=/,'[escapeStrings]=');
+      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[escapestrings]=/,'[escapeStrings]=');
+
     }
     if(this.escapeStrings) {
       // loop through items to and reset their casing, useful for inputs that will be converted to lower case otherwise
       for(let i = 0; i < this.escapeStrings.length; i++) {
         const lower = new RegExp('\\'+this.escapeStrings[i].toLowerCase(),"g");
-        console.log(lower)
         markupExampleString = markupExampleString.replace(lower, this.escapeStrings[i]);
       }
     }
@@ -336,9 +340,8 @@ export class AddExampleDirective implements AfterContentInit{
     this.pre = this.renderer.createElement(hostElement, 'pre');
     this.code = this.renderer.createElement(this.pre, 'code');
     this.renderer.setElementClass(this.pre, 'markup-example',true);
-    //this.renderer.setElementStyle(pre, 'display','none');
     this.codeP = this.renderer.createText(this.code,'');
-    this.showCode(this.getHtmlMarkup())
+    this.showCode(this.getHtmlMarkup());
   };
 
   private removeListeners = function(){
@@ -359,6 +362,12 @@ export class AddExampleDirective implements AfterContentInit{
       this.renderer.setElementStyle(this.pre, 'display','block');
       this.toggleState.innerHTML = this.texts.hide;
       this.visibility = true;
+      return
+    }
+    else if (forceShow === false) {
+      this.renderer.setElementStyle(this.pre, 'display','none');
+      this.toggleState.innerHTML = this.texts.show;
+      this.visibility = false;
       return
     }
     if(this.visibility){

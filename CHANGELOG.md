@@ -2,8 +2,17 @@ Release History
 ---------------
 ## [Unreleased]
 
+# [1.2.0] - 2017-03-09
+
+### Added
+- Option for showing/hiding example by default (see issue #3), examples are now hidden by default override using `[show]=true`
+
+### Fixed
+- Option for passing strings to be escaped (see issue #1 and #2)
+- Angular directives such as `*ngIf` and `*ngFor` will now be escaped
+
 ### Breaking change
-- `angularInputs` changed to `escapeStrings` to accommodate for more uses cases, so instead of typing `myInput` to escape the angular input `[myInput]` you now need to type `[myInput]`. This also works for `[(myInput)]` or `#myTemplateVar` (otherwise they will be rendered as `[(myinput)]` and `#mytemplatevar`). 
+- `angularInputs` changed to `escapeStrings` to accommodate for more use cases, so instead of typing `myInput` to escape the angular input `[myInput]` you now need to type `[myInput]`. This also works for `[(myInput)]` or `#myTemplateVar` (otherwise they will be rendered as `[(myinput)]` and `#mytemplatevar`). 
 
 # [1.1.0] - 2017-01-19
 

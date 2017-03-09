@@ -19,11 +19,6 @@ export class AppComponent {
     src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css',
     language:'css'
   }];
-  escape = [
-    '#myTemplate','[escapeStrings]'
-  ];
-
-
 
   constructor(){
   }

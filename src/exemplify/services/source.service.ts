@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import 'rxjs/Rx';
 
 @Injectable()
-export class SourceService {
+export class ExmplifySourceService {
 
   constructor(private http: Http) { }
 
