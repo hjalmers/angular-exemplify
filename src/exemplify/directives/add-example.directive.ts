@@ -34,7 +34,8 @@ export class AddExampleDirective implements AfterContentInit{
   @Input() visibility:boolean = true;
   @Input() texts:ExemplifyTexts;
   @Input('exemplify') exemplifyId: string;
-  @Input() angularInputs: Array<string>;
+  @Input() escapeStrings: Array<string>;
+
 
   private copyMarkup: Function;
   private hideMarkup: Function;
@@ -59,7 +60,7 @@ export class AddExampleDirective implements AfterContentInit{
     copy:"Copy",
     show:"Show",
     hide:"Hide",
-  }
+  };
   constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:SourceService) {
 
     this.hostElement = el.nativeElement;
@@ -299,7 +300,7 @@ export class AddExampleDirective implements AfterContentInit{
       markupExampleCode.removeAttribute("[navstyle]");
       markupExampleCode.removeAttribute("[useprism]");
       markupExampleCode.removeAttribute("[nested]");
-      markupExampleCode.removeAttribute("[angularinputs]");
+      markupExampleCode.removeAttribute("[escapestrings]");
     }
 
     /** Add markup content */
@@ -314,17 +315,20 @@ export class AddExampleDirective implements AfterContentInit{
     }
     if(this.keepInputs === true) {
       // keep original format ie. avoid attributes being transformed into lowercase
-      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[angularinputs]=/,'[angularInputs]=');
+      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[escapeStrings]=/,'[escapeStrings]=');
     }
-    if(this.angularInputs) {
-
+    if(this.escapeStrings) {
       // loop through items to and reset their casing, useful for inputs that will be converted to lower case otherwise
-      for(let i = 0; i < this.angularInputs.length; i++) {
-        const lower = new RegExp('\\['+this.angularInputs[i].toLowerCase()+']',"g");
-        markupExampleString = markupExampleString.replace(lower,'['+this.angularInputs[i]+']');
+      for(let i = 0; i < this.escapeStrings.length; i++) {
+        const lower = new RegExp('\\'+this.escapeStrings[i].toLowerCase(),"g");
+        console.log(lower)
+        markupExampleString = markupExampleString.replace(lower, this.escapeStrings[i]);
       }
-
     }
+
+    // remove empty ="" form generated markup
+    markupExampleString = markupExampleString.replace(/=""/g, '');
+
     return markupExampleString;
   };
 

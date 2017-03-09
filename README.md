@@ -78,18 +78,18 @@ View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and 
 
 ### Options
 
-| Attribute       | Type    | Usage/description                                                                                                                                                     | Default           |
-|:----------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-| target          | element | attach example to this element, use local variable                                                                                                                    | directive element |
-| source          | string  | where to get the markup, 'element' or its 'child'                                                                                                                     | 'element'         |
-| customClass     | string  | class name added to the directive element                                                                                                                             |                   |
-| externalSources | array   | an array of objects specifying external sources                                                                                                                       |                   |
-| usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                    | true              |
-| navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info. | 'inline'          |
-| keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                     | false             |
-| nested          | boolean | is example element nested inside `*ngIf` etc.                                                                                                                         | false             |
-| angularInputs   | array   | an array with input strings used by angular components in the example (only necessary for inputs that are written using camel case), see issue #1 for more info.      |                   |
-| texts           | object  | override default texts by passing an object containing one or more of the following properties: `heading`,`markup`,`show`,`hide`,`copy`                               |                   |
+| Attribute       | Type    | Usage/description                                                                                                                                                                  | Default           |
+|:----------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+| target          | element | attach example to this element, use local variable                                                                                                                                 | directive element |
+| source          | string  | where to get the markup, 'element' or its 'child'                                                                                                                                  | 'element'         |
+| customClass     | string  | class name added to the directive element                                                                                                                                          |                   |
+| externalSources | array   | an array of objects specifying external sources                                                                                                                                    |                   |
+| usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                                 | true              |
+| navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info.              | 'inline'          |
+| keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                                  | false             |
+| nested          | boolean | is example element nested inside `*ngIf` etc.                                                                                                                                      | false             |
+| escapeStrings   | array   | an array with strings that should be escaped (necessary for attribute strings that are written using camel case i.e. inputs, template variables etc.), see issue #1 for more info. |                   |
+| texts           | object  | override default texts by passing an object containing one or more of the following properties: `heading`,`markup`,`show`,`hide`,`copy`                                            |                   |
 
 
 **Using external sources**

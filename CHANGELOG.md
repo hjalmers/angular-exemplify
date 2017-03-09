@@ -2,6 +2,9 @@ Release History
 ---------------
 ## [Unreleased]
 
+### Breaking change
+- `angularInputs` changed to `escapeStrings` to accommodate for more uses cases, so instead of typing `myInput` to escape the angular input `[myInput]` you now need to type `[myInput]`. This also works for `[(myInput)]` or `#myTemplateVar` (otherwise they will be rendered as `[(myinput)]` and `#mytemplatevar`). 
+
 # [1.1.0] - 2017-01-19
 
 ### Breaking change
