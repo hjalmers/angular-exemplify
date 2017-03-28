@@ -1,10 +1,8 @@
 import {
-  Directive, ElementRef, AfterContentInit, Renderer2, Renderer, Host, Optional, ViewRef,
-  HostDecorator
+  Directive, ElementRef, AfterContentInit, Renderer2, Renderer
 } from '@angular/core';
-import {Input, ViewContainerRef } from '@angular/core';
-//import {Reflect} from 'reflect-metadata/reflect'
-declare var Reflect:any;
+import {Input} from '@angular/core';
+declare let Reflect:any;
 
 
 import { Injectable } from '@angular/core';
@@ -35,15 +33,11 @@ export class ExemplifyDirective implements AfterContentInit{
   @Input() usePrism:boolean = true;
   @Input() navStyle:string = 'inline';
   @Input() keepInputs:boolean = false;
-  @Input() nested:boolean = false;
   @Input('show') visibility:boolean = false;
   @Input() texts:ExemplifyTexts;
-  @Input('exemplify') exemplifyId: string;
+  @Input('exemplify') exemplifyId: any;
   @Input() escapeStrings: Array<string> = [];
-  @Input() some: any;
-
-  public temp
-  public host = Host
+  @Input() context: any;
 
   private copyMarkup: Function;
   private hideMarkup: Function;
@@ -70,9 +64,9 @@ export class ExemplifyDirective implements AfterContentInit{
     hide:"Hide",
   };
   private escapeAngularDirectives = [
-    '*ngIf','*ngFor','*ngPluralCase','*ngSwitchCase','*ngSwitchDefault','ngClass','ngPlural','ngStyle','ngSwitch','ngTemplateOutlet','[ngIf]','[ngFor]','[ngForOf]','[ngPluralCase]','[ngSwitchCase]','[ngSwitchDefault]'
+    '*ngIf','*ngFor','*ngPluralCase','*ngSwitchCase','*ngSwitchDefault','ngClass','ngPlural','ngStyle','ngSwitch','ngTemplateOutlet','[ngIf]','[ngFor]','[ngForOf]','[ngPluralCase]','[ngSwitchCase]','[ngSwitchDefault]','ngModel'
   ];
-  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private _viewContainerRef: ViewContainerRef, private sourceService:ExmplifySourceService) {
+  constructor(el: ElementRef, renderer: Renderer, private winRef: WindowRef, private sourceService:ExmplifySourceService) {
 
     this.hostElement = el.nativeElement;
     this.renderer = renderer;
@@ -111,6 +105,8 @@ export class ExemplifyDirective implements AfterContentInit{
 
 
   ngAfterContentInit() {
+    if(null == this.context) throw new Error("Input 'context' is required, add [context]=\"this\" to set example context to current component.");
+
     this.texts = <ExemplifyTexts>this.extend(this.defaultTexts,this.texts);
 
     // add angular directives to the list of strings to escape
@@ -214,7 +210,7 @@ export class ExemplifyDirective implements AfterContentInit{
     this.renderer.createText(renderElement,name);
     this.renderer.setElementAttribute(renderElement,'href','#');
     this.renderer.setElementClass(renderElement, 'nav-link',true);
-    this.renderer.setElementClass(renderElement, 'link-' + name.toLowerCase().replace(/[ ._]/g,'-'),true);
+    this.renderer.setElementClass(renderElement, 'exemplify-' + name.toLowerCase().replace(/[ ._]/g,'-'),true);
 
     if(this.activeListeners.length === 0){
       if(this.visibility) {
@@ -237,13 +233,13 @@ export class ExemplifyDirective implements AfterContentInit{
   };
 
   private addHide = function(hostElement,navElement) {
-    /** Create link for copying markup */
+    /** Create link for toggling markup */
     this.toggleState = this.renderer.createElement(navElement, 'a');
     let toggleState = this.renderer.createText(this.toggleState,this.texts.hide);
     this.renderer.setElementAttribute(this.toggleState,'href','#');
-    this.renderer.setElementClass(this.toggleState, 'link-hide',true);
+    this.renderer.setElementClass(this.toggleState, 'exemplify-hide',true);
 
-    /** Add click listener for copying markup example */
+    /** Add click listener for toggling markup example */
     this.hideMarkup = this.renderer.listen(this.toggleState, 'click', (event) => {
       event.preventDefault();
       //let content = this.parser.parseFromString(this.code.innerHTML,"text/html").body.childNodes[0].textContent;
@@ -257,7 +253,7 @@ export class ExemplifyDirective implements AfterContentInit{
     const copy = this.renderer.createElement(navElement, 'a');
     this.renderer.createText(copy,this.texts.copy);
     this.renderer.setElementAttribute(copy,'href','#');
-    this.renderer.setElementClass(copy, 'link-copy',true);
+    this.renderer.setElementClass(copy, 'exemplify-copy',true);
 
     /** Add click listener for copying markup example */
     this.copyMarkup = this.renderer.listen(copy, 'click', (event) => {
@@ -274,32 +270,11 @@ export class ExemplifyDirective implements AfterContentInit{
     /** Create markup example */
 
     try {
-      let markupExampleCode;
-      let metaKeys = Reflect.getOwnMetadataKeys(this.constructor);
-      let metaInfo =  Reflect.getOwnMetadata('annotations',this.constructor);
-      let temp = Reflect.getMetadata('annotations', Object.getPrototypeOf(this._viewContainerRef.element).constructor);
+      if(!this.context) {
+        console.log('No context set');
+      }
+      let markupExampleCode = Reflect.getMetadata('annotations', this.context.constructor);
 
-      console.log('hej4',
-          this.some,
-          this.host,
-          //this.constructor,
-          //Object.getPrototypeOf(this.some._parentView.component).constructor,
-          Reflect.getMetadata('annotations', Object.getPrototypeOf(this.some._parentView.component).constructor)
-      );
-      //console.log('test',this.hostElement, this.temp, Reflect.getMetadata('annotations', this.constructor), this.constructor);
-
-      //console.log(Object.getPrototypeOf(this._viewContainerRef.injector).constructor,temp, this._viewContainerRef, metaKeys,metaInfo);
-
-      markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf(this.some._parentView.component).constructor);
-
-
-      // check if directive is nested...
-      /*if(!this.nested){
-        markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
-
-      } else {
-        markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.parentView.context).constructor);
-      }*/
 
       if(this.elementId) {
         markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").getElementById(this.elementId);
@@ -317,7 +292,7 @@ export class ExemplifyDirective implements AfterContentInit{
         markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[exemplify]')[0];
       }
       if(typeof markupExampleCode === 'undefined'){
-        console.log('Exemplify warning! Component not found, have you applied ngIf*? If so try adding [nested]="true"');
+        console.log("Exemplify warning! Can't show example as the component holding the markup couldn't be found!");
         return
       }
       if(this.keepInputs !== true) {
@@ -329,9 +304,9 @@ export class ExemplifyDirective implements AfterContentInit{
         markupExampleCode.removeAttribute("[customclass]");
         markupExampleCode.removeAttribute("[navstyle]");
         markupExampleCode.removeAttribute("[useprism]");
-        markupExampleCode.removeAttribute("[nested]");
         markupExampleCode.removeAttribute("[escapestrings]");
         markupExampleCode.removeAttribute("[show]");
+        markupExampleCode.removeAttribute("[context]");
       }
 
       /** Add markup content */
@@ -384,7 +359,7 @@ export class ExemplifyDirective implements AfterContentInit{
   private removeActiveClass = function(){
 
     if(this.activeItem) {
-      this.renderer.setElementClass(this.activeItem, 'active');
+      this.renderer.setElementClass(this.activeItem, 'active',false);
     }
   };
 
@@ -392,23 +367,28 @@ export class ExemplifyDirective implements AfterContentInit{
     if(forceShow){
       this.renderer.setElementStyle(this.pre, 'display','block');
       this.toggleState.innerHTML = this.texts.hide;
+      this.renderer.setElementClass(this.toggleState,'exemplify-visible',true);
       this.visibility = true;
       return
     }
     else if (forceShow === false) {
       this.renderer.setElementStyle(this.pre, 'display','none');
       this.toggleState.innerHTML = this.texts.show;
+      this.renderer.setElementClass(this.toggleState,'exemplify-visible',false);
       this.visibility = false;
       return
     }
     if(this.visibility){
       this.removeActiveClass();
       this.renderer.setElementStyle(this.pre, 'display','none');
+      this.renderer.setElementClass(this.toggleState,'exemplify-visible',false);
+
     } else {
       if(this.activeItem) {
         this.renderer.setElementClass(this.activeItem, 'active', true);
       }
       this.renderer.setElementStyle(this.pre, 'display','block');
+      this.renderer.setElementClass(this.toggleState,'exemplify-visible',true);
     }
     this.visibility = !this.visibility;
     this.renderer.setText(element,this.visibility ? this.texts.hide:this.texts.show);

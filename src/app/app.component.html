@@ -3,20 +3,17 @@
   <h1>
     Angular Exemplify
   </h1>
-  <p class="lead">A simple directive for adding code examples based on actual code and markup! Just add <code>exemplify</code> to your element and you're done:D See <a href="https://github.com/hjalmers/angular-exemplify" target="_blank">docs</a> for more info.</p>
+  <p class="lead">A simple directive for adding code examples based on actual code and markup! Just add <code>exemplify</code> and <code>[context]="this"</code> to your element and you're done:D See <a href="https://github.com/hjalmers/angular-exemplify" target="_blank">docs</a> for more info.</p>
   <h4 class="mt-5">A really basic example</h4>
-  <p>Lets start with something really simple, by adding the directive <code>exemplify</code> to our element this is what we'll get.</p>
+  <p>Lets start with something really simple, by adding the directive <code>exemplify</code> and <code>[context]="this"</code> to our element this is what we'll get.</p>
   <strong class="text-muted">Example:</strong>
-  <ng-template #examp></ng-template>
-  <div exemplify="temp" [some]="this"></div>
-
-  <!--<div exemplify="basic" [show]="true" [some]="examp">
+  <div exemplify="basic" [show]="true" [context]="this">
     <p>Some content and a button.</p>
     <button class="btn btn-primary mb-4">Button</button>
-  </div>-->
-  <!--<p class="alert-info alert my-4">Note that the directive itself and other angular specific attributes added during compilation are removed as we often want to show the code before compilation. However, in some cases we might want to keep the inputs and attributes added to our example element and by passing <code>[keepInputs]="true"</code> to our directive we can achieve just that.</p>
+  </div>
+  <p class="alert-info alert my-4">Note that the directive itself and other angular specific attributes added during compilation are removed as we often want to show the code before compilation. However, in some cases we might want to keep the inputs and attributes added to our example element and by passing <code>[keepInputs]="true"</code> to our directive we can achieve just that.</p>
   <strong class="text-muted">Example:</strong>
-  <div exemplify="basicKeepInputs" [keepInputs]="true" [show]="true">
+  <div exemplify="basicKeepInputs" [keepInputs]="true" [show]="true" [context]="this">
     <p>Some other content and another button.</p>
     <button class="btn btn-primary mb-4">Another button</button>
   </div>
@@ -25,10 +22,10 @@
   <p class="alert alert-info">The following example loads external sources that are passed to the directive and presents them within tabs. You can override the css styles directly or pass other nav options to leverage bootstraps default styles using <code>[navStyle]="'tabs'"</code>. We're also targeting another element using <code>[target]="formExample"</code> (the element we want to add attach our example to) and by passing a custom class name <code>[customClass]="'card-footer'"</code> we can alter the appearance.</p>
   <p>For the sake of demonstrating the concept I've added an example inside another example so the first one is what you want to achieve and the second code block is actually how you'd set it up.</p>
   <strong class="text-muted">Example:</strong>
-  <div exemplify="metaExample" [keepInputs]="true" [source]="'child'" class="mt-2" [escapeStrings]="['#formExample']">
+  <div exemplify="metaExample" [keepInputs]="true" [source]="'child'" class="mt-2" [escapeStrings]="['#formExample']" [context]="this">
   <div class="card mb-4" #formExample>
     <div class="card-block">
-      <form exemplify="formExample" [target]="formExample" [navStyle]="'tabs'" [customClass]="'card-footer'" [externalSources]="externalSources">
+      <form exemplify="formExample" [target]="formExample" [navStyle]="'tabs'" [customClass]="'card-footer'" [externalSources]="externalSources" [context]="this">
         <div class="form-group row">
           <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
           <div class="col-sm-10">
@@ -86,11 +83,11 @@
   </div>
   <h4 class="mt-5">Escaping template variables, inputs etc.</h4>
   <p>Without escaping the string <code>#myTemplateVariable</code> this is how or example would turn out.</p>
-  <div exemplify="escapingFalseExample" [show]="true">
+  <div exemplify="escapingFalseExample" [show]="true" [context]="this">
     <div #myTemplateVariable></div>
   </div>
   <p class="alert alert-info mt-4">To avoid the above we need let exemplify know which strings to escape. We do this by passing them in an array ex. <code>['#myTemplateVariable','[myCustomInput]','[(myCustomEvent)]']</code>. Note that this is only necessary for camel case strings.</p>
-  <div exemplify="escapingExample" [keepInputs]="true" [escapeStrings]="['#myTemplateVariable']" [show]="true">
+  <div exemplify="escapingExample" [keepInputs]="true" [escapeStrings]="['#myTemplateVariable']" [show]="true" [context]="this">
     <div #myTemplateVariable></div>
-  </div>-->
+  </div>
 </div>

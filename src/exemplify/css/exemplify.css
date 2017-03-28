@@ -30,11 +30,11 @@
   display: flex;
 }
 
-.exemplify-wrapper > .exemplify-bar a.link-copy {
+.exemplify-wrapper > .exemplify-bar a.exemplify-copy {
   order: 2;
 }
 
-.exemplify-wrapper > .exemplify-bar a.link-hide {
+.exemplify-wrapper > .exemplify-bar a.exemplify-hide {
   order: 1;
 }
 

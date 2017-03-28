@@ -27,9 +27,9 @@ Please note the instructions below are for projects based on angular-cli, you mi
 
 **Include scripts and styles in build**
 
-If you want to use angular exemplify together with prism, make sure to add the prism script and one of the prism theme css files to your `angular-cli.json` config, bootstrap.css is optional:
+If you want to use angular exemplify together with prism, make sure to add the prism script and one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional:
 
-```
+```json
 "styles": [
   "../node_modules/bootstrap/dist/css/bootstrap.css",
   "../node_modules/prismjs/themes/prism-coy.css",
@@ -42,7 +42,7 @@ If you want to use angular exemplify together with prism, make sure to add the p
 ```
 
 **Import ExemplifyModule**
-```
+```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -67,37 +67,37 @@ export class AppModule { }
 ```
 
 ### Basic usage
-Add `exemplify` to your element like this:
-```
-<button exemplify="myExample" class="btn btn-primary" (click)="doSomething()">Action</button>
+Add `exemplify` together with `[context]="this"` to your element like this:
+```html
+<button exemplify="myExample" [context]="this" class="btn btn-primary" (click)="doSomething()">Action</button>
 ```
 
-Where `myExample` should be a unique identifier for your example.
+Where `myExample` should be a unique identifier for your example, and `context` should point to the component holding the markup (template).
 
 View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and more examples.
 
 ### Options
 
-| Attribute       | Type    | Usage/description                                                                                                                                                                  | Default           |
-|:----------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-| target          | element | attach example to this element, use local variable                                                                                                                                 | directive element |
-| source          | string  | where to get the markup, 'element' or its 'child'                                                                                                                                  | 'element'         |
-| show            | boolean | should the example be shown or hidden by default                                                                                                                                   | false             |
-| customClass     | string  | class name added to the directive element                                                                                                                                          |                   |
-| externalSources | array   | an array of objects specifying external sources                                                                                                                                    |                   |
-| usePrism        | boolean | highlight code examples using prismjs (prismjs has to be included)                                                                                                                 | true              |
-| navStyle        | string  | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info.              | 'inline'          |
-| keepInputs      | boolean | keep attributes attached to the directive element                                                                                                                                  | false             |
-| nested          | boolean | is example element nested inside `*ngIf` etc.                                                                                                                                      | false             |
-| escapeStrings   | array   | an array with strings that should be escaped (necessary for attribute strings that are written using camel case i.e. inputs, template variables etc.), see issue #1 for more info. |                   |
-| texts           | object  | override default texts by passing an object containing one or more of the following properties: `heading`,`markup`,`show`,`hide`,`copy`                                            |                   |
+| Attribute       | Type      | Usage/description                                                                                                                                                                  | Default           |
+|:----------------|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+| context         | component | to get markup through annotations exemplify needs access to component constructor, in most cases just use `[context]="this"` unless markup is specified elsewhere.                 |                   |
+| target          | element   | attach example to this element, use local variable                                                                                                                                 | directive element |
+| source          | string    | where to get the markup, 'element' or its 'child'                                                                                                                                  | 'element'         |
+| show            | boolean   | should the example be shown or hidden by default                                                                                                                                   | false             |
+| customClass     | string    | class name added to the directive element                                                                                                                                          |                   |
+| externalSources | array     | an array of objects specifying external sources                                                                                                                                    |                   |
+| usePrism        | boolean   | highlight code examples using prismjs (prismjs has to be included)                                                                                                                 | true              |
+| navStyle        | string    | customize the style of the nav links, possible values are "tabs", "pills", "inline" see [bootstrap](http://v4-alpha.getbootstrap.com/components/navs/) for more info.              | 'inline'          |
+| keepInputs      | boolean   | keep attributes attached to the directive element                                                                                                                                  | false             |
+| escapeStrings   | array     | an array with strings that should be escaped (necessary for attribute strings that are written using camel case i.e. inputs, template variables etc.), see issue #1 for more info. |                   |
+| texts           | object    | override default texts by passing an object containing one or more of the following properties: `heading`,`markup`,`show`,`hide`,`copy`                                            |                   |
 
 
 **Using external sources**
 
 To keep the examples in sync with your code you should reference the source files. Here's an example based on a app published and deployed to github pages.
 
-```
+```json
 externalSources = [{
     name:'app.module.ts',
     src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts'
