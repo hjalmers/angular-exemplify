@@ -99,14 +99,14 @@ To keep the examples in sync with your code you should reference the source file
 
 ```json
 externalSources = [{
-    name:'app.module.ts',
-    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts'
+    name:"app.module.ts",
+    src:"https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.module.ts"
   },{
-    name:'app.component.ts',
-    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.ts'
+    name:"app.component.ts",
+    src:"https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.ts"
   },{
-    name:'app.component.css',
-    src:'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css',
-    language:'css'
+    name:"app.component.css",
+    src:"https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/app.component.css",
+    language:"css"
   }]
 ```
