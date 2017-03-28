@@ -7,11 +7,14 @@
   <h4 class="mt-5">A really basic example</h4>
   <p>Lets start with something really simple, by adding the directive <code>exemplify</code> to our element this is what we'll get.</p>
   <strong class="text-muted">Example:</strong>
-  <div exemplify="basic" [show]="true">
+  <ng-template #examp></ng-template>
+  <div exemplify="temp" [some]="this"></div>
+
+  <!--<div exemplify="basic" [show]="true" [some]="examp">
     <p>Some content and a button.</p>
     <button class="btn btn-primary mb-4">Button</button>
-  </div>
-  <p class="alert-info alert my-4">Note that the directive itself and other angular specific attributes added during compilation are removed as we often want to show the code before compilation. However, in some cases we might want to keep the inputs and attributes added to our example element and by passing <code>[keepInputs]="true"</code> to our directive we can achieve just that.</p>
+  </div>-->
+  <!--<p class="alert-info alert my-4">Note that the directive itself and other angular specific attributes added during compilation are removed as we often want to show the code before compilation. However, in some cases we might want to keep the inputs and attributes added to our example element and by passing <code>[keepInputs]="true"</code> to our directive we can achieve just that.</p>
   <strong class="text-muted">Example:</strong>
   <div exemplify="basicKeepInputs" [keepInputs]="true" [show]="true">
     <p>Some other content and another button.</p>
@@ -89,5 +92,5 @@
   <p class="alert alert-info mt-4">To avoid the above we need let exemplify know which strings to escape. We do this by passing them in an array ex. <code>['#myTemplateVariable','[myCustomInput]','[(myCustomEvent)]']</code>. Note that this is only necessary for camel case strings.</p>
   <div exemplify="escapingExample" [keepInputs]="true" [escapeStrings]="['#myTemplateVariable']" [show]="true">
     <div #myTemplateVariable></div>
-  </div>
+  </div>-->
 </div>

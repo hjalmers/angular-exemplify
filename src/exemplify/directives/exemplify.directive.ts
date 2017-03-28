@@ -1,6 +1,11 @@
-import {Directive, ElementRef, Renderer, AfterContentInit} from '@angular/core';
+import {
+  Directive, ElementRef, AfterContentInit, Renderer2, Renderer, Host, Optional, ViewRef,
+  HostDecorator
+} from '@angular/core';
 import {Input, ViewContainerRef } from '@angular/core';
+//import {Reflect} from 'reflect-metadata/reflect'
 declare var Reflect:any;
+
 
 import { Injectable } from '@angular/core';
 import {ExmplifySourceService} from "../services/source.service";
@@ -35,6 +40,10 @@ export class ExemplifyDirective implements AfterContentInit{
   @Input() texts:ExemplifyTexts;
   @Input('exemplify') exemplifyId: string;
   @Input() escapeStrings: Array<string> = [];
+  @Input() some: any;
+
+  public temp
+  public host = Host
 
   private copyMarkup: Function;
   private hideMarkup: Function;
@@ -140,20 +149,20 @@ export class ExemplifyDirective implements AfterContentInit{
       for (let i = 0; i < this.externalSources.length;i++) {
         links.push(this.sourceService.getSource(this.externalSources[i].src));
         this.sourceService.getSource(this.externalSources[i].src)
-          .subscribe(
-            code => {
-              this.addLink(nav,this.externalSources[i].name,code,this.externalSources[i].language ? this.externalSources[i].language:'typescript');
-            }
-          );
+            .subscribe(
+                code => {
+                  this.addLink(nav,this.externalSources[i].name,code,this.externalSources[i].language ? this.externalSources[i].language:'typescript');
+                }
+            );
       }
       // wait until all sources have loaded...
       Observable.forkJoin(links).subscribe(
-        res => {
-          this.addCopy(hostElement,func);
-          this.addHide(hostElement,func);
-          // ...add code container
-          this.addCodeContainer(hostElement);
-        }
+          res => {
+            this.addCopy(hostElement,func);
+            this.addHide(hostElement,func);
+            // ...add code container
+            this.addCodeContainer(hostElement);
+          }
       );
     } else {
       this.addCopy(hostElement,func);
@@ -264,76 +273,98 @@ export class ExemplifyDirective implements AfterContentInit{
   private getHtmlMarkup = function() {
     /** Create markup example */
 
-    let markupExampleCode;
+    try {
+      let markupExampleCode;
+      let metaKeys = Reflect.getOwnMetadataKeys(this.constructor);
+      let metaInfo =  Reflect.getOwnMetadata('annotations',this.constructor);
+      let temp = Reflect.getMetadata('annotations', Object.getPrototypeOf(this._viewContainerRef.element).constructor);
 
-    // check if directive is nested...
-    if(!this.nested){
-     markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
+      console.log('hej4',
+          this.some,
+          this.host,
+          //this.constructor,
+          //Object.getPrototypeOf(this.some._parentView.component).constructor,
+          Reflect.getMetadata('annotations', Object.getPrototypeOf(this.some._parentView.component).constructor)
+      );
+      //console.log('test',this.hostElement, this.temp, Reflect.getMetadata('annotations', this.constructor), this.constructor);
 
-    } else {
-      markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.parentView.context).constructor);
-    }
+      //console.log(Object.getPrototypeOf(this._viewContainerRef.injector).constructor,temp, this._viewContainerRef, metaKeys,metaInfo);
 
-    if(this.elementId) {
-      markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").getElementById(this.elementId);
-    } else if(this.exemplifyId){
+      markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf(this.some._parentView.component).constructor);
 
-      const selector = '[exemplify="' +this.exemplifyId + '"]';
-      const content = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll(selector);
-      if(content.length > 1) {
-        console.log('Exemplify warning! Multiple elements are using: "' + this.exemplifyId + '" as a identifier for the example, it should be a unique id. Returning first match.');
+
+      // check if directive is nested...
+      /*if(!this.nested){
+        markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.context).constructor);
+
+      } else {
+        markupExampleCode = Reflect.getMetadata('annotations', Object.getPrototypeOf((<any>this._viewContainerRef)._element.parentView.parentView.context).constructor);
+      }*/
+
+      if(this.elementId) {
+        markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").getElementById(this.elementId);
+      } else if(this.exemplifyId){
+
+        const selector = '[exemplify="' +this.exemplifyId + '"]';
+        const content = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll(selector);
+        if(content.length > 1) {
+          console.log('Exemplify warning! Multiple elements are using: "' + this.exemplifyId + '" as a identifier for the example, it should be a unique id. Returning first match.');
+        }
+        markupExampleCode = content[0];
+
+      } else {
+        console.log('Exemplify warning! No id set for example element, returning first match.');
+        markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[exemplify]')[0];
       }
-      markupExampleCode = content[0];
-
-    } else {
-      console.log('Exemplify warning! No id set for example element, returning first match.');
-      markupExampleCode = this.parser.parseFromString(markupExampleCode[0].template,"text/html").querySelectorAll('[exemplify]')[0];
-    }
-    if(typeof markupExampleCode === 'undefined'){
-      console.log('Exemplify warning! Component not found, have you applied ngIf*? If so try adding [nested]="true"');
-      return
-    }
-    if(this.keepInputs !== true) {
-      markupExampleCode.removeAttribute("exemplify");
-      markupExampleCode.removeAttribute("id");
-      markupExampleCode.removeAttribute("[externalsources]");
-      markupExampleCode.removeAttribute("[source]");
-      markupExampleCode.removeAttribute("[target]");
-      markupExampleCode.removeAttribute("[customclass]");
-      markupExampleCode.removeAttribute("[navstyle]");
-      markupExampleCode.removeAttribute("[useprism]");
-      markupExampleCode.removeAttribute("[nested]");
-      markupExampleCode.removeAttribute("[escapestrings]");
-      markupExampleCode.removeAttribute("[show]");
-    }
-
-    /** Add markup content */
-    let markupExampleString:string;
-    switch(this.source){
-      case 'child':
-        markupExampleString = markupExampleCode.innerHTML;
-        break;
-      default:
-        markupExampleString = markupExampleCode.outerHTML;
-        break;
-    }
-    if(this.keepInputs === true) {
-      // keep original format ie. avoid attributes being transformed into lowercase
-      markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[escapestrings]=/,'[escapeStrings]=');
-
-    }
-    if(this.escapeStrings) {
-      // loop through items to and reset their casing, useful for inputs that will be converted to lower case otherwise
-      for(let i = 0; i < this.escapeStrings.length; i++) {
-        const lower = new RegExp('\\'+this.escapeStrings[i].toLowerCase(),"g");
-        markupExampleString = markupExampleString.replace(lower, this.escapeStrings[i]);
+      if(typeof markupExampleCode === 'undefined'){
+        console.log('Exemplify warning! Component not found, have you applied ngIf*? If so try adding [nested]="true"');
+        return
       }
+      if(this.keepInputs !== true) {
+        markupExampleCode.removeAttribute("exemplify");
+        markupExampleCode.removeAttribute("id");
+        markupExampleCode.removeAttribute("[externalsources]");
+        markupExampleCode.removeAttribute("[source]");
+        markupExampleCode.removeAttribute("[target]");
+        markupExampleCode.removeAttribute("[customclass]");
+        markupExampleCode.removeAttribute("[navstyle]");
+        markupExampleCode.removeAttribute("[useprism]");
+        markupExampleCode.removeAttribute("[nested]");
+        markupExampleCode.removeAttribute("[escapestrings]");
+        markupExampleCode.removeAttribute("[show]");
+      }
+
+      /** Add markup content */
+      let markupExampleString:string;
+      switch(this.source){
+        case 'child':
+          markupExampleString = markupExampleCode.innerHTML;
+          break;
+        default:
+          markupExampleString = markupExampleCode.outerHTML;
+          break;
+      }
+      if(this.keepInputs === true) {
+        // keep original format ie. avoid attributes being transformed into lowercase
+        markupExampleString = markupExampleString.replace(/\[keepinputs]=/,'[keepInputs]=').replace(/\[externalsources]=/,'[externalSources]=').replace(/\[customclass]=/,'[customClass]=').replace(/\[navstyle]=/,'[navStyle]=').replace(/\[escapestrings]=/,'[escapeStrings]=');
+
+      }
+      if(this.escapeStrings) {
+        // loop through items to and reset their casing, useful for inputs that will be converted to lower case otherwise
+        for(let i = 0; i < this.escapeStrings.length; i++) {
+          const lower = new RegExp('\\'+this.escapeStrings[i].toLowerCase(),"g");
+          markupExampleString = markupExampleString.replace(lower, this.escapeStrings[i]);
+        }
+      }
+
+      // remove empty ="" form generated markup
+      markupExampleString = markupExampleString.replace(/=""/g, '');
+
+      return markupExampleString;
+    } catch(error) {
+      console.log(error);
+      return ""
     }
-
-    // remove empty ="" form generated markup
-    markupExampleString = markupExampleString.replace(/=""/g, '');
-
-    return markupExampleString;
   };
 
   private addCodeContainer = function(hostElement) {
