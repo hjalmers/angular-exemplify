@@ -1,6 +1,6 @@
 # Angular Exemplify
 
-A simple angular 2+ directive for adding code examples based on actual code and markup! Just add `AddExample` to your element and you're done:D
+A simple angular 2+ directive for adding code examples based on actual code and markup! Just add `exemplify` and `[context]="this"` to your element and you're done:D
 
 ### View [example](https://hjalmers.github.io/angular-exemplify/)
 
