@@ -24,10 +24,9 @@
     "index.ts"
   ],
   "angularCompilerOptions": {
-    "debug": true,
     "genDir": "../",
-    "generateCodeForLibraries": false,
     "strictMetadataEmit": true,
-    "trace": true
+    "skipMetadataEmit" : false,
+    "skipTemplateCodegen": true
   }
 }

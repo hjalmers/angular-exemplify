@@ -1,3 +1,3 @@
-export * from './exemplify/services/source.service';
-export * from './exemplify/directives/exemplify.directive';
-export * from './exemplify/exemplify.module';
+export {ExmplifySourceService} from './exemplify/services/source.service';
+export {ExemplifyDirective} from './exemplify/directives/exemplify.directive';
+export {ExemplifyModule} from './exemplify/exemplify.module';

@@ -20,7 +20,7 @@
     "prebuild": "npm run -s clean",
     "build": "ngc -p src/tsconfig-aot.json && npm run copy:css",
     "postbuild": "npm run -s clean:factory",
-    "prepublish": "npm run -s build",
+    "prepublishOnly": "npm run -s build",
     "postpublish": "npm run -s clean"
   },
   "private": false,
