@@ -1,17 +1,29 @@
 import { Injectable } from '@angular/core';
-import {Http, Response} from "@angular/http";
+import {Response} from '@angular/http';
 import {Observable} from "rxjs";
 import 'rxjs/Rx';
 
 @Injectable()
 export class ExmplifySourceService {
 
-  constructor(private http: Http) { }
+  constructor() { }
 
   getSource (src): Observable<any> {
-    return this.http.get(src)
-      .map(res => res.text())
-      .catch(this.handleError);
+
+      return Observable.fromPromise(new Promise((resolve, reject) => {
+          let xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4) {
+                  if (xhr.status === 200) {
+                      resolve(xhr.response)
+                  } else {
+                      reject(xhr.response)
+                  }
+              }
+          };
+          xhr.open("GET",src);
+          xhr.send();
+      }));
   }
   private handleError (error: Response | any) {
     let errMsg: string;
