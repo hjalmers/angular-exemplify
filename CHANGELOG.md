@@ -2,6 +2,11 @@ Release History
 ---------------
 ## [Unreleased]
 
+# [2.0.1] - 2017-08-23
+
+### Fixed
+- Removed dependencies to http service as it will be deprecated (improved support for angular 4.3+)
+
 # [2.0.0] - 2017-03-28
 
 ### Breaking change
