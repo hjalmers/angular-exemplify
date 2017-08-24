@@ -20,7 +20,7 @@ Run `npm install prismjs --save-dev`
 
 **If you want to use together with bootstrap 4**
 
-Run `npm install bootstrap@4.0.0-alpha.6`
+Run `npm install bootstrap@next`
 
 ### Usage in angular-cli project
 Please note the instructions below are for projects based on angular-cli, you might need to set up things differently if you're using something else.
@@ -46,7 +46,6 @@ If you want to use angular exemplify together with prism, make sure to add the p
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { ExemplifyModule } from "angular-exemplify";
 
@@ -57,7 +56,6 @@ import { ExemplifyModule } from "angular-exemplify";
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
     ExemplifyModule
   ],
   providers: [],
