@@ -21,11 +21,17 @@
     "build": "ngc -p src/tsconfig-aot.json && npm run copy:css",
     "postbuild": "npm run -s clean:factory",
     "prepublishOnly": "npm run -s build",
-    "postpublish": "npm run -s clean"
+    "postpublish": "npm run -s clean",
+    "commit": "git-cz"
   },
   "private": false,
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "main": "index.js",
   "devDependencies": {
@@ -45,8 +51,10 @@
     "@types/node": "^6.0.87",
     "bootstrap": "^4.0.0-beta",
     "codelyzer": "~4.2.1",
+    "commitizen": "^2.10.1",
     "copyfiles": "^1.0.0",
     "core-js": "^2.5.0",
+    "cz-conventional-changelog": "^2.1.0",
     "jasmine-core": "2.5.2",
     "karma": "~1.4.1",
     "karma-chrome-launcher": "~2.0.0",
