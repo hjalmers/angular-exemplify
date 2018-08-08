@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
-import { ExemplifyModule } from "../exemplify/exemplify.module";
+import {ExemplifyModule} from '../../projects/exemplify/src/lib/exemplify.module';
 
 @NgModule({
   declarations: [
