@@ -11,13 +11,14 @@ export class UtilitiesService {
   parseHtml(template: ViewContainerRef | string, selector: string) {
     const parser = new DOMParser();
     const htmlTemplate = typeof template !== 'string' ? template[ '_data' ].componentView.component.viewContainerRef[ '_view' ].component.constructor['__annotations__'][0].template : template;
-
+    let output = '';
     const markupExampleCode = parser.parseFromString(htmlTemplate, 'text/html').querySelectorAll(selector);
-    if (markupExampleCode.length > 1) {
-      console.warn('Exemplify: multiple elements matched selector, the first match will be used.');
-    } else if (markupExampleCode.length === 0) {
+    if (markupExampleCode.length === 0) {
       console.warn('Exemplify: no element matched selector, no markup returned.');
     }
-    return markupExampleCode.length > 0 ? markupExampleCode[0].outerHTML : '';
+    for (let i = 0; i < markupExampleCode.length; i++) {
+      output += markupExampleCode[i].outerHTML + '\n';
+    }
+    return output === '' ? 'no elements matched: "' + selector + '"' : output;
   }
 }
