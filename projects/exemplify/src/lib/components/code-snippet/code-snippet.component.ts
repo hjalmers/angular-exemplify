@@ -2,15 +2,14 @@ import {
   Component,
   Input, OnDestroy
 } from '@angular/core';
-import {of} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, map, takeUntil, tap} from 'rxjs/operators';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {WindowRef} from '../../services/window-ref.service';
 import {Snippet} from '../../interfaces/snippet';
 import {CodeHighlightService} from '../../services/code-highlight.service';
 import {UtilitiesService} from '../../services/utilities.service';
-import {Subject} from 'rxjs/Rx';
 import {ExemplifyTexts} from '../../interfaces/exemplify-texts';
+import {Subject, of} from 'rxjs';
 
 @Component({
   selector: 'code-snippet',
@@ -75,10 +74,7 @@ export class CodeSnippetComponent implements OnDestroy {
     this._window = this.windowRef.nativeWindow;
   }
 
-  /** Highlight, highlight code and update value of parsed snippet
-   * @param {string} code - code to be highlighted.
-   * @param {string} lang - language for code.
-   */
+  /** Highlight, highlight code and update value of parsed snippet */
   highlight(code: string, lang: string) {
     this.parsedSnippet = this._codeHighlight.highlight(
       code,
@@ -86,10 +82,7 @@ export class CodeSnippetComponent implements OnDestroy {
     );
   }
 
-  /** Get source code
-   * @param {string} url - url to fetch.
-   * @param {string} selector - optional selector for filtering the response.
-   */
+  /** Get source code */
   private getSourceCode(url: string, selector?: string) {
     return this.http.get(url, {responseType: 'text'})
       .pipe(
@@ -112,10 +105,7 @@ export class CodeSnippetComponent implements OnDestroy {
       );
   }
 
-  /**
-   * Copy to clipboard
-   * @param {string} text - text to be copied to clipboard.
-   */
+  /** Copy to clipboard */
   public copyToClipboard = function(text: string) {
     if (this.window.clipboardData && this.window.clipboardData.setData) {
       // IE specific code path to prevent textarea being shown while dialog is visible.
@@ -138,10 +128,7 @@ export class CodeSnippetComponent implements OnDestroy {
     }
   };
 
-  /**
-   * Toggle state for code snippet toolbar
-   * @param {boolean} state - optional state.
-   */
+  /** Toggle state for code snippet toolbar */
   toggleState(state?: boolean) {
     this.isActive = state || !this.isActive;
   }

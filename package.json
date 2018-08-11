@@ -19,6 +19,7 @@
     "copy:css": "copyfiles -f src/exemplify/css/exemplify.css exemplify/css",
     "prebuild": "npm run -s clean",
     "build": "ngc -p src/tsconfig-aot.json && npm run copy:css",
+    "build-lib": "ng build exemplify",
     "postbuild": "npm run -s clean:factory",
     "prepublishOnly": "npm run -s build",
     "postpublish": "npm run -s clean",
