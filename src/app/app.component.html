@@ -1,93 +1,12 @@
-<div class="container pb-5">
+<div class="container-fluid pb-5">
   <br>
   <h1>
     Angular Exemplify
   </h1>
-  <p class="lead">A simple directive for adding code examples based on actual code and markup! Just add <code>exemplify</code> and <code>[context]="this"</code> to your element and you're done:D See <a href="https://github.com/hjalmers/angular-exemplify" target="_blank">docs</a> for more info.</p>
-  <h4 class="mt-5">A really basic example</h4>
-  <p>Lets start with something really simple, by adding the directive <code>exemplify</code> and <code>[context]="this"</code> to our element this is what we'll get.</p>
-  <strong class="text-muted">Example:</strong>
-  <div exemplify="basic" [show]="true" [context]="this">
-    <p>Some content and a button.</p>
-    <button class="btn btn-primary mb-4">Button</button>
-  </div>
-  <p class="alert-info alert my-4">Note that the directive itself and other angular specific attributes added during compilation are removed as we often want to show the code before compilation. However, in some cases we might want to keep the inputs and attributes added to our example element and by passing <code>[keepInputs]="true"</code> to our directive we can achieve just that.</p>
-  <strong class="text-muted">Example:</strong>
-  <div exemplify="basicKeepInputs" [keepInputs]="true" [show]="true" [context]="this">
-    <p>Some other content and another button.</p>
-    <button class="btn btn-primary mb-4">Another button</button>
-  </div>
-  <h4 class="mt-5">The less basic reality</h4>
-  <p>A real app or library is usually more complex and most often our code is split in to multiple files (JavaScript, TypeScript, html, css etc.), which is a good practice for organizing our code but i also poses a problem when we're trying to keep examples up to date. So how do we solve that last problem now that our code is split into multiple files?</p>
-  <p class="alert alert-info">The following example loads external sources that are passed to the directive and presents them within tabs. You can override the css styles directly or pass other nav options to leverage bootstraps default styles using <code>[navStyle]="'tabs'"</code>. We're also targeting another element using <code>[target]="formExample"</code> (the element we want to add attach our example to) and by passing a custom class name <code>[customClass]="'card-footer'"</code> we can alter the appearance.</p>
-  <p>For the sake of demonstrating the concept I've added an example inside another example so the first one is what you want to achieve and the second code block is actually how you'd set it up.</p>
-  <strong class="text-muted">Example:</strong>
-  <div exemplify="metaExample" [keepInputs]="true" [source]="'child'" class="mt-2" [escapeStrings]="['#formExample']" [context]="this">
-  <div class="card mb-4" #formExample>
-    <div class="card-body">
-      <form exemplify="formExample" [target]="formExample" [navStyle]="'tabs'" [customClass]="'card-footer'" [externalSources]="externalSources" [context]="this">
-        <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-          <div class="col-sm-10">
-            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-          </div>
-        </div>
-        <fieldset class="form-group row">
-          <legend class="col-form-legend col-sm-2">Radios</legend>
-          <div class="col-sm-10">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                Option one is this and that&mdash;be sure to include why it's great
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                Option two can be something else and selecting it will deselect option one
-              </label>
-            </div>
-            <div class="form-check disabled">
-              <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                Option three is disabled
-              </label>
-            </div>
-          </div>
-        </fieldset>
-        <div class="form-group row">
-          <label class="col-sm-2">Checkbox</label>
-          <div class="col-sm-10">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="form-check-input" type="checkbox"> Check me out
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="offset-sm-2 col-sm-10">
-            <button type="submit" class="btn btn-primary btn-custom" (click)="signIn()">Sign in</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <strong class="text-muted">Meta code example</strong>
-  </div>
-  <h4 class="mt-5">Escaping template variables, inputs etc.</h4>
-  <p>Without escaping the string <code>#myTemplateVariable</code> this is how or example would turn out.</p>
-  <div exemplify="escapingFalseExample" [show]="true" [context]="this">
-    <div #myTemplateVariable></div>
-  </div>
-  <p class="alert alert-info mt-4">To avoid the above we need let exemplify know which strings to escape. We do this by passing them in an array ex. <code>['#myTemplateVariable','[myCustomInput]','[(myCustomEvent)]']</code>. Note that this is only necessary for camel case strings.</p>
-  <div exemplify="escapingExample" [keepInputs]="true" [escapeStrings]="['#myTemplateVariable']" [show]="true" [context]="this">
-    <div #myTemplateVariable></div>
-  </div>
+  <p class="lead">A simple component for adding code examples based on actual code and markup! Just add <code>&lt;exemplify&gt;&lt;/exemplify&gt;</code> together with <code>[selector]=&quot;'**html selector**'&quot;</code> and/or <code>[sources]=&quot;sourceList&quot;</code> to your code and you're done:D See <a href="https://github.com/hjalmers/angular-exemplify" target="_blank">docs</a> for more info.</p>
+  <basic-example></basic-example>
+  <sources></sources>
+  <raw-loader></raw-loader>
+  <inline-snippet></inline-snippet>
+  <escaping-strings></escaping-strings>
 </div>

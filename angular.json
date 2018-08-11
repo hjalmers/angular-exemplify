@@ -21,9 +21,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/prismjs/themes/prism-coy.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/prismjs/prism.js"
@@ -77,9 +75,7 @@
               "node_modules/prismjs/prism.js"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/prismjs/themes/prism-coy.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "assets": [
               "src/assets",
