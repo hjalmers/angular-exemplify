@@ -55,7 +55,7 @@ export class CodeSnippetComponent implements OnDestroy {
   public code: string;
   public isActive: boolean = true;
   public parsedSnippet: string;
-  private _window: Window;
+  private window: Window;
   private _snippet: Snippet;
   private $unsubscribe = new Subject();
   private _defaultTexts: ExemplifyTexts = {
@@ -71,7 +71,7 @@ export class CodeSnippetComponent implements OnDestroy {
               private http: HttpClient,
               private windowRef: WindowRef,
               private utilities: UtilitiesService) {
-    this._window = this.windowRef.nativeWindow;
+    this.window = this.windowRef.nativeWindow;
   }
 
   /** Highlight, highlight code and update value of parsed snippet */
