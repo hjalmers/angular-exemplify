@@ -1,0 +1,11 @@
+<h4 class="mt-5">Escaping template variables, inputs etc.</h4>
+<p>Without escaping the string <code>#myTemplateVariable</code> this is how or example would turn out.</p>
+<div id="unescapedTemplateVariable">
+  <div #myTemplateVariable></div>
+</div>
+<exemplify [selector]="'#unescapedTemplateVariable'" [texts]="{markup:'unescaped'}"></exemplify>
+<p class="alert alert-info mt-4">To avoid the above we need let exemplify know which strings to escape. We do this by passing them in an array ex. <code>['#myTemplateVariable','[myCustomInput]','[(myCustomEvent)]']</code>. Note that this is only necessary for camel case strings and when we're using the <code>[selector]</code> attribute to get the html template.</p>
+<div id="escapedTemplateVariable">
+  <div #myTemplateVariable></div>
+</div>
+<exemplify [selector]="'#escapedTemplateVariable'" [escapeStrings]="['#myTemplateVariable']" [texts]="{markup:'escaped'}"></exemplify>

@@ -1,0 +1,20 @@
+@import "../../scss/exemplify-variables";
+:host {
+  display: block;
+  position: relative;
+  margin-top: 1rem;
+  &:hover ::ng-deep.btn-group {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    .btn.not-active {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media only screen and (max-width : $exemplify-mobile-width) {
+  .custom-select {
+    padding-right: 150px;
+    background-position-x: calc(100% - 125px);
+  }
+}

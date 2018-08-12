@@ -1,0 +1,64 @@
+<h4 class="mt-5">The less basic reality</h4>
+<p>A real app or library is usually more complex and most often our code is split in to multiple files (JavaScript, TypeScript, html, css etc.), which is a good practice for organizing our code but i also poses a problem when we're trying to keep examples up to date. So how do we solve that last problem now that our code is split into multiple files?</p>
+<p class="alert alert-info">The following example loads external sources and displays them in tabs once they're fetched. One thing that's great with this approach is that we don't need to think about escaping strings in html templates (for more info on that topic scroll down). However, we can still target specific parts of the code by passing a selector with config so we could have multiple examples in the same html template but display them individually.</p>
+<p>For the sake of demonstrating the concept I've added an example inside another example so the first one is what you want to achieve and the second code block is actually how you'd set it up.</p>
+<strong class="text-muted">Example:</strong>
+<div class="card mb-4" id="metaFormExample">
+  <div class="card-body">
+    <form id="formExample">
+      <div class="form-group row">
+        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+          <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+        </div>
+      </div>
+      <fieldset class="form-group row">
+        <legend class="col-form-legend col-sm-2">Radios</legend>
+        <div class="col-sm-10">
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+              Option one is this and that&mdash;be sure to include why it's great
+            </label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+              Option two can be something else and selecting it will deselect option one
+            </label>
+          </div>
+          <div class="form-check disabled">
+            <label class="form-check-label">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+              Option three is disabled
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group row">
+        <label class="col-sm-2">Checkbox</label>
+        <div class="col-sm-10">
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox"> Check me out
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+          <button type="submit" class="btn btn-primary btn-custom" (click)="signIn()">Sign in</button>
+        </div>
+      </div>
+    </form>
+    <exemplify [sources]="externalSources"></exemplify>
+  </div>
+</div>
+<strong class="text-muted">Meta code example</strong>
+<exemplify [selector]="'#metaFormExample'" [show]="false"></exemplify>

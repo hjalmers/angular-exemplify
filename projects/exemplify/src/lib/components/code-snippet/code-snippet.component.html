@@ -1,0 +1,7 @@
+<div class="btn-group" role="group" aria-label="Code snippet toolbar" *ngIf="code">
+  <button class="btn btn-link" (click)="toggleState()" [ngClass]="{'not-active':!isActive}">{{isActive ? texts.hide:texts.show}}</button>
+  <button class="btn btn-link" (click)="copyToClipboard(code)">{{texts.copy}}</button>
+</div>
+<pre class="language-{{snippet?.lang}}" *ngIf="isActive">
+  <code class="language-{{snippet?.lang}}" [innerHTML]="parsedSnippet"></code>
+</pre>

@@ -1,0 +1,23 @@
+@import "../../scss/exemplify-variables";
+.btn-group {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+@media only screen and (min-width : $exemplify-mobile-width) {
+  .btn-group {
+    opacity: 0;
+    margin-top: 2px;
+    transform: translate3d(0, 10px, 0);
+    transition: opacity 400ms ease-in-out, transform 400ms ease-out;
+  }
+}
+@media only screen and (max-width : $exemplify-mobile-width) {
+  .btn-group {
+    width: 114px;
+    .btn {
+      padding-right: .5rem;
+      padding-left: .5rem;
+    }
+  }
+}
