@@ -1,7 +1,3 @@
-Release History
----------------
-## [Unreleased]
-
 # [2.0.1] - 2017-08-23
 
 ### Fixed
