@@ -1,6 +1,6 @@
 {
   "name": "angular-exemplify",
-  "version": "2.0.1-development",
+  "version": "1.0.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
     "autoprefix-css": "postcss -u autoprefixer -r dist/exemplify/css/prism-exemplify.css",
     "minify-css": "cleancss -o dist/exemplify/css/prism-exemplify.min.css dist/exemplify/css/prism-exemplify.css --source-map",
     "compile-css": "npm run build-css && npm run autoprefix-css && npm run minify-css",
-    "prebuild": "rimraf dist/demo && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts",
+    "prebuild": "rimraf dist/demo && replace __TRAVIS_BUILD_NUMBER__ $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace __TRAVIS_BUILD_NUMBER__ $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts",
     "prebuild-lib": "rimraf dist/exemplify && npm run copy-md",
-    "build": "ng build --base-href /demo/",
+    "build": "ng build --base-href /angular-exemplify/",
     "build-lib": "ng build exemplify",
     "lint": "ng lint",
     "lint-lib": "ng lint exemplify",

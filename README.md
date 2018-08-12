@@ -1,6 +1,7 @@
 # Angular Exemplify
 [![Build Status](https://travis-ci.com/hjalmers/angular-exemplify.svg?branch=master)](https://travis-ci.com/hjalmers/angular-exemplify)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 A simple angular component for adding code examples based on actual code and markup! Just add <code>&lt;exemplify&gt;&lt;/exemplify&gt;</code> together with <code>[selector]=&quot;'**html selector**'&quot;</code> and/or <code>[sources]=&quot;sourceList&quot;</code> to your code and you're done:D
 
@@ -15,14 +16,17 @@ Please note that you don't have to use bootstrap and/or raw-loader with angular 
 
 ## Installation and usage
 
-Install with
+Install with:
 ```
 npm install angular-exemplify --save
 ```
 
 **If you want to use together with bootstrap 4**
 
-Run `npm install bootstrap --save`
+Run:
+```
+npm install bootstrap --save
+```
 
 ### Usage in angular-cli project
 Please note the instructions below are for projects based on angular-cli, you might need to set up things differently if you're using something else.
@@ -74,7 +78,7 @@ export class AppModule { }
 
 ### Basic usage
 Add `<exemplify [selector]="'.btn.btn-primary'"></exemplify>` below your element like this:
-```html
+```
 <button class="btn btn-primary" (click)="doSomething()">Action</button>
 <exemplify [selector]="'.btn.btn-primary'"></exemplify>
 ```
@@ -114,7 +118,7 @@ sources = [{
 
 ### If you want to use raw-loader to load project files
 
-Install with
+Install with:
 ```
 npm install raw-loader --save-dev`
 ```
@@ -138,12 +142,12 @@ sorces = [{
   }]
 ```
 
-install types for node
+Install types for node:
 ```
 npm install @types/node --save-dev
 ```
 
-and add `node` to your types in tsconfig.app.json`
+And add `node` to your types in tsconfig.app.json`
 
 ```
 {
