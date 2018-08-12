@@ -15,6 +15,9 @@ script:
 - npm run test-lib-ci
 - npm run build-lib && npm run build
 
+notifications:
+  email: false
+
 deploy:
   provider: pages
   skip-cleanup: true
@@ -26,3 +29,10 @@ deploy:
 
 git:
   depth: 3
+
+after_success:
+  - npm run travis-deploy-once "npm run semantic-release"
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
