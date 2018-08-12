@@ -1,4 +1,5 @@
 import {Component, ViewEncapsulation} from '@angular/core';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,7 @@ import {Component, ViewEncapsulation} from '@angular/core';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class AppComponent {
+  travis_build_number: string = environment.travis_build_number;
+  version: string = environment.version;
   constructor() {}
 }
