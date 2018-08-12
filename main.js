@@ -1,5 +1,16 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["main"],{
 
+/***/ "./dist/exemplify/package.json":
+/*!*************************************!*\
+  !*** ./dist/exemplify/package.json ***!
+  \*************************************/
+/*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
+/***/ (function(module) {
+
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.0-development","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/es6/array.js":
 /*!*******************************************!*\
   !*** ./node_modules/core-js/es6/array.js ***!
@@ -9848,17 +9859,6 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 
 /***/ }),
 
-/***/ "./package.json":
-/*!**********************!*\
-  !*** ./package.json ***!
-  \**********************/
-/*! exports provided: name, version, license, repository, author, angular-cli, scripts, private, publishConfig, config, release, main, devDependencies, dependencies, default */
-/***/ (function(module) {
-
-module.exports = {"name":"angular-exemplify","version":"3.0.0","license":"Apache-2.0","repository":{"type":"git","url":"https://github.com/hjalmers/angular-exemplify.git"},"author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","angular-cli":{},"scripts":{"ng":"ng","start":"ng serve","e2e":"ng e2e","copy-md":"copyfiles -f *.md dist/exemplify/","copy-scss":"copyfiles -f projects/exemplify/src/lib/scss/**/*.scss dist/exemplify/scss/","build-css":"node-sass --source-map true  projects/exemplify/src/lib/scss/prism-exemplify.scss dist/exemplify/css/prism-exemplify.css","autoprefix-css":"postcss -u autoprefixer -r dist/exemplify/css/prism-exemplify.css","minify-css":"cleancss -o dist/exemplify/css/prism-exemplify.min.css dist/exemplify/css/prism-exemplify.css --source-map","compile-css":"npm run build-css && npm run autoprefix-css && npm run minify-css","prebuild":"rimraf dist/demo && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts","prebuild-lib":"rimraf dist/exemplify && npm run copy-md","build":"ng build --base-href /demo/","build-lib":"ng build exemplify","lint":"ng lint","lint-lib":"ng lint exemplify","test":"ng test","test-lib":"ng test exemplify --code-coverage","test-lib-ci":"npm run test-lib -- --browsers ChromeHeadlessCI --watch false","prepublishOnly":"npm run -s build","commit":"git-cz","travis-deploy-once":"travis-deploy-once --pro","semantic-release":"semantic-release"},"private":true,"publishConfig":{"registry":"https://registry.npmjs.org/"},"config":{"commitizen":{"path":"./node_modules/cz-conventional-changelog"}},"release":{"pkgRoot":"dist/exemplify"},"main":"index.js","devDependencies":{"@angular-devkit/build-angular":"~0.7.0","@angular-devkit/build-ng-packagr":"~0.7.0","@angular/cli":"^6.1.2","@angular/compiler-cli":"^6.1.1","@types/jasmine":"~2.8.6","@types/jasminewd2":"~2.0.3","@types/node":"~8.9.4","autoprefixer":"^9.1.0","clean-css-cli":"^4.2.1","codelyzer":"~4.2.1","commitizen":"^2.10.1","copyfiles":"^1.2.0","cz-conventional-changelog":"^2.1.0","jasmine-core":"~2.99.1","jasmine-spec-reporter":"~4.2.1","karma":"~1.7.1","karma-chrome-launcher":"~2.2.0","karma-coverage-istanbul-reporter":"~2.0.0","karma-jasmine":"~1.1.1","karma-jasmine-html-reporter":"^0.2.2","karma-mocha-reporter":"^2.2.5","ng-packagr":"^3.0.0","postcss-cli":"^6.0.0","prismjs":"^1.15.0","protractor":"~5.3.0","raw-loader":"^0.5.1","replace":"^1.0.0","rimraf":"^2.6.2","ts-helpers":"^1.1.1","ts-node":"~5.0.1","tsickle":">=0.29.0","tslib":"^1.9.0","tslint":"~5.9.1","typescript":"~2.9.2","travis-deploy-once":"^5.0.2","semantic-release":"^15.9.8"},"dependencies":{"@angular/common":"^6.1.1","@angular/compiler":"^6.1.1","@angular/core":"^6.1.1","@angular/forms":"^6.1.1","@angular/http":"^6.1.1","@angular/platform-browser":"^6.1.1","@angular/platform-browser-dynamic":"^6.1.1","@angular/router":"^6.1.1","bootstrap":"^4.1.3","core-js":"^2.5.4","rxjs":"^6.2.2","zone.js":"~0.8.26"}};
-
-/***/ }),
-
 /***/ "./projects/exemplify/src/lib/components/code-snippet/code-snippet.component.html":
 /*!****************************************************************************************!*\
   !*** ./projects/exemplify/src/lib/components/code-snippet/code-snippet.component.html ***!
@@ -10485,7 +10485,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <br>\n  <h1>\n    Angular Exemplify\n  </h1>\n  <p class=\"lead\">A simple component for adding code examples based on actual code and markup! Just add <code>&lt;exemplify&gt;&lt;/exemplify&gt;</code> together with <code>[selector]=&quot;'**html selector**'&quot;</code> and/or <code>[sources]=&quot;sourceList&quot;</code> to your code and you're done:D See <a href=\"https://github.com/hjalmers/angular-exemplify\" target=\"_blank\">docs</a> for more info.</p>\n  <basic-example></basic-example>\n  <sources></sources>\n  <raw-loader></raw-loader>\n  <inline-snippet></inline-snippet>\n  <escaping-strings></escaping-strings>\n  <div class=\"py-5 text-center text-muted\">Version: <a href=\"{{'https://github.com/hjalmers/angular-exemplify/releases/tag/' + version}}\" target=\"_blank\" class=\"mr-3\">{{version}}</a>Build: {{travis_build_number}} </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\n  <br>\n  <h1>\n    Angular Exemplify\n  </h1>\n  <p class=\"lead\">A simple component for adding code examples based on actual code and markup! Just add <code>&lt;exemplify&gt;&lt;/exemplify&gt;</code> together with <code>[selector]=&quot;'**html selector**'&quot;</code> and/or <code>[sources]=&quot;sourceList&quot;</code> to your code and you're done:D See <a href=\"https://github.com/hjalmers/angular-exemplify\" target=\"_blank\">docs</a> for more info.</p>\n  <basic-example></basic-example>\n  <sources></sources>\n  <raw-loader></raw-loader>\n  <inline-snippet></inline-snippet>\n  <escaping-strings></escaping-strings>\n  <div class=\"py-5 text-center text-muted\">Version: <a href=\"{{'https://github.com/hjalmers/angular-exemplify/releases/tag/v' + version}}\" target=\"_blank\" class=\"mr-3\">{{version}}</a>Build: {{travis_build_number}} </div>\n</div>\n"
 
 /***/ }),
 
@@ -10996,8 +10996,8 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 var environment = {
     production: false,
-    version: __webpack_require__(/*! ../../package.json */ "./package.json").version,
-    travis_build_number: 'n/a'
+    version: __webpack_require__(/*! ../../dist/exemplify/package.json */ "./dist/exemplify/package.json").version,
+    travis_build_number: '14'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
