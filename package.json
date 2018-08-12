@@ -19,7 +19,7 @@
     "minify-css": "cleancss -o dist/exemplify/css/prism-exemplify.min.css dist/exemplify/css/prism-exemplify.css --source-map",
     "compile-css": "npm run build-css && npm run autoprefix-css && npm run minify-css",
     "prebuild": "rimraf dist/demo && replace __TRAVIS_BUILD_NUMBER__ $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace __TRAVIS_BUILD_NUMBER__ $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts",
-    "prebuild-lib": "rimraf dist/exemplify && npm run copy-md",
+    "prebuild-lib": "rimraf dist/exemplify && npm run copy-md && npm run copy-scss && npm run compile-css",
     "build": "ng build --base-href /angular-exemplify/",
     "build-lib": "ng build exemplify",
     "lint": "ng lint",
