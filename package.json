@@ -1,22 +1,25 @@
 {
   "name": "angular-exemplify",
   "version": "2.0.1",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/hjalmers/angular-exemplify.git"
   },
+  "author": "Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "e2e": "ng e2e",
+    "copy-md": "copyfiles -f *.md dist/exemplify/",
     "copy-scss": "copyfiles -f projects/exemplify/src/lib/scss/**/*.scss dist/exemplify/scss/",
     "build-css": "node-sass --source-map true  projects/exemplify/src/lib/scss/prism-exemplify.scss dist/exemplify/css/prism-exemplify.css",
     "autoprefix-css": "postcss -u autoprefixer -r dist/exemplify/css/prism-exemplify.css",
     "minify-css": "cleancss -o dist/exemplify/css/prism-exemplify.min.css dist/exemplify/css/prism-exemplify.css --source-map",
     "compile-css": "npm run build-css && npm run autoprefix-css && npm run minify-css",
     "prebuild": "rimraf dist/demo && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts",
+    "prebuild-lib": "rimraf dist/exemplify && npm run copy-md",
     "build": "ng build --base-href /demo/",
     "build-lib": "ng build exemplify",
     "lint": "ng lint",
@@ -27,7 +30,7 @@
     "prepublishOnly": "npm run -s build",
     "commit": "git-cz"
   },
-  "private": false,
+  "private": true,
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

@@ -1,5 +1,7 @@
 {
   "name": "angular-exemplify",
+  "license": "Apache-2.0",
+  "author": "Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)",
   "version": "2.0.1",
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0",

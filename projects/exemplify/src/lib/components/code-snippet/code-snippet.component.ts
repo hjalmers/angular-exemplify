@@ -53,7 +53,7 @@ export class CodeSnippetComponent implements OnDestroy {
   }
 
   public code: string;
-  public isActive: boolean = true;
+  public isActive = true;
   public parsedSnippet: string;
   private window: Window;
   private _snippet: Snippet;

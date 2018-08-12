@@ -27,7 +27,7 @@ export class FormComponent {
 
   constructor() {}
 
-  signIn = function(){
+  signIn = function() {
     console.log('you clicked sign in');
   };
 }
