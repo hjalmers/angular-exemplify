@@ -10997,7 +10997,7 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false,
     version: __webpack_require__(/*! ../../dist/exemplify/package.json */ "./dist/exemplify/package.json").version,
-    travis_build_number: '14'
+    travis_build_number: '17'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
