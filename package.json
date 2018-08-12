@@ -20,7 +20,7 @@
     "compile-css": "npm run build-css && npm run autoprefix-css && npm run minify-css",
     "prebuild": "rimraf dist/demo && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.ts && replace src/environments/environment.ts $TRAVIS_BUILD_NUMBER src/environments/environment.prod.ts",
     "prebuild-lib": "rimraf dist/exemplify && npm run copy-md",
-    "build": "ng build --base-href /demo/",
+    "build": "ng build --base-href /angular-exemplify/",
     "build-lib": "ng build exemplify",
     "lint": "ng lint",
     "lint-lib": "ng lint exemplify",
