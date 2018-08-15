@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.1","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.0-development","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -10997,7 +10997,7 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false,
     version: __webpack_require__(/*! ../../dist/exemplify/package.json */ "./dist/exemplify/package.json").version,
-    travis_build_number: '17'
+    travis_build_number: '20'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
