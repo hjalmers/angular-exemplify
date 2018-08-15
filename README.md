@@ -38,7 +38,7 @@ If you want to use angular exemplify together with prism, make sure to add the p
 ```json
 "styles": [
   "../node_modules/bootstrap/dist/css/bootstrap.css",
-  "../node_modules/angular-exemplify/exemplify/css/prism-exemplify.css",
+  "../node_modules/angular-exemplify/css/prism-exemplify.css",
   "styles.css"
 ],
 "scripts": [
@@ -123,7 +123,7 @@ Install with:
 npm install raw-loader --save-dev`
 ```
 
-Then you need to add the followinf typings to your `typings.d.ts` file.
+Then you need to add the following typings to your `typings.d.ts` file.
 
 ```js
 declare module '!raw-loader!*' {
