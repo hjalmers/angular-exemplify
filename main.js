@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.1","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.2","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -10383,10 +10383,16 @@ var UtilitiesService = /** @class */ (function () {
     /* parse html from and return element matched with selector */
     UtilitiesService.prototype.parseHtml = function (template, selector) {
         var parser = new DOMParser();
-        var htmlTemplate = typeof template !== 'string' ? template['_data'].componentView.component.viewContainerRef['_view'].component.constructor['__annotations__'][0].template : template;
+        var htmlTemplate = '';
+        try {
+            htmlTemplate = typeof template !== 'string' ? template['_data'].componentView.component.viewContainerRef['_view'].component.constructor['__annotations__'][0].template : template;
+        }
+        catch (e) {
+            console.warn('Exemplify: couldn\'t retrieve html for "' + selector + '", most likely due to annotations being removed with aot build. Referer to the following issue for more info and workaround:', 'https://github.com/hjalmers/angular-exemplify/issues/15');
+        }
         var output = '';
         var markupExampleCode = parser.parseFromString(htmlTemplate, 'text/html').querySelectorAll(selector);
-        if (markupExampleCode.length === 0) {
+        if (markupExampleCode.length === 0 && htmlTemplate !== '') {
             console.warn('Exemplify: no element matched selector, no markup returned.');
         }
         for (var i = 0; i < markupExampleCode.length; i++) {
@@ -10996,8 +11002,17 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 var environment = {
     production: false,
-    version: __webpack_require__(/*! ../../dist/exemplify/package.json */ "./dist/exemplify/package.json").version,
-    travis_build_number: '20'
+    version: (function () {
+        var version = '';
+        try {
+            version = __webpack_require__(/*! ../../dist/exemplify/package.json */ "./dist/exemplify/package.json").version;
+        }
+        catch (e) {
+            version = 'n/a';
+        }
+        return version;
+    })(),
+    travis_build_number: '23'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
