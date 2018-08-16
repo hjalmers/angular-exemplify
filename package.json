@@ -30,7 +30,7 @@
     "prepublishOnly": "npm run -s build",
     "commit": "git-cz",
     "travis-deploy-once": "travis-deploy-once --pro",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release && npm run build"
   },
   "private": true,
   "publishConfig": {
@@ -51,6 +51,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npm run lint && npm run lint-lib",
       "commit-msg": "commitlint --edit"
     }
   },

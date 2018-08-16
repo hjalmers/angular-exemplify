@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  version: require('../../dist/exemplify/package.json').version,
+  version: (() => {
+      let version = '';
+      try {version = require('../../dist/exemplify/package.json').version; } catch (e) {version = 'n/a'; }
+      return version;
+  })(),
   travis_build_number: '__TRAVIS_BUILD_NUMBER__'
 };
 
