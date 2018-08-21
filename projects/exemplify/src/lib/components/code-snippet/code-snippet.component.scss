@@ -58,6 +58,6 @@
 .exemplify-hidden.copy-notice {
   transition: opacity ease-out $exemplify-copy-notice-transition-time $exemplify-copy-notice-duration, z-index 0ms $exemplify-copy-notice-duration;
   opacity: 0;
-  z-index: 0;
+  z-index: -1;
 }
 

@@ -24,7 +24,6 @@ pre[class*="language-"] {
   border-left: 8px solid $exemplify-border-color;
   display: flex;
   padding-top: 22px;
-  padding-bottom: 22px;
 
 }
 pre[class*="language-"]>code {
@@ -35,12 +34,13 @@ pre[class*="language-"]>code {
   background-origin: content-box;
   background-attachment: local;
   min-width: 100%;
+  box-sizing: border-box;
 }
 
 code[class*="language"] {
   max-height: inherit;
   height: inherit;
-  padding: 0 1em;
+  padding: 0 1rem 21px 1rem;
   display: block;
   overflow: auto;
 }
