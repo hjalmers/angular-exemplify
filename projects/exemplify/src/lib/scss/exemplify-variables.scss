@@ -1,7 +1,15 @@
-$exemplify-border-color: #037aff !default;
-$exemplify-mobile-width: 576px !default;
-$exemplify-stripe-color: #f1f1f1 !default;
+$exemplify-font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default; // default font-family
+$exemplify-code-font-size: 14px !default; // default font size for code snippet
+$exemplify-border-color: #037aff !default; // border color of left border
+$exemplify-tab-border-color: #e1e1e1 !default; // tab border color
+$exemplify-color: #000 !default; // default text color
+$exemplify-link-color: $exemplify-border-color !default; // link color for nav elements and links
+$exemplify-mobile-width: 576px !default; // breakpoint for mobile layout
+$exemplify-stripe-color: #f1f1f1 !default; // stripe color of code snippet background
+$exemplify-custom-select-height: calc(2.25rem + 2px) !default; // the height for select element
+$exemplify-custom-toolbar-width: 114px !default; // the width need for copy and toggle show/hide buttons
 
+// default colors for code snippet tags
 $exemplify-colors:
   (
     one: #6610f2,
@@ -9,21 +17,4 @@ $exemplify-colors:
     three: #17a2b8,
     four: #0092E1,
     five: #e83e8c
-  ) !default;
-$exemplify-colors:
-  (
-    one: #c92c2c,
-    two: #2f9c0a,
-    three: #a67f59,
-    four: #1990b8,
-    five: #e90
-  ) !default;
-
-$exemplify-colors:
-  (
-    one: #e83e8c,
-    two: #6610f2,
-    three: #17a2b8,
-    four: #0092E1,
-    five: #009d3a
   ) !default;

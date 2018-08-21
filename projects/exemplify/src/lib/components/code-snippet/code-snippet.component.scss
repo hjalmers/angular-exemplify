@@ -14,8 +14,10 @@
 }
 @media only screen and (max-width : $exemplify-mobile-width) {
   .btn-group {
-    width: 114px;
+    width: $exemplify-custom-toolbar-width;
+    height: $exemplify-custom-select-height;
     .btn {
+      height: 100%;
       padding-right: .5rem;
       padding-left: .5rem;
     }
