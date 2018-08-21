@@ -33,7 +33,7 @@ Please note the instructions below are for projects based on angular-cli, you mi
 
 **Include scripts and styles in build**
 
-If you want to use angular exemplify together with prism, make sure to add the prism script and the prism-exemplif.css or one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional:
+If you want to use angular exemplify together with prism, make sure to add the prism script and the prism-exemplify.css or one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional but if you're not using bootstrap you should include exemplify.css to get the basic styling at least:
 
 ```js
 "styles": [
