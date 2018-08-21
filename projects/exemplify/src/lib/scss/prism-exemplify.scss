@@ -4,7 +4,7 @@ code[class*="language-"],
 pre[class*="language-"] {
   color: black;
   background: none;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: $exemplify-font-family;
   text-align: left;
   white-space: pre;
   word-spacing: normal;

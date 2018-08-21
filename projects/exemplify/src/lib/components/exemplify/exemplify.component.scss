@@ -14,7 +14,7 @@
 
 @media only screen and (max-width : $exemplify-mobile-width) {
   .custom-select {
-    padding-right: 150px;
-    background-position-x: calc(100% - 125px);
+    padding-right: $exemplify-custom-toolbar-width;
+    background-position-x: calc(100% - #{$exemplify-custom-toolbar-width} - 8px);
   }
 }
