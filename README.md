@@ -35,11 +35,11 @@ Please note the instructions below are for projects based on angular-cli, you mi
 
 If you want to use angular exemplify together with prism, make sure to add the prism script and the prism-exemplif.css or one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional:
 
-```json
+```js
 "styles": [
   "../node_modules/bootstrap/dist/css/bootstrap.css",
   "../node_modules/angular-exemplify/css/prism-exemplify.css",
-  "../node_modules/angular-exemplify/css/exemplify.css", <-- only add this line if you're not using bootstrap
+  "../node_modules/angular-exemplify/css/exemplify.css", // <-- only add this line if you're not using bootstrap
   "styles.css"
 ],
 "scripts": [
@@ -50,7 +50,7 @@ If you want to use angular exemplify together with prism, make sure to add the p
 If you're using sass, you could also import the corresponding sass files like this instead of adding the css files:
 ```scss
 @import "~angular-exemplify/scss/prism-exemplify";
-@import "~angular-exemplify/scss/exemplify"; <-- only add this line if you're not using bootstrap
+@import "~angular-exemplify/scss/exemplify"; // <-- only add this line if you're not using bootstrap
 @import "~bootstrap/scss/bootstrap";
 ```
 
