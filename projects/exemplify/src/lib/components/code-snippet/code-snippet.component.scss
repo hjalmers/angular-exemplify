@@ -23,3 +23,41 @@
     }
   }
 }
+.snippet-wrapper {
+  position: relative;
+  &.exemplify-backdrop::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: rgba(0,0,0,.75);
+    z-index: 0;
+    opacity: 1;
+  }
+}
+.copy-notice {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 300px;
+  z-index: 1;
+  opacity: 1;
+}
+
+.exemplify-hidden.exemplify-backdrop::after,
+.exemplify-hidden.copy-notice {
+  transition: opacity ease-out $exemplify-copy-notice-transition-time $exemplify-copy-notice-duration, z-index 0ms $exemplify-copy-notice-duration;
+  opacity: 0;
+  z-index: 0;
+}
+

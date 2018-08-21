@@ -22,6 +22,9 @@ pre[class*="language-"] {
   overflow: visible;
   padding: 0;
   border-left: 8px solid $exemplify-border-color;
+  display: flex;
+  padding-top: 22px;
+  padding-bottom: 22px;
 
 }
 pre[class*="language-"]>code {
@@ -31,6 +34,7 @@ pre[class*="language-"]>code {
   background-size: 3em 3em;
   background-origin: content-box;
   background-attachment: local;
+  min-width: 100%;
 }
 
 code[class*="language"] {

@@ -2,6 +2,12 @@
   <button class="btn btn-link" (click)="toggleState()" [ngClass]="{'not-active':!isActive}">{{isActive ? texts.hide:texts.show}}</button>
   <button class="btn btn-link" (click)="copyToClipboard(code)">{{texts.copy}}</button>
 </div>
-<pre class="language-{{snippet?.lang}}" *ngIf="isActive">
-  <code class="language-{{snippet?.lang}}" [innerHTML]="parsedSnippet"></code>
-</pre>
+<div class="snippet-wrapper exemplify-backdrop" [ngClass]="{'exemplify-hidden': !showCopyNotice }">
+  <pre class="language-{{snippet?.lang}}" *ngIf="isActive">
+    <code class="language-{{snippet?.lang}}" [innerHTML]="parsedSnippet"></code>
+  </pre>
+  <div class="copy-notice" [ngClass]="{'exemplify-hidden': !showCopyNotice }">
+    <span>{{copyNotice}}</span>
+  </div>
+</div>
+
