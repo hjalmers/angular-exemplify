@@ -70,7 +70,9 @@ export class ExemplifyComponent implements OnChanges {
     copy: 'Copy',
     show: 'Show',
     hide: 'Hide',
-    sourceNotFound: 'Source not found'
+    sourceNotFound: 'Source not found',
+    copySuccess: 'Code snippet successfully copied to clipboard!',
+    copyError: 'Copy to clipboard failed!'
   };
   private _texts: ExemplifyTexts = this._defaultTexts;
   public activeSnippet: Snippet;

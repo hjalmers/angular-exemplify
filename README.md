@@ -33,12 +33,13 @@ Please note the instructions below are for projects based on angular-cli, you mi
 
 **Include scripts and styles in build**
 
-If you want to use angular exemplify together with prism, make sure to add the prism script and the prism-exemplif.css or one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional:
+If you want to use angular exemplify together with prism, make sure to add the prism script and the prism-exemplify.css or one of the prism theme css files to your `.angular-cli.json` config, bootstrap.css is optional but if you're not using bootstrap you should include exemplify.css to get the basic styling at least:
 
-```json
+```js
 "styles": [
   "../node_modules/bootstrap/dist/css/bootstrap.css",
   "../node_modules/angular-exemplify/css/prism-exemplify.css",
+  "../node_modules/angular-exemplify/css/exemplify.css", // <-- only add this line if you're not using bootstrap
   "styles.css"
 ],
 "scripts": [
@@ -49,6 +50,7 @@ If you want to use angular exemplify together with prism, make sure to add the p
 If you're using sass, you could also import the corresponding sass files like this instead of adding the css files:
 ```scss
 @import "~angular-exemplify/scss/prism-exemplify";
+@import "~angular-exemplify/scss/exemplify"; // <-- only add this line if you're not using bootstrap
 @import "~bootstrap/scss/bootstrap";
 ```
 
@@ -94,7 +96,7 @@ View [demo](https://hjalmers.github.io/angular-exemplify/) for live preview and 
 | show            | boolean   | should the example be shown or hidden by default                                                                                                                                   | false             |
 | sources         | array     | an array of objects specifying sources                                                                                                                                             |                   |
 | escapeStrings   | array     | an array with strings that should be escaped (necessary for attribute strings that are written using camel case i.e. inputs, template variables etc.), see issue #1 for more info. |                   |
-| texts           | object    | override default texts by passing an object containing one or more of the following properties: `sourceNotFound`,`markup`,`show`,`hide`,`copy`                                     |                   |
+| texts           | object    | override default texts by passing an object containing one or more of the following properties: `sourceNotFound`, `markup`, `show`, `hide`, `copy`, `copySuccess`, `copyError`     |                   |
 
 
 ### Using external sources

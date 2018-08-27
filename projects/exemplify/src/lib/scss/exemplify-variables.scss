@@ -8,6 +8,8 @@ $exemplify-mobile-width: 576px !default; // breakpoint for mobile layout
 $exemplify-stripe-color: #f1f1f1 !default; // stripe color of code snippet background
 $exemplify-custom-select-height: calc(2.25rem + 2px) !default; // the height for select element
 $exemplify-custom-toolbar-width: 114px !default; // the width need for copy and toggle show/hide buttons
+$exemplify-copy-notice-duration: 1400ms !default; // duration when copy notice is displayed
+$exemplify-copy-notice-transition-time: 600ms !default; // copy notice transition time
 
 // default colors for code snippet tags
 $exemplify-colors:

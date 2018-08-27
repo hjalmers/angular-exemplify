@@ -55,6 +55,8 @@ export class CodeSnippetComponent implements OnDestroy {
   public code: string;
   public isActive = true;
   public parsedSnippet: string;
+  public copyNotice: string;
+  public showCopyNotice = false;
   private window: Window;
   private _snippet: Snippet;
   private $unsubscribe = new Subject();
@@ -63,7 +65,9 @@ export class CodeSnippetComponent implements OnDestroy {
     copy: 'Copy',
     show: 'Show',
     hide: 'Hide',
-    sourceNotFound: 'Source not found'
+    sourceNotFound: 'Source not found',
+    copySuccess: 'Code snippet successfully copied to clipboard!',
+    copyError: 'Copy to clipboard failed!'
   };
   private _texts: ExemplifyTexts = this._defaultTexts;
 
@@ -118,12 +122,19 @@ export class CodeSnippetComponent implements OnDestroy {
       document.body.appendChild(textarea);
       textarea.select();
       try {
-        return document.execCommand('copy');  // Security exception may be thrown by some browsers.
+        const copy = document.execCommand('copy');  // Security exception may be thrown by some browsers.
+        this.copyNotice = this.texts.copySuccess;
+        this.showCopyNotice = true;
+        return copy;
       } catch (ex) {
         console.warn('Copy to clipboard failed.', ex);
+        this.copyNotice = this.texts.copyError;
+        this.showCopyNotice = true;
+
         return false;
       } finally {
         document.body.removeChild(textarea);
+        setTimeout(() => this.showCopyNotice = false);
       }
     }
   };
