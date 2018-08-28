@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.0.2","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.0","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -9866,7 +9866,7 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"btn-group\" role=\"group\" aria-label=\"Code snippet toolbar\" *ngIf=\"code\">\n  <button class=\"btn btn-link\" (click)=\"toggleState()\" [ngClass]=\"{'not-active':!isActive}\">{{isActive ? texts.hide:texts.show}}</button>\n  <button class=\"btn btn-link\" (click)=\"copyToClipboard(code)\">{{texts.copy}}</button>\n</div>\n<pre class=\"language-{{snippet?.lang}}\" *ngIf=\"isActive\">\n  <code class=\"language-{{snippet?.lang}}\" [innerHTML]=\"parsedSnippet\"></code>\n</pre>\n"
+module.exports = "<div class=\"btn-group\" role=\"group\" aria-label=\"Code snippet toolbar\" *ngIf=\"code\">\n  <button class=\"btn btn-link\" (click)=\"toggleState()\" [ngClass]=\"{'not-active':!isActive}\">{{isActive ? texts.hide:texts.show}}</button>\n  <button class=\"btn btn-link\" (click)=\"copyToClipboard(code)\">{{texts.copy}}</button>\n</div>\n<div class=\"snippet-wrapper exemplify-backdrop\" [ngClass]=\"{'exemplify-hidden': !showCopyNotice }\" (dblclick)=\"copyToClipboard(code)\">\n  <pre class=\"language-{{snippet?.lang}}\" *ngIf=\"isActive\">\n    <code class=\"language-{{snippet?.lang}}\" [innerHTML]=\"parsedSnippet\"></code>\n  </pre>\n  <div class=\"copy-notice\" [ngClass]=\"{'exemplify-hidden': !showCopyNotice }\">\n    <span>{{copyNotice}}</span>\n  </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -9877,7 +9877,7 @@ module.exports = "<div class=\"btn-group\" role=\"group\" aria-label=\"Code snip
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0; }\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out; } }\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px; }\n    .btn-group .btn {\n      padding-right: .5rem;\n      padding-left: .5rem; } }\n"
+module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0; }\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out; } }\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px;\n    height: calc(2.25rem + 2px); }\n    .btn-group .btn {\n      height: 100%;\n      padding-right: .5rem;\n      padding-left: .5rem; } }\n\n.snippet-wrapper {\n  position: relative; }\n\n.snippet-wrapper.exemplify-backdrop::after {\n    content: '';\n    display: block;\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.75);\n    z-index: 0;\n    opacity: 1; }\n\n.copy-notice {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  text-align: center;\n  color: #fff;\n  font-size: 1.25rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  max-height: 300px;\n  z-index: 1;\n  opacity: 1; }\n\n.exemplify-hidden.exemplify-backdrop::after,\n.exemplify-hidden.copy-notice {\n  transition: opacity ease-out 600ms 1400ms, z-index 0ms 1400ms, height 0ms 2000ms;\n  opacity: 0;\n  z-index: 0;\n  height: 0; }\n"
 
 /***/ }),
 
@@ -9929,17 +9929,21 @@ var CodeSnippetComponent = /** @class */ (function () {
         this.windowRef = windowRef;
         this.utilities = utilities;
         this.isActive = true;
+        this.showCopyNotice = false;
         this.$unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_6__["Subject"]();
         this._defaultTexts = {
             markup: 'markup',
             copy: 'Copy',
             show: 'Show',
             hide: 'Hide',
-            sourceNotFound: 'Source not found'
+            sourceNotFound: 'Source not found',
+            copySuccess: 'Code snippet successfully copied to clipboard!',
+            copyError: 'Copy to clipboard failed!'
         };
         this._texts = this._defaultTexts;
         /** Copy to clipboard */
         this.copyToClipboard = function (text) {
+            var _this = this;
             if (this.window.clipboardData && this.window.clipboardData.setData) {
                 // IE specific code path to prevent textarea being shown while dialog is visible.
                 return this.window.clipboardData.setData('Text', text);
@@ -9951,14 +9955,20 @@ var CodeSnippetComponent = /** @class */ (function () {
                 document.body.appendChild(textarea);
                 textarea.select();
                 try {
-                    return document.execCommand('copy'); // Security exception may be thrown by some browsers.
+                    var copy = document.execCommand('copy'); // Security exception may be thrown by some browsers.
+                    this.copyNotice = this.texts.copySuccess;
+                    this.showCopyNotice = true;
+                    return copy;
                 }
                 catch (ex) {
                     console.warn('Copy to clipboard failed.', ex);
+                    this.copyNotice = this.texts.copyError;
+                    this.showCopyNotice = true;
                     return false;
                 }
                 finally {
                     document.body.removeChild(textarea);
+                    setTimeout(function () { return _this.showCopyNotice = false; });
                 }
             }
         };
@@ -10074,7 +10084,7 @@ module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"na
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  display: block;\n  position: relative;\n  margin-top: 1rem; }\n  :host:hover ::ng-deep.btn-group {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0); }\n  :host:hover ::ng-deep.btn-group .btn.not-active {\n      text-decoration: underline; }\n  @media only screen and (max-width: 576px) {\n  .custom-select {\n    padding-right: 150px;\n    background-position-x: calc(100% - 125px); } }\n"
+module.exports = ":host {\n  display: block;\n  position: relative;\n  margin-top: 1rem; }\n  :host:hover ::ng-deep.btn-group {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0); }\n  :host:hover ::ng-deep.btn-group .btn.not-active {\n      text-decoration: underline; }\n  @media only screen and (max-width: 576px) {\n  .custom-select {\n    padding-right: 114px;\n    background-position-x: calc(100% - 114px - 8px); } }\n"
 
 /***/ }),
 
@@ -10121,7 +10131,9 @@ var ExemplifyComponent = /** @class */ (function () {
             copy: 'Copy',
             show: 'Show',
             hide: 'Hide',
-            sourceNotFound: 'Source not found'
+            sourceNotFound: 'Source not found',
+            copySuccess: 'Code snippet successfully copied to clipboard!',
+            copyError: 'Copy to clipboard failed!'
         };
         this._texts = this._defaultTexts;
     }
@@ -11012,7 +11024,7 @@ var environment = {
         }
         return version;
     })(),
-    travis_build_number: '23'
+    travis_build_number: '29'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
