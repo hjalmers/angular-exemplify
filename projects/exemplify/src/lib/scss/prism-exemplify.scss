@@ -4,7 +4,7 @@ code[class*="language-"],
 pre[class*="language-"] {
   color: black;
   background: none;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: $exemplify-font-family;
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -22,6 +22,8 @@ pre[class*="language-"] {
   overflow: visible;
   padding: 0;
   border-left: 8px solid $exemplify-border-color;
+  display: flex;
+  padding-top: 22px;
 
 }
 pre[class*="language-"]>code {
@@ -31,12 +33,14 @@ pre[class*="language-"]>code {
   background-size: 3em 3em;
   background-origin: content-box;
   background-attachment: local;
+  min-width: 100%;
+  box-sizing: border-box;
 }
 
 code[class*="language"] {
   max-height: inherit;
   height: inherit;
-  padding: 0 1em;
+  padding: 0 1rem 21px 1rem;
   display: block;
   overflow: auto;
 }

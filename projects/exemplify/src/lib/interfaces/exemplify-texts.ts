@@ -4,4 +4,6 @@ export interface ExemplifyTexts {
   show?: string;
   hide?: string;
   sourceNotFound?: string;
+  copySuccess?: string;
+  copyError?: string;
 }
