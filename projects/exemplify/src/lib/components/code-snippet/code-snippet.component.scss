@@ -56,7 +56,8 @@
 
 .exemplify-hidden.exemplify-backdrop::after,
 .exemplify-hidden.copy-notice {
-  transition: opacity ease-out $exemplify-copy-notice-transition-time $exemplify-copy-notice-duration, z-index 0ms $exemplify-copy-notice-duration, height 0ms ($exemplify-copy-notice-transition-time + $exemplify-copy-notice-duration);
+  transition: opacity ease-out $exemplify-copy-notice-transition-time, z-index 0ms, height 0ms;
+  transition-delay: $exemplify-copy-notice-duration, $exemplify-copy-notice-duration, ($exemplify-copy-notice-transition-time + $exemplify-copy-notice-duration);
   opacity: 0;
   z-index: 0;
   height: 0;
