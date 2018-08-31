@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.0","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.1","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -9877,7 +9877,7 @@ module.exports = "<div class=\"btn-group\" role=\"group\" aria-label=\"Code snip
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0; }\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out; } }\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px;\n    height: calc(2.25rem + 2px); }\n    .btn-group .btn {\n      height: 100%;\n      padding-right: .5rem;\n      padding-left: .5rem; } }\n\n.snippet-wrapper {\n  position: relative; }\n\n.snippet-wrapper.exemplify-backdrop::after {\n    content: '';\n    display: block;\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.75);\n    z-index: 0;\n    opacity: 1; }\n\n.copy-notice {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  text-align: center;\n  color: #fff;\n  font-size: 1.25rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  max-height: 300px;\n  z-index: 1;\n  opacity: 1; }\n\n.exemplify-hidden.exemplify-backdrop::after,\n.exemplify-hidden.copy-notice {\n  transition: opacity ease-out 600ms 1400ms, z-index 0ms 1400ms, height 0ms 2000ms;\n  opacity: 0;\n  z-index: 0;\n  height: 0; }\n"
+module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0; }\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out; } }\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px;\n    height: calc(2.25rem + 2px); }\n    .btn-group .btn {\n      height: 100%;\n      padding-right: .5rem;\n      padding-left: .5rem; } }\n\n.snippet-wrapper {\n  position: relative; }\n\n.snippet-wrapper.exemplify-backdrop::after {\n    content: '';\n    display: block;\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.75);\n    z-index: 0;\n    opacity: 1; }\n\n.copy-notice {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  text-align: center;\n  color: #fff;\n  font-size: 1.25rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  max-height: 300px;\n  z-index: 1;\n  opacity: 1; }\n\n.exemplify-hidden.exemplify-backdrop::after,\n.exemplify-hidden.copy-notice {\n  transition: opacity ease-out 600ms 1400ms, z-index 1ms 1400ms, height 1ms 2000ms;\n  opacity: 0;\n  z-index: 0;\n  height: 0; }\n"
 
 /***/ }),
 
@@ -11024,7 +11024,7 @@ var environment = {
         }
         return version;
     })(),
-    travis_build_number: '29'
+    travis_build_number: '32'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as

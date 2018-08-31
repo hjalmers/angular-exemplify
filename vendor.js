@@ -104,7 +104,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -190,6 +190,8 @@ var LocationStrategy = /** @class */ (function () {
  * representing the URL prefix that should be preserved when generating and recognizing
  * URLs.
  *
+ * @usageNotes
+ *
  * ### Example
  *
  * ```typescript
@@ -221,7 +223,9 @@ var APP_BASE_HREF = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["InjectionTok
  * Depending on which {@link LocationStrategy} is used, `Location` will either persist
  * to the URL's path or the URL's hash segment.
  *
- * Note: it's better to use {@link Router#navigate} service to trigger route changes. Use
+ * @usageNotes
+ *
+ * It's better to use {@link Router#navigate} service to trigger route changes. Use
  * `Location` only if you need to interact with or create normalized URLs outside of
  * routing.
  *
@@ -233,6 +237,7 @@ var APP_BASE_HREF = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["InjectionTok
  * - `/my/app/user/123/` **is not** normalized
  *
  * ### Example
+ *
  * {@example common/location/ts/path_location_component.ts region='LocationComponent'}
  *
  */
@@ -397,6 +402,8 @@ function _stripIndexHtml(url) {
  * For instance, if you call `location.go('/foo')`, the browser's URL will become
  * `example.com#/foo`.
  *
+ * @usageNotes
+ *
  * ### Example
  *
  * {@example common/location/ts/hash_location_component.ts region='LocationComponent'}
@@ -484,6 +491,8 @@ var HashLocationStrategy = /** @class */ (function (_super) {
  * Similarly, if you add `<base href='/my/app'/>` to the document and call
  * `location.go('/foo')`, the browser's URL will become
  * `example.com/my/app/foo`.
+ *
+ * @usageNotes
  *
  * ### Example
  *
@@ -2842,9 +2851,9 @@ var NgClass = /** @class */ (function () {
         this._initialClasses = [];
     }
     Object.defineProperty(NgClass.prototype, "klass", {
-        set: function (v) {
+        set: function (value) {
             this._removeClasses(this._initialClasses);
-            this._initialClasses = typeof v === 'string' ? v.split(/\s+/) : [];
+            this._initialClasses = typeof value === 'string' ? value.split(/\s+/) : [];
             this._applyClasses(this._initialClasses);
             this._applyClasses(this._rawClass);
         },
@@ -2852,12 +2861,12 @@ var NgClass = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(NgClass.prototype, "ngClass", {
-        set: function (v) {
+        set: function (value) {
             this._removeClasses(this._rawClass);
             this._applyClasses(this._initialClasses);
             this._iterableDiffer = null;
             this._keyValueDiffer = null;
-            this._rawClass = typeof v === 'string' ? v.split(/\s+/) : v;
+            this._rawClass = typeof value === 'string' ? value.split(/\s+/) : value;
             if (this._rawClass) {
                 if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵisListLikeIterable"])(this._rawClass)) {
                     this._iterableDiffer = this._iterableDiffers.find(this._rawClass).create();
@@ -2985,6 +2994,8 @@ var NgClass = /** @class */ (function () {
  * `NgComponentOutlet` requires a component type, if a falsy value is set the view will clear and
  * any existing component will get destroyed.
  *
+ * @usageNotes
+ *
  * ### Fine tune control
  *
  * You can control the component creation process by using the following optional attributes:
@@ -3019,7 +3030,8 @@ var NgClass = /** @class */ (function () {
  *                                   ngModuleFactory: moduleFactory;">
  * </ng-container>
  * ```
- * ## Example
+ *
+ * ### A simple example
  *
  * {@example common/ngComponentOutlet/ts/module.ts region='SimpleExample'}
  *
@@ -3121,6 +3133,8 @@ var NgForOfContext = /** @class */ (function () {
  * The `NgForOf` directive instantiates a template once per item from an iterable. The context
  * for each instantiated template inherits from the outer context with the given loop variable
  * set to the current item from the iterable.
+ *
+ * @usageNotes
  *
  * ### Local Variables
  *
@@ -3328,13 +3342,16 @@ function getTypeNameForDebugging(type) {
  *  - `then` template is the inline template of `ngIf` unless bound to a different value.
  *  - `else` template is blank unless it is bound.
  *
- * ## Most common usage
+ *
+ * @usageNotes
+ *
+ * ### Most common usage
  *
  * The most common usage of the `ngIf` directive is to conditionally show the inline template as
  * seen in this example:
  * {@example common/ngIf/ts/module.ts region='NgIfSimple'}
  *
- * ## Showing an alternative template using `else`
+ * ### Showing an alternative template using `else`
  *
  * If it is necessary to display a template when the `expression` is falsy use the `else` template
  * binding as shown. Note that the `else` binding points to a `<ng-template>` labeled `#elseBlock`.
@@ -3343,7 +3360,7 @@ function getTypeNameForDebugging(type) {
  *
  * {@example common/ngIf/ts/module.ts region='NgIfElse'}
  *
- * ## Using non-inlined `then` template
+ * ### Using non-inlined `then` template
  *
  * Usually the `then` template is the inlined template of the `ngIf`, but it can be changed using
  * a binding (just like `else`). Because `then` and `else` are bindings, the template references can
@@ -3351,7 +3368,7 @@ function getTypeNameForDebugging(type) {
  *
  * {@example common/ngIf/ts/module.ts region='NgIfThenElse'}
  *
- * ## Storing conditional result in a variable
+ * ### Storing conditional result in a variable
  *
  * A common pattern is that we need to show a set of properties from the same object. If the
  * object is undefined, then we have to use the safe-traversal-operator `?.` to guard against
@@ -3862,10 +3879,10 @@ var NgStyle = /** @class */ (function () {
         this._renderer = _renderer;
     }
     Object.defineProperty(NgStyle.prototype, "ngStyle", {
-        set: function (v) {
-            this._ngStyle = v;
-            if (!this._differ && v) {
-                this._differ = this._differs.find(v).create();
+        set: function (values) {
+            this._ngStyle = values;
+            if (!this._differ && values) {
+                this._differ = this._differs.find(values).create();
             }
         },
         enumerable: true,
@@ -3920,11 +3937,6 @@ var NgStyle = /** @class */ (function () {
 /**
  * @ngModule CommonModule
  *
- * @usageNotes
- * ```
- * <ng-container *ngTemplateOutlet="templateRefExp; context: contextExp"></ng-container>
- * ```
- *
  * @description
  *
  * Inserts an embedded view from a prepared `TemplateRef`.
@@ -3933,12 +3945,16 @@ var NgStyle = /** @class */ (function () {
  * `[ngTemplateOutletContext]` should be an object, the object's keys will be available for binding
  * by the local template `let` declarations.
  *
- * Note: using the key `$implicit` in the context object will set its value as default.
+ * @usageNotes
+ * ```
+ * <ng-container *ngTemplateOutlet="templateRefExp; context: contextExp"></ng-container>
+ * ```
  *
- * ## Example
+ * Using the key `$implicit` in the context object will set its value as default.
+ *
+ * ### Example
  *
  * {@example common/ngTemplateOutlet/ts/module.ts region='NgTemplateOutlet'}
- *
  *
  */
 var NgTemplateOutlet = /** @class */ (function () {
@@ -4306,6 +4322,8 @@ var DateFormatter = /** @class */ (function () {
  * - this pipe uses the Internationalization API. Therefore it is only reliable in Chrome and Opera
  *   browsers.
  *
+ * @usageNotes
+ *
  * ### Examples
  *
  * Assuming `dateObj` is (year: 2010, month: 9, day: 3, hour: 12 PM, minute: 05, second: 08)
@@ -4453,10 +4471,11 @@ function formatNumber$1(pipe, locale, value, style, digits, currency, currencyAs
  * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
  * and may require a polyfill. See [Browser Support](guide/browser-support) for details.
  *
+ * @usageNotes
+ *
  * ### Example
  *
  * {@example common/pipes/ts/number_pipe.ts region='DeprecatedNumberPipe'}
- *
  *
  */
 var DeprecatedDecimalPipe = /** @class */ (function () {
@@ -4486,6 +4505,8 @@ var DeprecatedDecimalPipe = /** @class */ (function () {
  *
  * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
  * and may require a polyfill. See [Browser Support](guide/browser-support) for details.
+ *
+ * @usageNotes
  *
  * ### Example
  *
@@ -4526,6 +4547,8 @@ var DeprecatedPercentPipe = /** @class */ (function () {
  *
  * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
  * and may require a polyfill. See [Browser Support](guide/browser-support) for details.
+ *
+ * @usageNotes
  *
  * ### Example
  *
@@ -4606,8 +4629,9 @@ var _observableStrategy = new ObservableStrategy();
  * changes. When the component gets destroyed, the `async` pipe unsubscribes automatically to avoid
  * potential memory leaks.
  *
+ * @usageNotes
  *
- * ## Examples
+ * ### Examples
  *
  * This example binds a `Promise` to the view. Clicking the `Resolve` button resolves the
  * promise.
@@ -4618,7 +4642,6 @@ var _observableStrategy = new ObservableStrategy();
  * to the view. The Observable continuously updates the view with the current time.
  *
  * {@example common/pipes/ts/async_pipe.ts region='AsyncPipeObservable'}
- *
  *
  */
 var AsyncPipe = /** @class */ (function () {
@@ -4998,7 +5021,9 @@ var _INTERPOLATION_REGEXP = /#/g;
  *
  * Maps a value to a string that pluralizes the value according to locale rules.
  *
- *  ## Example
+ * @usageNotes
+ *
+ * ### Example
  *
  * {@example common/pipes/ts/i18n_pipe.ts region='I18nPluralPipeComponent'}
  *
@@ -5050,7 +5075,9 @@ var I18nPluralPipe = /** @class */ (function () {
  * If none of the keys of the `mapping` match the `value`, then the content
  * of the `other` key is returned when present, otherwise an empty string is returned.
  *
- * ## Example
+ * @usageNotes
+ *
+ * ### Example
  *
  * {@example common/pipes/ts/i18n_pipe.ts region='I18nSelectPipeComponent'}
  *
@@ -5101,9 +5128,8 @@ var I18nSelectPipe = /** @class */ (function () {
  *
  * The following component uses a JSON pipe to convert an object
  * to JSON format, and displays the string in both formats for comparison.
-
- * {@example common/pipes/ts/json_pipe.ts region='JsonPipe'}
  *
+ * {@example common/pipes/ts/json_pipe.ts region='JsonPipe'}
  *
  */
 var JsonPipe = /** @class */ (function () {
@@ -5249,7 +5275,6 @@ function defaultComparator(keyValueA, keyValueB) {
  * ### Example
  *
  * <code-example path="common/pipes/ts/number_pipe.ts" region='NumberPipe'></code-example>
- *
  *
  */
 var DecimalPipe = /** @class */ (function () {
@@ -5475,6 +5500,8 @@ function strToNumber(value) {
  *
  * Creates a new `Array` or `String` containing a subset (slice) of the elements.
  *
+ * @usageNotes
+ *
  * All behavior is based on the expected behavior of the JavaScript API `Array.prototype.slice()`
  * and `String.prototype.slice()`.
  *
@@ -5491,13 +5518,14 @@ function strToNumber(value) {
  *
  * produces the following:
  *
- *     <li>b</li>
- *     <li>c</li>
+ * ```html
+ * <li>b</li>
+ * <li>c</li>
+ * ```
  *
- * ## String Examples
+ * ### String Examples
  *
  * {@example common/pipes/ts/slice_pipe.ts region='SlicePipe_string'}
- *
  *
  */
 var SlicePipe = /** @class */ (function () {
@@ -5670,7 +5698,7 @@ function isPlatformWorkerUi(platformId) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["Version"]('6.1.1');
+var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["Version"]('6.1.6');
 
 /**
  * @license
@@ -5897,7 +5925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -6153,10 +6181,10 @@ var HttpHeaders = /** @class */ (function () {
 var HttpUrlEncodingCodec = /** @class */ (function () {
     function HttpUrlEncodingCodec() {
     }
-    HttpUrlEncodingCodec.prototype.encodeKey = function (k) { return standardEncoding(k); };
-    HttpUrlEncodingCodec.prototype.encodeValue = function (v) { return standardEncoding(v); };
-    HttpUrlEncodingCodec.prototype.decodeKey = function (k) { return decodeURIComponent(k); };
-    HttpUrlEncodingCodec.prototype.decodeValue = function (v) { return decodeURIComponent(v); };
+    HttpUrlEncodingCodec.prototype.encodeKey = function (key) { return standardEncoding(key); };
+    HttpUrlEncodingCodec.prototype.encodeValue = function (value) { return standardEncoding(value); };
+    HttpUrlEncodingCodec.prototype.decodeKey = function (key) { return decodeURIComponent(key); };
+    HttpUrlEncodingCodec.prototype.decodeValue = function (value) { return decodeURIComponent(value); };
     return HttpUrlEncodingCodec;
 }());
 function paramParser(rawParams, codec) {
@@ -8115,7 +8143,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compileInjectable", function() { return compileInjectable; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -9241,7 +9269,7 @@ var Version = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new Version('6.1.1');
+var VERSION = new Version('6.1.6');
 
 /**
  * @license
@@ -9250,6 +9278,7 @@ var VERSION = new Version('6.1.1');
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var _a;
 /**
  * A segment of text within the template.
  */
@@ -9591,7 +9620,6 @@ function templateVisitAll(visitor, asts, context) {
     });
     return result;
 }
-var _a;
 
 /**
  * @license
@@ -14073,15 +14101,16 @@ var _SerializerIgnoreIcuExpVisitor = /** @class */ (function (_super) {
  *          DO NOT USE IT IN A SECURITY SENSITIVE CONTEXT.
  */
 function sha1(str) {
+    var _a, _b;
     var utf8 = utf8Encode(str);
     var words32 = stringToWords32(utf8, Endian.Big);
     var len = utf8.length * 8;
     var w = new Array(80);
-    var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0], 5), a = _a[0], b = _a[1], c = _a[2], d = _a[3], e = _a[4];
+    var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0], 5), a = _c[0], b = _c[1], c = _c[2], d = _c[3], e = _c[4];
     words32[len >> 5] |= 0x80 << (24 - len % 32);
     words32[((len + 64 >> 9) << 4) + 15] = len;
     for (var i = 0; i < words32.length; i += 16) {
-        var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([a, b, c, d, e], 5), h0 = _b[0], h1 = _b[1], h2 = _b[2], h3 = _b[3], h4 = _b[4];
+        var _d = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([a, b, c, d, e], 5), h0 = _d[0], h1 = _d[1], h2 = _d[2], h3 = _d[3], h4 = _d[4];
         for (var j = 0; j < 80; j++) {
             if (j < 16) {
                 w[j] = words32[i + j];
@@ -14089,14 +14118,13 @@ function sha1(str) {
             else {
                 w[j] = rol32(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
             }
-            var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fk(j, b, c, d), 2), f = _c[0], k = _c[1];
+            var _e = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fk(j, b, c, d), 2), f = _e[0], k = _e[1];
             var temp = [rol32(a, 5), f, e, k, w[j]].reduce(add32);
-            _d = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([d, c, rol32(b, 30), a, temp], 5), e = _d[0], d = _d[1], c = _d[2], b = _d[3], a = _d[4];
+            _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([d, c, rol32(b, 30), a, temp], 5), e = _a[0], d = _a[1], c = _a[2], b = _a[3], a = _a[4];
         }
-        _e = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([add32(a, h0), add32(b, h1), add32(c, h2), add32(d, h3), add32(e, h4)], 5), a = _e[0], b = _e[1], c = _e[2], d = _e[3], e = _e[4];
+        _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([add32(a, h0), add32(b, h1), add32(c, h2), add32(d, h3), add32(e, h4)], 5), a = _b[0], b = _b[1], c = _b[2], d = _b[3], e = _b[4];
     }
     return byteStringToHexString(words32ToByteString([a, b, c, d, e]));
-    var _d, _e;
 }
 function fk(index, b, c, d) {
     if (index < 20) {
@@ -14128,23 +14156,24 @@ function fingerprint(str) {
     return [hi, lo];
 }
 function computeMsgId(msg, meaning) {
-    var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fingerprint(msg), 2), hi = _a[0], lo = _a[1];
+    var _a;
+    var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fingerprint(msg), 2), hi = _b[0], lo = _b[1];
     if (meaning) {
-        var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fingerprint(meaning), 2), him = _b[0], lom = _b[1];
-        _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(add64(rol64([hi, lo], 1), [him, lom]), 2), hi = _c[0], lo = _c[1];
+        var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(fingerprint(meaning), 2), him = _c[0], lom = _c[1];
+        _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(add64(rol64([hi, lo], 1), [him, lom]), 2), hi = _a[0], lo = _a[1];
     }
     return byteStringToDecString(words32ToByteString([hi & 0x7fffffff, lo]));
-    var _c;
 }
 function hash32(str, c) {
-    var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([0x9e3779b9, 0x9e3779b9], 2), a = _a[0], b = _a[1];
+    var _a;
+    var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])([0x9e3779b9, 0x9e3779b9], 2), a = _b[0], b = _b[1];
     var i;
     var len = str.length;
     for (i = 0; i + 12 <= len; i += 12) {
         a = add32(a, wordAt(str, i, Endian.Little));
         b = add32(b, wordAt(str, i + 4, Endian.Little));
         c = add32(c, wordAt(str, i + 8, Endian.Little));
-        _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(mix([a, b, c]), 3), a = _b[0], b = _b[1], c = _b[2];
+        _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(mix([a, b, c]), 3), a = _a[0], b = _a[1], c = _a[2];
     }
     a = add32(a, wordAt(str, i, Endian.Little));
     b = add32(b, wordAt(str, i + 4, Endian.Little));
@@ -14152,7 +14181,6 @@ function hash32(str, c) {
     c = add32(c, len);
     c = add32(c, wordAt(str, i + 8, Endian.Little) << 8);
     return mix([a, b, c])[2];
-    var _b;
 }
 // clang-format off
 function mix(_a) {
@@ -15347,6 +15375,7 @@ var Xliff = /** @class */ (function (_super) {
         var visitor = new _WriteVisitor();
         var transUnits = [];
         messages.forEach(function (message) {
+            var _a;
             var contextTags = [];
             message.sources.forEach(function (source) {
                 var contextGroupTag = new Tag(_CONTEXT_GROUP_TAG, { purpose: 'location' });
@@ -15363,7 +15392,6 @@ var Xliff = /** @class */ (function (_super) {
             }
             transUnit.children.push(new CR(6));
             transUnits.push(new CR(6), transUnit);
-            var _a;
         });
         var body = new Tag('body', {}, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(transUnits, [new CR(4)]));
         var file = new Tag('file', {
@@ -17919,6 +17947,7 @@ function tagToString(tag) {
     return out;
 }
 function serializeTags(tags) {
+    var e_1, _a;
     if (tags.length === 0)
         return '';
     var out = '*\n';
@@ -17940,7 +17969,6 @@ function serializeTags(tags) {
     }
     out += ' ';
     return out;
-    var e_1, _a;
 }
 
 /**
@@ -18339,10 +18367,10 @@ var CompileMetadataResolver = /** @class */ (function () {
         }
     };
     CompileMetadataResolver.prototype.initComponentFactory = function (factory, ngContentSelectors) {
+        var _a;
         if (!(factory instanceof StaticSymbol)) {
             (_a = factory.ngContentSelectors).push.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(ngContentSelectors));
         }
-        var _a;
     };
     CompileMetadataResolver.prototype._loadSummary = function (type, kind) {
         var typeSummary = this._summaryCache.get(type);
@@ -21160,6 +21188,7 @@ var PipeResolver = /** @class */ (function () {
 /** Map from tagName|propertyName SecurityContext. Properties applying to all tags use '*'. */
 var SECURITY_SCHEMA = {};
 function registerContext(ctx, specs) {
+    var e_1, _a;
     try {
         for (var specs_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(specs), specs_1_1 = specs_1.next(); !specs_1_1.done; specs_1_1 = specs_1.next()) {
             var spec = specs_1_1.value;
@@ -21173,7 +21202,6 @@ function registerContext(ctx, specs) {
         }
         finally { if (e_1) throw e_1.error; }
     }
-    var e_1, _a;
 }
 // Case is insignificant below, all element and attribute names are lower-cased for lookup.
 registerContext(SecurityContext.HTML, [
@@ -22780,6 +22808,7 @@ var BindingParser = /** @class */ (function () {
         this.errors.push(new ParseError(sourceSpan, message, level));
     };
     BindingParser.prototype._reportExpressionParserErrors = function (errors, sourceSpan) {
+        var e_1, _a;
         try {
             for (var errors_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(errors), errors_1_1 = errors_1.next(); !errors_1_1.done; errors_1_1 = errors_1.next()) {
                 var error$$1 = errors_1_1.value;
@@ -22793,7 +22822,6 @@ var BindingParser = /** @class */ (function () {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     };
     // Make sure all the used pipes are known in `this.pipesByName`
     BindingParser.prototype._checkPipes = function (ast, sourceSpan) {
@@ -24252,13 +24280,14 @@ var ViewBuilder = /** @class */ (function () {
         return varName;
     };
     ViewBuilder.prototype.getTypeGuardExpressions = function (ast) {
+        var e_1, _a, e_2, _b;
         var result = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(this.guards);
         try {
-            for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(ast.directives), _b = _a.next(); !_b.done; _b = _a.next()) {
-                var directive = _b.value;
+            for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(ast.directives), _d = _c.next(); !_d.done; _d = _c.next()) {
+                var directive = _d.value;
                 try {
-                    for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(directive.inputs), _d = _c.next(); !_d.done; _d = _c.next()) {
-                        var input = _d.value;
+                    for (var _e = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(directive.inputs), _f = _e.next(); !_f.done; _f = _e.next()) {
+                        var input = _f.value;
                         var guard = directive.directive.guards[input.directiveName];
                         if (guard) {
                             var useIf = guard === 'UseIf';
@@ -24270,24 +24299,23 @@ var ViewBuilder = /** @class */ (function () {
                         }
                     }
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
                 finally {
                     try {
-                        if (_d && !_d.done && (_e = _c.return)) _e.call(_c);
+                        if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
                     }
-                    finally { if (e_1) throw e_1.error; }
+                    finally { if (e_2) throw e_2.error; }
                 }
             }
         }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_b && !_b.done && (_f = _a.return)) _f.call(_a);
+                if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
             }
-            finally { if (e_2) throw e_2.error; }
+            finally { if (e_1) throw e_1.error; }
         }
         return result;
-        var e_2, _f, e_1, _e;
     };
     ViewBuilder.prototype.visitAll = function (variables, astNodes) {
         this.variables = variables;
@@ -24296,6 +24324,7 @@ var ViewBuilder = /** @class */ (function () {
     ViewBuilder.prototype.build = function (componentId, targetStatements) {
         var _this = this;
         if (targetStatements === void 0) { targetStatements = []; }
+        var e_3, _a;
         this.children.forEach(function (child) { return child.build(componentId, targetStatements); });
         var viewStmts = [variable(DYNAMIC_VAR_NAME).set(NULL_EXPR).toDeclStmt(DYNAMIC_TYPE)];
         var bindingCount = 0;
@@ -24317,14 +24346,14 @@ var ViewBuilder = /** @class */ (function () {
         if (this.guards.length) {
             var guardExpression = undefined;
             try {
-                for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this.guards), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    var guard = _b.value;
-                    var _c = this.preprocessUpdateExpression(guard.expression), context = _c.context, value = _c.value;
+                for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this.guards), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var guard = _c.value;
+                    var _d = this.preprocessUpdateExpression(guard.expression), context = _d.context, value = _d.value;
                     var bindingId = "" + bindingCount++;
                     var nameResolver = context === this.component ? this : defaultResolver;
                     // We only support support simple expressions and ignore others as they
                     // are unlikely to affect type narrowing.
-                    var _d = convertPropertyBinding(nameResolver, variable(this.getOutputVar(context)), value, bindingId, BindingForm.TrySimple), stmts = _d.stmts, currValExpr = _d.currValExpr;
+                    var _e = convertPropertyBinding(nameResolver, variable(this.getOutputVar(context)), value, bindingId, BindingForm.TrySimple), stmts = _e.stmts, currValExpr = _e.currValExpr;
                     if (stmts.length == 0) {
                         var guardClause = guard.useIf ? currValExpr : this.ctx.importExpr(guard.guard).callFn([currValExpr]);
                         guardExpression = guardExpression ? guardExpression.and(guardClause) : guardClause;
@@ -24334,7 +24363,7 @@ var ViewBuilder = /** @class */ (function () {
             catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
-                    if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_3) throw e_3.error; }
             }
@@ -24346,7 +24375,6 @@ var ViewBuilder = /** @class */ (function () {
         var viewFactory = new DeclareFunctionStmt(viewName, [], viewStmts);
         targetStatements.push(viewFactory);
         return targetStatements;
-        var e_3, _e;
     };
     ViewBuilder.prototype.visitBoundText = function (ast, context) {
         var _this = this;
@@ -24512,6 +24540,7 @@ var ViewCompiler = /** @class */ (function () {
     }
     ViewCompiler.prototype.compileComponent = function (outputCtx, component, template, styles, usedPipes) {
         var _this = this;
+        var _a;
         var embeddedViewCount = 0;
         var staticQueryIds = findStaticQueryIds(template);
         var renderComponentVarName = undefined;
@@ -24539,7 +24568,6 @@ var ViewCompiler = /** @class */ (function () {
         visitor.visitAll([], template);
         (_a = outputCtx.statements).push.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(visitor.build()));
         return new ViewCompileResult(visitor.viewName, renderComponentVarName);
-        var _a;
     };
     return ViewCompiler;
 }());
@@ -25683,6 +25711,7 @@ var MessageBundle = /** @class */ (function () {
         this._messages = [];
     }
     MessageBundle.prototype.updateFromTemplate = function (html, url, interpolationConfig) {
+        var _a;
         var htmlParserResult = this._htmlParser.parse(html, url, true, interpolationConfig);
         if (htmlParserResult.errors.length) {
             return htmlParserResult.errors;
@@ -25693,7 +25722,6 @@ var MessageBundle = /** @class */ (function () {
         }
         (_a = this._messages).push.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(i18nParserResult.messages));
         return [];
-        var _a;
     };
     // Return the message in the internal format
     // The public (serialized) format might be different, see the `write` method.
@@ -25703,6 +25731,7 @@ var MessageBundle = /** @class */ (function () {
         var mapperVisitor = new MapPlaceholderNames();
         // Deduplicate messages based on their ID
         this._messages.forEach(function (message) {
+            var _a;
             var id = serializer.digest(message);
             if (!messages.hasOwnProperty(id)) {
                 messages[id] = message;
@@ -25710,7 +25739,6 @@ var MessageBundle = /** @class */ (function () {
             else {
                 (_a = messages[id].sources).push.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(message.sources));
             }
-            var _a;
         });
         // Transform placeholder names using the serializer mapping
         var msgList = Object.keys(messages).map(function (id) {
@@ -26084,6 +26112,7 @@ function compileInjectDependency(dep, injectFn) {
  * `CompileTypeMetadata` instance.
  */
 function dependenciesFromGlobalMetadata(type, outputCtx, reflector) {
+    var e_1, _a;
     // Use the `CompileReflector` to look up references to some well-known Angular types. These will
     // be compared with the token to statically determine whether the token has significance to
     // Angular, and set the correct `R3ResolvedDependencyType` as a result.
@@ -26094,8 +26123,8 @@ function dependenciesFromGlobalMetadata(type, outputCtx, reflector) {
     // Iterate through the type's DI dependencies and produce `R3DependencyMetadata` for each of them.
     var deps = [];
     try {
-        for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(type.diDeps), _b = _a.next(); !_b.done; _b = _a.next()) {
-            var dependency = _b.value;
+        for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(type.diDeps), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var dependency = _c.value;
             if (dependency.token) {
                 var tokenRef = tokenReference(dependency.token);
                 var resolved = R3ResolvedDependencyType.Token;
@@ -26135,12 +26164,11 @@ function dependenciesFromGlobalMetadata(type, outputCtx, reflector) {
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
     finally {
         try {
-            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
         }
         finally { if (e_1) throw e_1.error; }
     }
     return deps;
-    var e_1, _c;
 }
 
 /**
@@ -26435,6 +26463,7 @@ var Reference = /** @class */ (function () {
     return Reference;
 }());
 function visitAll$1(visitor, nodes) {
+    var e_1, _a, e_2, _b;
     var result = [];
     if (visitor.visit) {
         try {
@@ -26470,7 +26499,6 @@ function visitAll$1(visitor, nodes) {
         }
     }
     return result;
-    var e_1, _a, e_2, _b;
 }
 
 /**
@@ -26532,6 +26560,7 @@ var HtmlAstToIvyAst = /** @class */ (function () {
     }
     // HTML visitor
     HtmlAstToIvyAst.prototype.visitElement = function (element) {
+        var e_1, _a;
         var preparsedElement = preparseElement(element);
         if (preparsedElement.type === PreparsedElementType.SCRIPT ||
             preparsedElement.type === PreparsedElementType.STYLE) {
@@ -26561,8 +26590,8 @@ var HtmlAstToIvyAst = /** @class */ (function () {
         // Whether the element has any *-attribute
         var elementHasInlineTemplate = false;
         try {
-            for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(element.attrs), _b = _a.next(); !_b.done; _b = _a.next()) {
-                var attribute = _b.value;
+            for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(element.attrs), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var attribute = _c.value;
                 var hasBinding = false;
                 var normalizedName = normalizeAttributeName(attribute.name);
                 // `*attr` defines template bindings
@@ -26594,7 +26623,7 @@ var HtmlAstToIvyAst = /** @class */ (function () {
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
             finally { if (e_1) throw e_1.error; }
         }
@@ -26632,7 +26661,6 @@ var HtmlAstToIvyAst = /** @class */ (function () {
             parsedElement = new Template(attributes_2, boundAttributes, [parsedElement], [], templateVariables, element.sourceSpan, element.startSourceSpan, element.endSourceSpan);
         }
         return parsedElement;
-        var e_1, _c;
     };
     HtmlAstToIvyAst.prototype.visitAttribute = function (attribute) {
         return new TextAttribute(attribute.name, attribute.value, attribute.sourceSpan, attribute.valueSpan);
@@ -26939,6 +26967,7 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
     TemplateDefinitionBuilder.prototype.buildTemplateFunction = function (nodes, variables, hasNgContent, ngContentSelectors) {
         if (hasNgContent === void 0) { hasNgContent = false; }
         if (ngContentSelectors === void 0) { ngContentSelectors = []; }
+        var e_1, _a, e_2, _b;
         if (this._namespace !== Identifiers$1.namespaceHTML) {
             this.instruction(this._creationCode, null, this._namespace);
         }
@@ -26986,8 +27015,8 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         try {
             // Generate maps of placeholder name to node indexes
             // TODO(vicb): This is a WIP, not fully supported yet
-            for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this._phToNodeIdxes), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var phToNodeIdx = _c.value;
+            for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this._phToNodeIdxes), _d = _c.next(); !_d.done; _d = _c.next()) {
+                var phToNodeIdx = _d.value;
                 if (Object.keys(phToNodeIdx).length > 0) {
                     var scopedName = this._bindingScope.freshReferenceName();
                     var phMap = variable(scopedName)
@@ -27000,12 +27029,11 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_d = _b.return)) _d.call(_b);
+                if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
             }
             finally { if (e_2) throw e_2.error; }
         }
         return fn([new FnParam(RENDER_FLAGS, NUMBER_TYPE), new FnParam(this.contextParameter, null)], Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(this._prefixCode, creationCode, this._variableCode, updateCode, this._postfixCode), INFERRED_TYPE, null, this.templateName);
-        var e_1, _a, e_2, _d;
     };
     // LocalResolver
     TemplateDefinitionBuilder.prototype.getLocal = function (name) { return this._bindingScope.get(name); };
@@ -27044,13 +27072,14 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
     };
     TemplateDefinitionBuilder.prototype.visitElement = function (element) {
         var _this = this;
+        var e_3, _a, _b, _c;
         var elementIndex = this.allocateDataSlot();
         var referenceDataSlots = new Map();
         var wasInI18nSection = this._inI18nSection;
         var outputAttrs = {};
         var attrI18nMetas = {};
         var i18nMeta = '';
-        var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(splitNsName(element.name), 2), namespaceKey = _a[0], elementName = _a[1];
+        var _d = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(splitNsName(element.name), 2), namespaceKey = _d[0], elementName = _d[1];
         // Elements inside i18n sections are replaced with placeholders
         // TODO(vicb): nested elements are a WIP in this phase
         if (this._inI18nSection) {
@@ -27062,8 +27091,8 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         }
         try {
             // Handle i18n attributes
-            for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(element.attributes), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var attr = _c.value;
+            for (var _e = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(element.attributes), _f = _e.next(); !_f.done; _f = _e.next()) {
+                var attr = _f.value;
                 var name_1 = attr.name;
                 var value = attr.value;
                 if (name_1 === I18N_ATTR) {
@@ -27086,7 +27115,7 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         catch (e_3_1) { e_3 = { error: e_3_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_d = _b.return)) _d.call(_b);
+                if (_f && !_f.done && (_a = _e.return)) _a.call(_e);
             }
             finally { if (e_3) throw e_3.error; }
         }
@@ -27242,7 +27271,7 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         }
         // Generate the instruction create element instruction
         if (i18nMessages.length > 0) {
-            (_e = this._creationCode).push.apply(_e, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(i18nMessages));
+            (_b = this._creationCode).push.apply(_b, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(i18nMessages));
         }
         var wasInNamespace = this._namespace;
         var currentNamespace = this.getNamespaceInstruction(namespaceKey);
@@ -27259,7 +27288,7 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         else {
             // Generate the instruction create element instruction
             if (i18nMessages.length > 0) {
-                (_f = this._creationCode).push.apply(_f, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(i18nMessages));
+                (_c = this._creationCode).push.apply(_c, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(i18nMessages));
             }
             this.instruction.apply(this, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])([this._creationCode, element.sourceSpan, Identifiers$1.elementStart], trimTrailingNulls(parameters)));
             // initial styling for static style="..." attributes
@@ -27400,7 +27429,6 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         }
         // Restore the state before exiting this node
         this._inI18nSection = wasInI18nSection;
-        var e_3, _d, _e, _f;
     };
     TemplateDefinitionBuilder.prototype.visitTemplate = function (template) {
         var _this = this;
@@ -27480,6 +27508,7 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
         statements.push(importExpr(reference, null, span).callFn(params, span).toStmt());
     };
     TemplateDefinitionBuilder.prototype.convertPropertyBinding = function (implicit, value, skipBindFn) {
+        var _a, _b;
         var pipesConvertedValue = value.visit(this._valueConverter);
         if (pipesConvertedValue instanceof Interpolation) {
             var convertedPropertyBinding = convertPropertyBinding(this, implicit, pipesConvertedValue, this.bindingContext(), BindingForm.TrySimple, interpolate);
@@ -27492,7 +27521,6 @@ var TemplateDefinitionBuilder = /** @class */ (function () {
             var valExpr = convertedPropertyBinding.currValExpr;
             return skipBindFn ? valExpr : importExpr(Identifiers$1.bind).callFn([valExpr]);
         }
-        var _a, _b;
     };
     return TemplateDefinitionBuilder;
 }());
@@ -27682,6 +27710,7 @@ function createCssSelector(tag, attributes) {
 // - "description[@@id]",
 // - "meaning|description[@@id]"
 function parseI18nMeta(i18n) {
+    var _a, _b;
     var meaning;
     var description;
     var id;
@@ -27696,7 +27725,6 @@ function parseI18nMeta(i18n) {
             ['', meaningAndDesc], 2), meaning = _b[0], description = _b[1];
     }
     return { description: description, id: id, meaning: meaning };
-    var _a, _b;
 }
 function interpolate(args) {
     args = args.slice(1); // Ignore the length prefix added for render2
@@ -28022,11 +28050,12 @@ function createDirectiveSelector(selector) {
     return asLiteral(parseSelectorToR3Selector(selector));
 }
 function createHostAttributesArray(meta) {
+    var e_1, _a;
     var values = [];
     var attributes = meta.host.attributes;
     try {
-        for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(Object.getOwnPropertyNames(attributes)), _b = _a.next(); !_b.done; _b = _a.next()) {
-            var key = _b.value;
+        for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(Object.getOwnPropertyNames(attributes)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            var key = _c.value;
             var value = attributes[key];
             values.push(literal(key), literal(value));
         }
@@ -28034,7 +28063,7 @@ function createHostAttributesArray(meta) {
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
     finally {
         try {
-            if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
         }
         finally { if (e_1) throw e_1.error; }
     }
@@ -28042,7 +28071,6 @@ function createHostAttributesArray(meta) {
         return literalArr(values);
     }
     return null;
-    var e_1, _c;
 }
 // Return a contentQueries function or null if one is not necessary.
 function createContentQueriesFunction(meta, constantPool) {
@@ -28114,6 +28142,7 @@ function createViewQueriesFunction(meta, constantPool) {
 }
 // Return a host binding function or null if one is not necessary.
 function createHostBindingsFunction(meta, bindingParser) {
+    var e_2, _a, e_3, _b;
     var statements = [];
     var hostBindingSourceSpan = meta.typeSourceSpan;
     var directiveSummary = metadataAsSummary(meta);
@@ -28173,7 +28202,6 @@ function createHostBindingsFunction(meta, bindingParser) {
         ], statements, INFERRED_TYPE, null, typeName ? typeName + "_HostBindings" : null);
     }
     return null;
-    var e_2, _a, e_3, _b;
 }
 function metadataAsSummary(meta) {
     // clang-format off
@@ -28269,10 +28297,11 @@ function toTypeScript(file, preamble) {
  * found in the LICENSE file at https://angular.io/license
  */
 function listLazyRoutes(moduleMeta, reflector) {
+    var e_1, _a, e_2, _b;
     var allLazyRoutes = [];
     try {
-        for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(moduleMeta.transitiveModule.providers), _b = _a.next(); !_b.done; _b = _a.next()) {
-            var _c = _b.value, provider = _c.provider, module = _c.module;
+        for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(moduleMeta.transitiveModule.providers), _d = _c.next(); !_d.done; _d = _c.next()) {
+            var _e = _d.value, provider = _e.provider, module = _e.module;
             if (tokenReference(provider.token) === reflector.ROUTES) {
                 var loadChildren = _collectLoadChildren(provider.useValue);
                 try {
@@ -28281,28 +28310,28 @@ function listLazyRoutes(moduleMeta, reflector) {
                         allLazyRoutes.push(parseLazyRoute(route, reflector, module.reference));
                     }
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
                 finally {
                     try {
-                        if (loadChildren_1_1 && !loadChildren_1_1.done && (_d = loadChildren_1.return)) _d.call(loadChildren_1);
+                        if (loadChildren_1_1 && !loadChildren_1_1.done && (_b = loadChildren_1.return)) _b.call(loadChildren_1);
                     }
-                    finally { if (e_1) throw e_1.error; }
+                    finally { if (e_2) throw e_2.error; }
                 }
             }
         }
     }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
     finally {
         try {
-            if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
+            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
         }
-        finally { if (e_2) throw e_2.error; }
+        finally { if (e_1) throw e_1.error; }
     }
     return allLazyRoutes;
-    var e_2, _e, e_1, _d;
 }
 function _collectLoadChildren(routes, target) {
     if (target === void 0) { target = []; }
+    var e_3, _a;
     if (typeof routes === 'string') {
         target.push(routes);
     }
@@ -28328,7 +28357,6 @@ function _collectLoadChildren(routes, target) {
         _collectLoadChildren(routes.children, target);
     }
     return target;
-    var e_3, _a;
 }
 function parseLazyRoute(route, reflector, module) {
     var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__read"])(route.split('#'), 2), routePath = _a[0], routeName = _a[1];
@@ -28476,6 +28504,7 @@ var StaticSymbolResolver = /** @class */ (function () {
      * @param fileName the file to invalidate
      */
     StaticSymbolResolver.prototype.invalidateFile = function (fileName) {
+        var e_1, _a;
         this.metadataCache.delete(fileName);
         this.resolvedFilePaths.delete(fileName);
         var symbols = this.symbolFromFile.get(fileName);
@@ -28497,9 +28526,8 @@ var StaticSymbolResolver = /** @class */ (function () {
                 finally { if (e_1) throw e_1.error; }
             }
         }
-        var e_1, _a;
     };
-    /* @internal */
+    /** @internal */
     StaticSymbolResolver.prototype.ignoreErrorsFor = function (cb) {
         var recorder = this.errorRecorder;
         this.errorRecorder = function () { };
@@ -28584,6 +28612,7 @@ var StaticSymbolResolver = /** @class */ (function () {
     };
     StaticSymbolResolver.prototype._createSymbolsOf = function (filePath) {
         var _this = this;
+        var e_2, _a;
         if (this.resolvedFilePaths.has(filePath)) {
             return;
         }
@@ -28635,15 +28664,15 @@ var StaticSymbolResolver = /** @class */ (function () {
             };
             var this_1 = this;
             try {
-                for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(metadata['exports']), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    var moduleExport = _b.value;
+                for (var _b = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(metadata['exports']), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var moduleExport = _c.value;
                     _loop_1(moduleExport);
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
@@ -28677,7 +28706,6 @@ var StaticSymbolResolver = /** @class */ (function () {
         }
         resolvedSymbols.forEach(function (resolvedSymbol) { return _this.resolvedSymbols.set(resolvedSymbol.symbol, resolvedSymbol); });
         this.symbolFromFile.set(filePath, resolvedSymbols.map(function (resolvedSymbol) { return resolvedSymbol.symbol; }));
-        var e_2, _c;
     };
     StaticSymbolResolver.prototype.createResolvedSymbol = function (sourceSymbol, topLevelPath, topLevelSymbolNames, metadata) {
         var _this = this;
@@ -29122,24 +29150,25 @@ var ForJitSerializer = /** @class */ (function () {
     };
     ForJitSerializer.prototype.serialize = function (exportAsArr) {
         var _this = this;
+        var e_1, _a, e_2, _b, e_3, _c;
         var exportAsBySymbol = new Map();
         try {
             for (var exportAsArr_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(exportAsArr), exportAsArr_1_1 = exportAsArr_1.next(); !exportAsArr_1_1.done; exportAsArr_1_1 = exportAsArr_1.next()) {
-                var _a = exportAsArr_1_1.value, symbol = _a.symbol, exportAs = _a.exportAs;
+                var _d = exportAsArr_1_1.value, symbol = _d.symbol, exportAs = _d.exportAs;
                 exportAsBySymbol.set(symbol, exportAs);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (exportAsArr_1_1 && !exportAsArr_1_1.done && (_b = exportAsArr_1.return)) _b.call(exportAsArr_1);
+                if (exportAsArr_1_1 && !exportAsArr_1_1.done && (_a = exportAsArr_1.return)) _a.call(exportAsArr_1);
             }
             finally { if (e_1) throw e_1.error; }
         }
         var ngModuleSymbols = new Set();
         try {
-            for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this.data), _d = _c.next(); !_d.done; _d = _c.next()) {
-                var _e = _d.value, summary = _e.summary, metadata = _e.metadata, isLibrary = _e.isLibrary;
+            for (var _e = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(this.data), _f = _e.next(); !_f.done; _f = _e.next()) {
+                var _g = _f.value, summary = _g.summary, metadata = _g.metadata, isLibrary = _g.isLibrary;
                 if (summary.summaryKind === CompileSummaryKind.NgModule) {
                     // collect the symbols that refer to NgModule classes.
                     // Note: we can't just rely on `summary.type.summaryKind` to determine this as
@@ -29148,17 +29177,17 @@ var ForJitSerializer = /** @class */ (function () {
                     ngModuleSymbols.add(summary.type.reference);
                     var modSummary = summary;
                     try {
-                        for (var _f = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(modSummary.modules), _g = _f.next(); !_g.done; _g = _f.next()) {
-                            var mod = _g.value;
+                        for (var _h = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(modSummary.modules), _j = _h.next(); !_j.done; _j = _h.next()) {
+                            var mod = _j.value;
                             ngModuleSymbols.add(mod.reference);
                         }
                     }
-                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
                     finally {
                         try {
-                            if (_g && !_g.done && (_h = _f.return)) _h.call(_f);
+                            if (_j && !_j.done && (_c = _h.return)) _c.call(_h);
                         }
-                        finally { if (e_2) throw e_2.error; }
+                        finally { if (e_3) throw e_3.error; }
                     }
                 }
                 if (!isLibrary) {
@@ -29167,12 +29196,12 @@ var ForJitSerializer = /** @class */ (function () {
                 }
             }
         }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
-                if (_d && !_d.done && (_j = _c.return)) _j.call(_c);
+                if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
             }
-            finally { if (e_3) throw e_3.error; }
+            finally { if (e_2) throw e_2.error; }
         }
         ngModuleSymbols.forEach(function (ngModuleSymbol) {
             if (_this.summaryResolver.isLibraryFile(ngModuleSymbol.filePath)) {
@@ -29183,7 +29212,6 @@ var ForJitSerializer = /** @class */ (function () {
                     .toDeclStmt(null, [StmtModifier.Exported]));
             }
         });
-        var e_1, _b, e_3, _j, e_2, _h;
     };
     ForJitSerializer.prototype.serializeSummaryWithDeps = function (summary, metadata) {
         var _this = this;
@@ -29196,6 +29224,10 @@ var ForJitSerializer = /** @class */ (function () {
             // summaries.
             metadata.declaredDirectives.concat(metadata.declaredPipes)
                 .map(function (type) { return type.reference; })
+                // For modules,
+                // we also add the summaries for modules
+                // from libraries.
+                // This is ok as we produce reexports for all transitive modules.
                 .concat(metadata.transitiveModule.modules.map(function (type) { return type.reference; })
                 .filter(function (ref) { return ref !== metadata.type.reference; }))
                 .map(function (ref) { return _this.serializeSummaryRef(ref); })));
@@ -29499,6 +29531,7 @@ var AotCompiler = /** @class */ (function () {
         }
     };
     AotCompiler.prototype._externalIdentifierReferences = function (references) {
+        var e_1, _a;
         var result = [];
         try {
             for (var references_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(references), references_1_1 = references_1.next(); !references_1_1.done; references_1_1 = references_1.next()) {
@@ -29517,12 +29550,11 @@ var AotCompiler = /** @class */ (function () {
             finally { if (e_1) throw e_1.error; }
         }
         return result;
-        var e_1, _a;
     };
     AotCompiler.prototype._createTypeCheckBlock = function (ctx, componentId, moduleMeta, compMeta, directives, externalReferenceVars) {
-        var _a = this._parseTemplate(compMeta, moduleMeta, directives), parsedTemplate = _a.template, usedPipes = _a.pipes;
-        (_b = ctx.statements).push.apply(_b, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(this._typeCheckCompiler.compileComponent(componentId, compMeta, parsedTemplate, usedPipes, externalReferenceVars, ctx)));
-        var _b;
+        var _a;
+        var _b = this._parseTemplate(compMeta, moduleMeta, directives), parsedTemplate = _b.template, usedPipes = _b.pipes;
+        (_a = ctx.statements).push.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(this._typeCheckCompiler.compileComponent(componentId, compMeta, parsedTemplate, usedPipes, externalReferenceVars, ctx)));
     };
     AotCompiler.prototype.emitMessageBundle = function (analyzeResult, locale) {
         var _this = this;
@@ -29822,6 +29854,7 @@ var AotCompiler = /** @class */ (function () {
         return new GeneratedFile(srcFileUrl, ctx.genFilePath, ctx.statements);
     };
     AotCompiler.prototype.listLazyRoutes = function (entryRoute, analyzedModules) {
+        var e_2, _a, e_3, _b;
         var self = this;
         if (entryRoute) {
             var symbol = parseLazyRoute(entryRoute, this.reflector).referencedModule;
@@ -29830,8 +29863,8 @@ var AotCompiler = /** @class */ (function () {
         else if (analyzedModules) {
             var allLazyRoutes = [];
             try {
-                for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(analyzedModules.ngModules), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    var ngModule = _b.value;
+                for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(analyzedModules.ngModules), _d = _c.next(); !_d.done; _d = _c.next()) {
+                    var ngModule = _d.value;
                     var lazyRoutes = listLazyRoutes(ngModule, this.reflector);
                     try {
                         for (var lazyRoutes_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(lazyRoutes), lazyRoutes_1_1 = lazyRoutes_1.next(); !lazyRoutes_1_1.done; lazyRoutes_1_1 = lazyRoutes_1.next()) {
@@ -29839,21 +29872,21 @@ var AotCompiler = /** @class */ (function () {
                             allLazyRoutes.push(lazyRoute);
                         }
                     }
-                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
                     finally {
                         try {
-                            if (lazyRoutes_1_1 && !lazyRoutes_1_1.done && (_c = lazyRoutes_1.return)) _c.call(lazyRoutes_1);
+                            if (lazyRoutes_1_1 && !lazyRoutes_1_1.done && (_b = lazyRoutes_1.return)) _b.call(lazyRoutes_1);
                         }
-                        finally { if (e_2) throw e_2.error; }
+                        finally { if (e_3) throw e_3.error; }
                     }
                 }
             }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_b && !_b.done && (_d = _a.return)) _d.call(_a);
+                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
                 }
-                finally { if (e_3) throw e_3.error; }
+                finally { if (e_2) throw e_2.error; }
             }
             return allLazyRoutes;
         }
@@ -29863,6 +29896,7 @@ var AotCompiler = /** @class */ (function () {
         function visitLazyRoute(symbol, seenRoutes, allLazyRoutes) {
             if (seenRoutes === void 0) { seenRoutes = new Set(); }
             if (allLazyRoutes === void 0) { allLazyRoutes = []; }
+            var e_4, _a;
             // Support pointing to default exports, but stop recursing there,
             // as the StaticReflector does not yet support default exports.
             if (seenRoutes.has(symbol) || !symbol.name) {
@@ -29885,9 +29919,7 @@ var AotCompiler = /** @class */ (function () {
                 finally { if (e_4) throw e_4.error; }
             }
             return allLazyRoutes;
-            var e_4, _a;
         }
-        var e_3, _d, e_2, _c;
     };
     return AotCompiler;
 }());
@@ -30388,6 +30420,7 @@ var StaticReflector = /** @class */ (function () {
         }
     };
     StaticReflector.prototype.guards = function (type) {
+        var e_1, _a;
         if (!(type instanceof StaticSymbol)) {
             this.reportError(new Error("guards received " + JSON.stringify(type) + " which is not a StaticSymbol"), type);
             return {};
@@ -30419,7 +30452,6 @@ var StaticReflector = /** @class */ (function () {
             finally { if (e_1) throw e_1.error; }
         }
         return result;
-        var e_1, _a;
     };
     StaticReflector.prototype._registerDecoratorOrConstructor = function (type, ctor) {
         this.conversionMap.set(type, function (context, args) { return new (ctor.bind.apply(ctor, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])([void 0], args)))(); });
@@ -30588,14 +30620,15 @@ var StaticReflector = /** @class */ (function () {
                 }, context);
             }
             function simplify(expression) {
+                var e_2, _a, e_3, _b;
                 if (isPrimitive(expression)) {
                     return expression;
                 }
                 if (expression instanceof Array) {
                     var result_2 = [];
                     try {
-                        for (var _a = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(expression), _b = _a.next(); !_b.done; _b = _a.next()) {
-                            var item = _b.value;
+                        for (var _c = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__values"])(expression), _d = _c.next(); !_d.done; _d = _c.next()) {
+                            var item = _d.value;
                             // Check for a spread expression
                             if (item && item.__symbolic === 'spread') {
                                 // We call with references as 0 because we require the actual value and cannot
@@ -30608,12 +30641,12 @@ var StaticReflector = /** @class */ (function () {
                                             result_2.push(spreadItem);
                                         }
                                     }
-                                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
                                     finally {
                                         try {
-                                            if (spreadArray_1_1 && !spreadArray_1_1.done && (_c = spreadArray_1.return)) _c.call(spreadArray_1);
+                                            if (spreadArray_1_1 && !spreadArray_1_1.done && (_b = spreadArray_1.return)) _b.call(spreadArray_1);
                                         }
-                                        finally { if (e_2) throw e_2.error; }
+                                        finally { if (e_3) throw e_3.error; }
                                     }
                                     continue;
                                 }
@@ -30625,12 +30658,12 @@ var StaticReflector = /** @class */ (function () {
                             result_2.push(value_2);
                         }
                     }
-                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
                     finally {
                         try {
-                            if (_b && !_b.done && (_d = _a.return)) _d.call(_a);
+                            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
                         }
-                        finally { if (e_3) throw e_3.error; }
+                        finally { if (e_2) throw e_2.error; }
                     }
                     return result_2;
                 }
@@ -30847,7 +30880,6 @@ var StaticReflector = /** @class */ (function () {
                     });
                 }
                 return IGNORE;
-                var e_3, _d, e_2, _c;
             }
             return simplify(value);
         }
@@ -33043,7 +33075,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -33142,11 +33174,13 @@ function defineInjector(options) {
  * @usageNotes
  * ### Basic Example
  *
+ * #### Plain InjectionToken
+ *
  * {@example core/di/ts/injector_spec.ts region='InjectionToken'}
  *
- * ### Tree-shakeable Example
+ * #### Tree-shakable InjectionToken
  *
- * {@example core/di/ts/injector_spec.ts region='ShakeableInjectionToken'}
+ * {@example core/di/ts/injector_spec.ts region='ShakableInjectionToken'}
  *
  */
 var InjectionToken = /** @class */ (function () {
@@ -34686,7 +34720,7 @@ var Version = /** @class */ (function () {
     }
     return Version;
 }());
-var VERSION = new Version('6.1.1');
+var VERSION = new Version('6.1.6');
 
 /**
  * @license
@@ -51853,7 +51887,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -57238,7 +57272,7 @@ var FormBuilder = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["Version"]('6.1.1');
+var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["Version"]('6.1.6');
 
 /**
  * @license
@@ -57426,7 +57460,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -57855,7 +57889,7 @@ var CachedResourceLoader = /** @class */ (function (_super) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["Version"]('6.1.1');
+var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["Version"]('6.1.6');
 
 /**
  * @license
@@ -57962,7 +57996,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /**
- * @license Angular v6.1.1
+ * @license Angular v6.1.6
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -60443,7 +60477,7 @@ var By = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["Version"]('6.1.1');
+var VERSION = new _angular_core__WEBPACK_IMPORTED_MODULE_2__["Version"]('6.1.6');
 
 /**
  * @license
