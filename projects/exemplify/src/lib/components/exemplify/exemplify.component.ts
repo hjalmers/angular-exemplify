@@ -91,6 +91,11 @@ export class ExemplifyComponent implements OnChanges {
     }
   }
 
+  /* compare options */
+  compareFn(o1: Snippet, o2: Snippet): boolean {
+    return o1 && o2 ? o1.name === o2.name : o1 === o2;
+  }
+
   /* prepend snippet to list of snippet */
   private addSnippet(snippet: Snippet) {
     this.sources = [snippet, ...this.sources];
