@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"0.0.0-semantically-released","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.2","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -10073,7 +10073,7 @@ var CodeSnippetComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"nav-item\" *ngFor=\"let snippet of sources\">\n    <button class=\"btn-link nav-link\" [ngClass]=\"{'active': snippet.name === activeSnippet.name}\"\n            (click)=\"setActiveSnippet(snippet)\">{{snippet.name}}\n    </button>\n  </li>\n</ul>\n<select class=\"custom-select d-sm-none\" [(ngModel)]=\"activeSnippet\">\n  <option *ngFor=\"let snippet of sources\" [ngValue]=\"snippet\">{{snippet.name}}</option>\n</select>\n<code-snippet [snippet]=\"activeSnippet\" [texts]=\"texts\"></code-snippet>\n"
+module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"nav-item\" *ngFor=\"let snippet of sources\">\n    <button class=\"btn-link nav-link\" [ngClass]=\"{'active': snippet.name === activeSnippet.name}\"\n            (click)=\"setActiveSnippet(snippet)\">{{snippet.name}}\n    </button>\n  </li>\n</ul>\n<select class=\"custom-select d-sm-none\" [compareWith]=\"compareFn\" [(ngModel)]=\"activeSnippet\">\n  <option *ngFor=\"let snippet of sources\" [ngValue]=\"snippet\">{{snippet.name}}</option>\n</select>\n<code-snippet [snippet]=\"activeSnippet\" [texts]=\"texts\"></code-snippet>\n"
 
 /***/ }),
 
@@ -10211,6 +10211,10 @@ var ExemplifyComponent = /** @class */ (function () {
             // set first snippet in array to be active by default
             this.setActiveSnippet(this.sources[0]);
         }
+    };
+    /* compare options */
+    ExemplifyComponent.prototype.compareFn = function (o1, o2) {
+        return o1 && o2 ? o1.name === o2.name : o1 === o2;
     };
     /* prepend snippet to list of snippet */
     ExemplifyComponent.prototype.addSnippet = function (snippet) {
@@ -11024,7 +11028,7 @@ var environment = {
         }
         return version;
     })(),
-    travis_build_number: '42'
+    travis_build_number: '112'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
