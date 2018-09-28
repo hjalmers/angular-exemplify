@@ -98,7 +98,7 @@
     "tslint": "5.11.0",
     "typescript": "2.9.2",
     "travis-deploy-once": "5.0.7",
-    "semantic-release": "15.9.15"
+    "semantic-release": "15.9.16"
   },
   "dependencies": {
     "@angular/common": "6.1.9",
