@@ -68,7 +68,7 @@
     "@commitlint/config-conventional": "7.1.1",
     "@types/jasmine": "2.8.9",
     "@types/jasminewd2": "2.0.4",
-    "@types/node": "8.10.29",
+    "@types/node": "8.10.34",
     "autoprefixer": "9.1.5",
     "clean-css-cli": "4.2.1",
     "codelyzer": "4.4.4",
