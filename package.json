@@ -61,7 +61,7 @@
   "main": "index.js",
   "devDependencies": {
     "@angular-devkit/build-angular": "0.7.5",
-    "@angular-devkit/build-ng-packagr": "0.8.3",
+    "@angular-devkit/build-ng-packagr": "0.8.4",
     "@angular/cli": "6.2.1",
     "@angular/compiler-cli": "6.1.9",
     "@commitlint/cli": "7.1.1",
