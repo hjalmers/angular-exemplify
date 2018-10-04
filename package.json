@@ -71,7 +71,7 @@
     "@types/node": "8.10.34",
     "autoprefixer": "9.1.5",
     "clean-css-cli": "4.2.1",
-    "codelyzer": "4.4.4",
+    "codelyzer": "4.5.0",
     "commitizen": "3.0.2",
     "copyfiles": "2.1.0",
     "cz-conventional-changelog": "2.1.0",
