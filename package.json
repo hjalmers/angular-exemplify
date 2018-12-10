@@ -88,7 +88,7 @@
     "postcss-cli": "6.0.1",
     "prismjs": "1.15.0",
     "protractor": "5.4.1",
-    "raw-loader": "0.5.1",
+    "raw-loader": "1.0.0",
     "replace": "1.0.0",
     "rimraf": "2.6.2",
     "ts-helpers": "1.1.2",
