@@ -90,7 +90,7 @@
     "protractor": "5.4.1",
     "raw-loader": "1.0.0",
     "replace": "1.1.0",
-    "rimraf": "2.6.2",
+    "rimraf": "2.6.3",
     "ts-helpers": "1.1.2",
     "ts-node": "7.0.1",
     "tsickle": "0.34.0",
