@@ -89,7 +89,7 @@
     "prismjs": "1.15.0",
     "protractor": "5.4.1",
     "raw-loader": "1.0.0",
-    "replace": "1.0.0",
+    "replace": "1.1.0",
     "rimraf": "2.6.2",
     "ts-helpers": "1.1.2",
     "ts-node": "7.0.1",
