@@ -6,21 +6,54 @@
   "packageRules": [
     {
       "packagePatterns": [
-        "*"
+        "angular-exemplify"
       ],
       "rangeStrategy": "replace"
     },
     {
+      "packagePatterns": [
+        "angular-exemplify"
+      ],
       "depTypeList": [
         "devDependencies"
       ],
       "rangeStrategy": "pin"
     },
     {
+      "packagePatterns": [
+        "angular-exemplify"
+      ],
       "depTypeList": [
         "peerDependencies"
       ],
       "rangeStrategy": "widen"
+    },
+    {
+      "packagePatterns": [
+        "angular-exemplify-demo"
+      ],
+      "rangeStrategy": "replace",
+      "semanticCommitType": "chore"
+    },
+    {
+      "packagePatterns": [
+        "angular-exemplify-demo"
+      ],
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "rangeStrategy": "pin",
+      "semanticCommitType": "chore"
+    },
+    {
+      "packagePatterns": [
+        "angular-exemplify-demo"
+      ],
+      "depTypeList": [
+        "peerDependencies"
+      ],
+      "rangeStrategy": "widen",
+      "semanticCommitType": "chore"
     }
   ]
 }

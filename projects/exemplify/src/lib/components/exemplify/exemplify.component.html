@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs d-none d-sm-flex">
   <li class="nav-item" *ngFor="let snippet of sources">
-    <button class="btn-link nav-link" [ngClass]="{'active': snippet.name === activeSnippet.name}"
+    <button class="nav-link" [ngClass]="{'active': snippet.name === activeSnippet.name}"
             (click)="setActiveSnippet(snippet)">{{snippet.name}}
     </button>
   </li>
