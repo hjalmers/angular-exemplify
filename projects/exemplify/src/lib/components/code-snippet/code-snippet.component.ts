@@ -3,7 +3,7 @@ import {
   Input, OnDestroy
 } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {catchError, map, takeUntil} from 'rxjs/operators';
 import {WindowRef} from '../../services/window-ref.service';
 import {Snippet} from '../../interfaces/snippet';
 import {CodeHighlightService} from '../../services/code-highlight.service';
@@ -36,7 +36,7 @@ export class CodeSnippetComponent implements OnDestroy {
     const extension = e[e.length - 1];
     this._snippet = {
       ...snippet,
-      code: snippet.src.indexOf('http') !== -1 ? this.getSourceCode(snippet.src, snippet.selector) : of(snippet.src), // add snippet code by http request or just returning what's passed
+      code: snippet.src.substring(0, 4) === 'http' ? this.getSourceCode(snippet.src, snippet.selector) : of(snippet.src), // add snippet code by http request or just returning what's passed
       lang: snippet.lang || (extension.length > 4 ? 'markup' : extension) // if lang is omitted use extension if length is not greater than 4 otherwise default to markup
     };
     // when snippet has loaded highlight the code and store the string representation too (needed for copying etc).
@@ -90,7 +90,7 @@ export class CodeSnippetComponent implements OnDestroy {
   private getSourceCode(url: string, selector?: string) {
     return this.http.get(url, {responseType: 'text'})
       .pipe(
-        tap(data => {
+        map(data => {
           if (selector) {
             return this.utilities.parseHtml(data, selector);
           } else {
