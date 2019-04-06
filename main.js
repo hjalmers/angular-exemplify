@@ -7,7 +7,7 @@
 /*! exports provided: name, license, author, version, peerDependencies, main, module, es2015, esm5, esm2015, fesm5, fesm2015, typings, metadata, sideEffects, dependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.3","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0","prismjs":"^1.15.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
+module.exports = {"name":"angular-exemplify","license":"Apache-2.0","author":"Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)","version":"3.1.4","peerDependencies":{"@angular/common":"^6.0.0-rc.0 || ^6.0.0","@angular/core":"^6.0.0-rc.0 || ^6.0.0","prismjs":"^1.15.0"},"main":"bundles/angular-exemplify.umd.js","module":"fesm5/angular-exemplify.js","es2015":"fesm2015/angular-exemplify.js","esm5":"esm5/angular-exemplify.js","esm2015":"esm2015/angular-exemplify.js","fesm5":"fesm5/angular-exemplify.js","fesm2015":"fesm2015/angular-exemplify.js","typings":"angular-exemplify.d.ts","metadata":"angular-exemplify.metadata.json","sideEffects":false,"dependencies":{"tslib":"^1.9.0"}};
 
 /***/ }),
 
@@ -237,6 +237,7 @@ module.exports = __webpack_require__(/*! ../modules/_core */ "./node_modules/cor
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! ../modules/es6.regexp.constructor */ "./node_modules/core-js/modules/es6.regexp.constructor.js");
+__webpack_require__(/*! ../modules/es6.regexp.exec */ "./node_modules/core-js/modules/es6.regexp.exec.js");
 __webpack_require__(/*! ../modules/es6.regexp.to-string */ "./node_modules/core-js/modules/es6.regexp.to-string.js");
 __webpack_require__(/*! ../modules/es6.regexp.flags */ "./node_modules/core-js/modules/es6.regexp.flags.js");
 __webpack_require__(/*! ../modules/es6.regexp.match */ "./node_modules/core-js/modules/es6.regexp.match.js");
@@ -381,6 +382,26 @@ var ArrayProto = Array.prototype;
 if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(/*! ./_hide */ "./node_modules/core-js/modules/_hide.js")(ArrayProto, UNSCOPABLES, {});
 module.exports = function (key) {
   ArrayProto[UNSCOPABLES][key] = true;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_advance-string-index.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/_advance-string-index.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var at = __webpack_require__(/*! ./_string-at */ "./node_modules/core-js/modules/_string-at.js")(true);
+
+ // `AdvanceStringIndex` abstract operation
+// https://tc39.github.io/ecma262/#sec-advancestringindex
+module.exports = function (S, index, unicode) {
+  return index + (unicode ? at(S, index).length : 1);
 };
 
 
@@ -1117,7 +1138,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.7' };
+var core = module.exports = { version: '2.6.5' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -1427,22 +1448,90 @@ module.exports = function (exec) {
 
 "use strict";
 
-var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/modules/_hide.js");
+__webpack_require__(/*! ./es6.regexp.exec */ "./node_modules/core-js/modules/es6.regexp.exec.js");
 var redefine = __webpack_require__(/*! ./_redefine */ "./node_modules/core-js/modules/_redefine.js");
+var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/modules/_hide.js");
 var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
 var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/modules/_defined.js");
 var wks = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/modules/_wks.js");
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
+
+var SPECIES = wks('species');
+
+var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
+  // #replace needs built-in support for named groups.
+  // #match works fine because it just return the exec results, even if it has
+  // a "grops" property.
+  var re = /./;
+  re.exec = function () {
+    var result = [];
+    result.groups = { a: '7' };
+    return result;
+  };
+  return ''.replace(re, '$<a>') !== '7';
+});
+
+var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function () {
+  // Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec
+  var re = /(?:)/;
+  var originalExec = re.exec;
+  re.exec = function () { return originalExec.apply(this, arguments); };
+  var result = 'ab'.split(re);
+  return result.length === 2 && result[0] === 'a' && result[1] === 'b';
+})();
 
 module.exports = function (KEY, length, exec) {
   var SYMBOL = wks(KEY);
-  var fns = exec(defined, SYMBOL, ''[KEY]);
-  var strfn = fns[0];
-  var rxfn = fns[1];
-  if (fails(function () {
+
+  var DELEGATES_TO_SYMBOL = !fails(function () {
+    // String methods call symbol-named RegEp methods
     var O = {};
     O[SYMBOL] = function () { return 7; };
     return ''[KEY](O) != 7;
-  })) {
+  });
+
+  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !fails(function () {
+    // Symbol-named RegExp methods call .exec
+    var execCalled = false;
+    var re = /a/;
+    re.exec = function () { execCalled = true; return null; };
+    if (KEY === 'split') {
+      // RegExp[@@split] doesn't call the regex's exec method, but first creates
+      // a new one. We need to return the patched regex when creating the new one.
+      re.constructor = {};
+      re.constructor[SPECIES] = function () { return re; };
+    }
+    re[SYMBOL]('');
+    return !execCalled;
+  }) : undefined;
+
+  if (
+    !DELEGATES_TO_SYMBOL ||
+    !DELEGATES_TO_EXEC ||
+    (KEY === 'replace' && !REPLACE_SUPPORTS_NAMED_GROUPS) ||
+    (KEY === 'split' && !SPLIT_WORKS_WITH_OVERWRITTEN_EXEC)
+  ) {
+    var nativeRegExpMethod = /./[SYMBOL];
+    var fns = exec(
+      defined,
+      SYMBOL,
+      ''[KEY],
+      function maybeCallNative(nativeMethod, regexp, str, arg2, forceStringMethod) {
+        if (regexp.exec === regexpExec) {
+          if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+            // The native String method already delegates to @@method (this
+            // polyfilled function), leasing to infinite recursion.
+            // We avoid it by directly calling the native @@method method.
+            return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
+          }
+          return { done: true, value: nativeMethod.call(str, regexp, arg2) };
+        }
+        return { done: false };
+      }
+    );
+    var strfn = fns[0];
+    var rxfn = fns[1];
+
     redefine(String.prototype, KEY, strfn);
     hide(RegExp.prototype, SYMBOL, length == 2
       // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
@@ -1515,6 +1604,18 @@ var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) 
 };
 exports.BREAK = BREAK;
 exports.RETURN = RETURN;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_function-to-string.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/modules/_function-to-string.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./_shared */ "./node_modules/core-js/modules/_shared.js")('native-function-to-string', Function.toString);
 
 
 /***/ }),
@@ -2603,8 +2704,8 @@ var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/module
 var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/modules/_hide.js");
 var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/modules/_has.js");
 var SRC = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/modules/_uid.js")('src');
+var $toString = __webpack_require__(/*! ./_function-to-string */ "./node_modules/core-js/modules/_function-to-string.js");
 var TO_STRING = 'toString';
-var $toString = Function[TO_STRING];
 var TPL = ('' + $toString).split(TO_STRING);
 
 __webpack_require__(/*! ./_core */ "./node_modules/core-js/modules/_core.js").inspectSource = function (it) {
@@ -2630,6 +2731,109 @@ __webpack_require__(/*! ./_core */ "./node_modules/core-js/modules/_core.js").in
 })(Function.prototype, TO_STRING, function toString() {
   return typeof this == 'function' && this[SRC] || $toString.call(this);
 });
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_regexp-exec-abstract.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/_regexp-exec-abstract.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/modules/_classof.js");
+var builtinExec = RegExp.prototype.exec;
+
+ // `RegExpExec` abstract operation
+// https://tc39.github.io/ecma262/#sec-regexpexec
+module.exports = function (R, S) {
+  var exec = R.exec;
+  if (typeof exec === 'function') {
+    var result = exec.call(R, S);
+    if (typeof result !== 'object') {
+      throw new TypeError('RegExp exec method returned something other than an Object or null');
+    }
+    return result;
+  }
+  if (classof(R) !== 'RegExp') {
+    throw new TypeError('RegExp#exec called on incompatible receiver');
+  }
+  return builtinExec.call(R, S);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_regexp-exec.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/modules/_regexp-exec.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var regexpFlags = __webpack_require__(/*! ./_flags */ "./node_modules/core-js/modules/_flags.js");
+
+var nativeExec = RegExp.prototype.exec;
+// This always refers to the native implementation, because the
+// String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
+// which loads this file before patching the method.
+var nativeReplace = String.prototype.replace;
+
+var patchedExec = nativeExec;
+
+var LAST_INDEX = 'lastIndex';
+
+var UPDATES_LAST_INDEX_WRONG = (function () {
+  var re1 = /a/,
+      re2 = /b*/g;
+  nativeExec.call(re1, 'a');
+  nativeExec.call(re2, 'a');
+  return re1[LAST_INDEX] !== 0 || re2[LAST_INDEX] !== 0;
+})();
+
+// nonparticipating capturing group, copied from es5-shim's String#split patch.
+var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
+
+var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED;
+
+if (PATCH) {
+  patchedExec = function exec(str) {
+    var re = this;
+    var lastIndex, reCopy, match, i;
+
+    if (NPCG_INCLUDED) {
+      reCopy = new RegExp('^' + re.source + '$(?!\\s)', regexpFlags.call(re));
+    }
+    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re[LAST_INDEX];
+
+    match = nativeExec.call(re, str);
+
+    if (UPDATES_LAST_INDEX_WRONG && match) {
+      re[LAST_INDEX] = re.global ? match.index + match[0].length : lastIndex;
+    }
+    if (NPCG_INCLUDED && match && match.length > 1) {
+      // Fix browsers whose `exec` methods don't consistently return `undefined`
+      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+      // eslint-disable-next-line no-loop-func
+      nativeReplace.call(match[0], reCopy, function () {
+        for (i = 1; i < arguments.length - 2; i++) {
+          if (arguments[i] === undefined) match[i] = undefined;
+        }
+      });
+    }
+
+    return match;
+  };
+}
+
+module.exports = patchedExec;
 
 
 /***/ }),
@@ -2762,8 +2966,28 @@ var store = global[SHARED] || (global[SHARED] = {});
 })('versions', []).push({
   version: core.version,
   mode: __webpack_require__(/*! ./_library */ "./node_modules/core-js/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
 });
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_species-constructor.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/core-js/modules/_species-constructor.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/modules/_a-function.js");
+var SPECIES = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/modules/_wks.js")('species');
+module.exports = function (O, D) {
+  var C = anObject(O).constructor;
+  var S;
+  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+};
 
 
 /***/ }),
@@ -5447,6 +5671,27 @@ __webpack_require__(/*! ./_set-species */ "./node_modules/core-js/modules/_set-s
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es6.regexp.exec.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es6.regexp.exec.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
+__webpack_require__(/*! ./_export */ "./node_modules/core-js/modules/_export.js")({
+  target: 'RegExp',
+  proto: true,
+  forced: regexpExec !== /./.exec
+}, {
+  exec: regexpExec
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es6.regexp.flags.js":
 /*!**********************************************************!*\
   !*** ./node_modules/core-js/modules/es6.regexp.flags.js ***!
@@ -5470,15 +5715,46 @@ if (__webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_d
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/modules/_to-length.js");
+var advanceStringIndex = __webpack_require__(/*! ./_advance-string-index */ "./node_modules/core-js/modules/_advance-string-index.js");
+var regExpExec = __webpack_require__(/*! ./_regexp-exec-abstract */ "./node_modules/core-js/modules/_regexp-exec-abstract.js");
+
 // @@match logic
-__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('match', 1, function (defined, MATCH, $match) {
-  // 21.1.3.11 String.prototype.match(regexp)
-  return [function match(regexp) {
-    'use strict';
-    var O = defined(this);
-    var fn = regexp == undefined ? undefined : regexp[MATCH];
-    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
-  }, $match];
+__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('match', 1, function (defined, MATCH, $match, maybeCallNative) {
+  return [
+    // `String.prototype.match` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.match
+    function match(regexp) {
+      var O = defined(this);
+      var fn = regexp == undefined ? undefined : regexp[MATCH];
+      return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
+    },
+    // `RegExp.prototype[@@match]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@match
+    function (regexp) {
+      var res = maybeCallNative($match, regexp, this);
+      if (res.done) return res.value;
+      var rx = anObject(regexp);
+      var S = String(this);
+      if (!rx.global) return regExpExec(rx, S);
+      var fullUnicode = rx.unicode;
+      rx.lastIndex = 0;
+      var A = [];
+      var n = 0;
+      var result;
+      while ((result = regExpExec(rx, S)) !== null) {
+        var matchStr = String(result[0]);
+        A[n] = matchStr;
+        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+        n++;
+      }
+      return n === 0 ? null : A;
+    }
+  ];
 });
 
 
@@ -5491,17 +5767,124 @@ __webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/modules/_to-object.js");
+var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/modules/_to-length.js");
+var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/modules/_to-integer.js");
+var advanceStringIndex = __webpack_require__(/*! ./_advance-string-index */ "./node_modules/core-js/modules/_advance-string-index.js");
+var regExpExec = __webpack_require__(/*! ./_regexp-exec-abstract */ "./node_modules/core-js/modules/_regexp-exec-abstract.js");
+var max = Math.max;
+var min = Math.min;
+var floor = Math.floor;
+var SUBSTITUTION_SYMBOLS = /\$([$&`']|\d\d?|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&`']|\d\d?)/g;
+
+var maybeToString = function (it) {
+  return it === undefined ? it : String(it);
+};
+
 // @@replace logic
-__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('replace', 2, function (defined, REPLACE, $replace) {
-  // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
-  return [function replace(searchValue, replaceValue) {
-    'use strict';
-    var O = defined(this);
-    var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
-    return fn !== undefined
-      ? fn.call(searchValue, O, replaceValue)
-      : $replace.call(String(O), searchValue, replaceValue);
-  }, $replace];
+__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
+  return [
+    // `String.prototype.replace` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.replace
+    function replace(searchValue, replaceValue) {
+      var O = defined(this);
+      var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
+      return fn !== undefined
+        ? fn.call(searchValue, O, replaceValue)
+        : $replace.call(String(O), searchValue, replaceValue);
+    },
+    // `RegExp.prototype[@@replace]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@replace
+    function (regexp, replaceValue) {
+      var res = maybeCallNative($replace, regexp, this, replaceValue);
+      if (res.done) return res.value;
+
+      var rx = anObject(regexp);
+      var S = String(this);
+      var functionalReplace = typeof replaceValue === 'function';
+      if (!functionalReplace) replaceValue = String(replaceValue);
+      var global = rx.global;
+      if (global) {
+        var fullUnicode = rx.unicode;
+        rx.lastIndex = 0;
+      }
+      var results = [];
+      while (true) {
+        var result = regExpExec(rx, S);
+        if (result === null) break;
+        results.push(result);
+        if (!global) break;
+        var matchStr = String(result[0]);
+        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+      }
+      var accumulatedResult = '';
+      var nextSourcePosition = 0;
+      for (var i = 0; i < results.length; i++) {
+        result = results[i];
+        var matched = String(result[0]);
+        var position = max(min(toInteger(result.index), S.length), 0);
+        var captures = [];
+        // NOTE: This is equivalent to
+        //   captures = result.slice(1).map(maybeToString)
+        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+        for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
+        var namedCaptures = result.groups;
+        if (functionalReplace) {
+          var replacerArgs = [matched].concat(captures, position, S);
+          if (namedCaptures !== undefined) replacerArgs.push(namedCaptures);
+          var replacement = String(replaceValue.apply(undefined, replacerArgs));
+        } else {
+          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+        }
+        if (position >= nextSourcePosition) {
+          accumulatedResult += S.slice(nextSourcePosition, position) + replacement;
+          nextSourcePosition = position + matched.length;
+        }
+      }
+      return accumulatedResult + S.slice(nextSourcePosition);
+    }
+  ];
+
+    // https://tc39.github.io/ecma262/#sec-getsubstitution
+  function getSubstitution(matched, str, position, captures, namedCaptures, replacement) {
+    var tailPos = position + matched.length;
+    var m = captures.length;
+    var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+    if (namedCaptures !== undefined) {
+      namedCaptures = toObject(namedCaptures);
+      symbols = SUBSTITUTION_SYMBOLS;
+    }
+    return $replace.call(replacement, symbols, function (match, ch) {
+      var capture;
+      switch (ch.charAt(0)) {
+        case '$': return '$';
+        case '&': return matched;
+        case '`': return str.slice(0, position);
+        case "'": return str.slice(tailPos);
+        case '<':
+          capture = namedCaptures[ch.slice(1, -1)];
+          break;
+        default: // \d\d?
+          var n = +ch;
+          if (n === 0) return match;
+          if (n > m) {
+            var f = floor(n / 10);
+            if (f === 0) return match;
+            if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
+            return match;
+          }
+          capture = captures[n - 1];
+      }
+      return capture === undefined ? '' : capture;
+    });
+  }
 });
 
 
@@ -5514,15 +5897,37 @@ __webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var sameValue = __webpack_require__(/*! ./_same-value */ "./node_modules/core-js/modules/_same-value.js");
+var regExpExec = __webpack_require__(/*! ./_regexp-exec-abstract */ "./node_modules/core-js/modules/_regexp-exec-abstract.js");
+
 // @@search logic
-__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('search', 1, function (defined, SEARCH, $search) {
-  // 21.1.3.15 String.prototype.search(regexp)
-  return [function search(regexp) {
-    'use strict';
-    var O = defined(this);
-    var fn = regexp == undefined ? undefined : regexp[SEARCH];
-    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
-  }, $search];
+__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('search', 1, function (defined, SEARCH, $search, maybeCallNative) {
+  return [
+    // `String.prototype.search` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.search
+    function search(regexp) {
+      var O = defined(this);
+      var fn = regexp == undefined ? undefined : regexp[SEARCH];
+      return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
+    },
+    // `RegExp.prototype[@@search]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@search
+    function (regexp) {
+      var res = maybeCallNative($search, regexp, this);
+      if (res.done) return res.value;
+      var rx = anObject(regexp);
+      var S = String(this);
+      var previousLastIndex = rx.lastIndex;
+      if (!sameValue(previousLastIndex, 0)) rx.lastIndex = 0;
+      var result = regExpExec(rx, S);
+      if (!sameValue(rx.lastIndex, previousLastIndex)) rx.lastIndex = previousLastIndex;
+      return result === null ? -1 : result.index;
+    }
+  ];
 });
 
 
@@ -5535,15 +5940,30 @@ __webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var isRegExp = __webpack_require__(/*! ./_is-regexp */ "./node_modules/core-js/modules/_is-regexp.js");
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var speciesConstructor = __webpack_require__(/*! ./_species-constructor */ "./node_modules/core-js/modules/_species-constructor.js");
+var advanceStringIndex = __webpack_require__(/*! ./_advance-string-index */ "./node_modules/core-js/modules/_advance-string-index.js");
+var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/modules/_to-length.js");
+var callRegExpExec = __webpack_require__(/*! ./_regexp-exec-abstract */ "./node_modules/core-js/modules/_regexp-exec-abstract.js");
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
+var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
+var $min = Math.min;
+var $push = [].push;
+var $SPLIT = 'split';
+var LENGTH = 'length';
+var LAST_INDEX = 'lastIndex';
+var MAX_UINT32 = 0xffffffff;
+
+// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+var SUPPORTS_Y = !fails(function () { RegExp(MAX_UINT32, 'y'); });
+
 // @@split logic
-__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('split', 2, function (defined, SPLIT, $split) {
-  'use strict';
-  var isRegExp = __webpack_require__(/*! ./_is-regexp */ "./node_modules/core-js/modules/_is-regexp.js");
-  var _split = $split;
-  var $push = [].push;
-  var $SPLIT = 'split';
-  var LENGTH = 'length';
-  var LAST_INDEX = 'lastIndex';
+__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
+  var internalSplit;
   if (
     'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
     'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
@@ -5552,35 +5972,26 @@ __webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re
     '.'[$SPLIT](/()()/)[LENGTH] > 1 ||
     ''[$SPLIT](/.?/)[LENGTH]
   ) {
-    var NPCG = /()??/.exec('')[1] === undefined; // nonparticipating capturing group
     // based on es5-shim implementation, need to rework it
-    $split = function (separator, limit) {
+    internalSplit = function (separator, limit) {
       var string = String(this);
       if (separator === undefined && limit === 0) return [];
       // If `separator` is not a regex, use native split
-      if (!isRegExp(separator)) return _split.call(string, separator, limit);
+      if (!isRegExp(separator)) return $split.call(string, separator, limit);
       var output = [];
       var flags = (separator.ignoreCase ? 'i' : '') +
                   (separator.multiline ? 'm' : '') +
                   (separator.unicode ? 'u' : '') +
                   (separator.sticky ? 'y' : '');
       var lastLastIndex = 0;
-      var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
+      var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
       // Make `global` and avoid `lastIndex` issues by working with a copy
       var separatorCopy = new RegExp(separator.source, flags + 'g');
-      var separator2, match, lastIndex, lastLength, i;
-      // Doesn't need flags gy, but they don't hurt
-      if (!NPCG) separator2 = new RegExp('^' + separatorCopy.source + '$(?!\\s)', flags);
-      while (match = separatorCopy.exec(string)) {
-        // `separatorCopy.lastIndex` is not reliable cross-browser
-        lastIndex = match.index + match[0][LENGTH];
+      var match, lastIndex, lastLength;
+      while (match = regexpExec.call(separatorCopy, string)) {
+        lastIndex = separatorCopy[LAST_INDEX];
         if (lastIndex > lastLastIndex) {
           output.push(string.slice(lastLastIndex, match.index));
-          // Fix browsers whose `exec` methods don't consistently return `undefined` for NPCG
-          // eslint-disable-next-line no-loop-func
-          if (!NPCG && match[LENGTH] > 1) match[0].replace(separator2, function () {
-            for (i = 1; i < arguments[LENGTH] - 2; i++) if (arguments[i] === undefined) match[i] = undefined;
-          });
           if (match[LENGTH] > 1 && match.index < string[LENGTH]) $push.apply(output, match.slice(1));
           lastLength = match[0][LENGTH];
           lastLastIndex = lastIndex;
@@ -5595,16 +6006,74 @@ __webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re
     };
   // Chakra, V8
   } else if ('0'[$SPLIT](undefined, 0)[LENGTH]) {
-    $split = function (separator, limit) {
-      return separator === undefined && limit === 0 ? [] : _split.call(this, separator, limit);
+    internalSplit = function (separator, limit) {
+      return separator === undefined && limit === 0 ? [] : $split.call(this, separator, limit);
     };
+  } else {
+    internalSplit = $split;
   }
-  // 21.1.3.17 String.prototype.split(separator, limit)
-  return [function split(separator, limit) {
-    var O = defined(this);
-    var fn = separator == undefined ? undefined : separator[SPLIT];
-    return fn !== undefined ? fn.call(separator, O, limit) : $split.call(String(O), separator, limit);
-  }, $split];
+
+  return [
+    // `String.prototype.split` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.split
+    function split(separator, limit) {
+      var O = defined(this);
+      var splitter = separator == undefined ? undefined : separator[SPLIT];
+      return splitter !== undefined
+        ? splitter.call(separator, O, limit)
+        : internalSplit.call(String(O), separator, limit);
+    },
+    // `RegExp.prototype[@@split]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@split
+    //
+    // NOTE: This cannot be properly polyfilled in engines that don't support
+    // the 'y' flag.
+    function (regexp, limit) {
+      var res = maybeCallNative(internalSplit, regexp, this, limit, internalSplit !== $split);
+      if (res.done) return res.value;
+
+      var rx = anObject(regexp);
+      var S = String(this);
+      var C = speciesConstructor(rx, RegExp);
+
+      var unicodeMatching = rx.unicode;
+      var flags = (rx.ignoreCase ? 'i' : '') +
+                  (rx.multiline ? 'm' : '') +
+                  (rx.unicode ? 'u' : '') +
+                  (SUPPORTS_Y ? 'y' : 'g');
+
+      // ^(? + rx + ) is needed, in combination with some S slicing, to
+      // simulate the 'y' flag.
+      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
+      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      if (lim === 0) return [];
+      if (S.length === 0) return callRegExpExec(splitter, S) === null ? [S] : [];
+      var p = 0;
+      var q = 0;
+      var A = [];
+      while (q < S.length) {
+        splitter.lastIndex = SUPPORTS_Y ? q : 0;
+        var z = callRegExpExec(splitter, SUPPORTS_Y ? S : S.slice(q));
+        var e;
+        if (
+          z === null ||
+          (e = $min(toLength(splitter.lastIndex + (SUPPORTS_Y ? 0 : q)), S.length)) === p
+        ) {
+          q = advanceStringIndex(S, q, unicodeMatching);
+        } else {
+          A.push(S.slice(p, q));
+          if (A.length === lim) return A;
+          for (var i = 1; i <= z.length - 1; i++) {
+            A.push(z[i]);
+            if (A.length === lim) return A;
+          }
+          q = p = e;
+        }
+      }
+      A.push(S.slice(p));
+      return A;
+    }
+  ];
 });
 
 
@@ -6410,19 +6879,20 @@ setToStringTag(global.JSON, 'JSON', true);
 
 "use strict";
 
+var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/modules/_global.js");
 var each = __webpack_require__(/*! ./_array-methods */ "./node_modules/core-js/modules/_array-methods.js")(0);
 var redefine = __webpack_require__(/*! ./_redefine */ "./node_modules/core-js/modules/_redefine.js");
 var meta = __webpack_require__(/*! ./_meta */ "./node_modules/core-js/modules/_meta.js");
 var assign = __webpack_require__(/*! ./_object-assign */ "./node_modules/core-js/modules/_object-assign.js");
 var weak = __webpack_require__(/*! ./_collection-weak */ "./node_modules/core-js/modules/_collection-weak.js");
 var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/modules/_is-object.js");
-var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
 var validate = __webpack_require__(/*! ./_validate-collection */ "./node_modules/core-js/modules/_validate-collection.js");
+var NATIVE_WEAK_MAP = __webpack_require__(/*! ./_validate-collection */ "./node_modules/core-js/modules/_validate-collection.js");
+var IS_IE11 = !global.ActiveXObject && 'ActiveXObject' in global;
 var WEAK_MAP = 'WeakMap';
 var getWeak = meta.getWeak;
 var isExtensible = Object.isExtensible;
 var uncaughtFrozenStore = weak.ufstore;
-var tmp = {};
 var InternalMap;
 
 var wrapper = function (get) {
@@ -6450,7 +6920,7 @@ var methods = {
 var $WeakMap = module.exports = __webpack_require__(/*! ./_collection */ "./node_modules/core-js/modules/_collection.js")(WEAK_MAP, wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
-if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7; })) {
+if (NATIVE_WEAK_MAP && IS_IE11) {
   InternalMap = weak.getConstructor(wrapper, WEAK_MAP);
   assign(InternalMap.prototype, methods);
   meta.NEED = true;
@@ -6816,7 +7286,6 @@ module.exports = "import { Component, OnInit } from '@angular/core';\n\n@Compone
  * found in the LICENSE file at https://angular.io/license
  */
 var Zone$1 = (function (global) {
-    var FUNCTION = 'function';
     var performance = global['performance'];
     function mark(name) {
         performance && performance['mark'] && performance['mark'](name);
@@ -6825,12 +7294,26 @@ var Zone$1 = (function (global) {
         performance && performance['measure'] && performance['measure'](name, label);
     }
     mark('Zone');
+    var checkDuplicate = global[('__zone_symbol__forceDuplicateZoneCheck')] === true;
     if (global['Zone']) {
-        throw new Error('Zone already loaded.');
+        // if global['Zone'] already exists (maybe zone.js was already loaded or
+        // some other lib also registered a global object named Zone), we may need
+        // to throw an error, but sometimes user may not want this error.
+        // For example,
+        // we have two web pages, page1 includes zone.js, page2 doesn't.
+        // and the 1st time user load page1 and page2, everything work fine,
+        // but when user load page2 again, error occurs because global['Zone'] already exists.
+        // so we add a flag to let user choose whether to throw this error or not.
+        // By default, if existing Zone is from zone.js, we will not throw the error.
+        if (checkDuplicate || typeof global['Zone'].__symbol__ !== 'function') {
+            throw new Error('Zone already loaded.');
+        }
+        else {
+            return global['Zone'];
+        }
     }
     var Zone = /** @class */ (function () {
         function Zone(parent, zoneSpec) {
-            this._properties = null;
             this._parent = parent;
             this._name = zoneSpec ? zoneSpec.name || 'unnamed' : '<root>';
             this._properties = zoneSpec && zoneSpec.properties || {};
@@ -6873,7 +7356,9 @@ var Zone$1 = (function (global) {
         });
         Zone.__load_patch = function (name, fn) {
             if (patches.hasOwnProperty(name)) {
-                throw Error('Already loaded patch: ' + name);
+                if (checkDuplicate) {
+                    throw Error('Already loaded patch: ' + name);
+                }
             }
             else if (!global['__Zone_disable_' + name]) {
                 var perfName = 'Zone:' + name;
@@ -6917,7 +7402,7 @@ var Zone$1 = (function (global) {
             return this._zoneDelegate.fork(this, zoneSpec);
         };
         Zone.prototype.wrap = function (callback, source) {
-            if (typeof callback !== FUNCTION) {
+            if (typeof callback !== 'function') {
                 throw new Error('Expecting function got: ' + callback);
             }
             var _callback = this._zoneDelegate.intercept(this, callback, source);
@@ -6927,9 +7412,6 @@ var Zone$1 = (function (global) {
             };
         };
         Zone.prototype.run = function (callback, applyThis, applyArgs, source) {
-            if (applyThis === void 0) { applyThis = undefined; }
-            if (applyArgs === void 0) { applyArgs = null; }
-            if (source === void 0) { source = null; }
             _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
             try {
                 return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
@@ -6940,8 +7422,6 @@ var Zone$1 = (function (global) {
         };
         Zone.prototype.runGuarded = function (callback, applyThis, applyArgs, source) {
             if (applyThis === void 0) { applyThis = null; }
-            if (applyArgs === void 0) { applyArgs = null; }
-            if (source === void 0) { source = null; }
             _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
             try {
                 try {
@@ -6965,10 +7445,7 @@ var Zone$1 = (function (global) {
             // https://github.com/angular/zone.js/issues/778, sometimes eventTask
             // will run in notScheduled(canceled) state, we should not try to
             // run such kind of task but just return
-            // we have to define an variable here, if not
-            // typescript compiler will complain below
-            var isNotScheduled = task.state === notScheduled;
-            if (isNotScheduled && task.type === eventTask) {
+            if (task.state === notScheduled && (task.type === eventTask || task.type === macroTask)) {
                 return;
             }
             var reEntryGuard = task.state != running;
@@ -6979,7 +7456,7 @@ var Zone$1 = (function (global) {
             _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
             try {
                 if (task.type == macroTask && task.data && !task.data.isPeriodic) {
-                    task.cancelFn = null;
+                    task.cancelFn = undefined;
                 }
                 try {
                     return this._zoneDelegate.invokeTask(this, task, applyThis, applyArgs);
@@ -7015,8 +7492,7 @@ var Zone$1 = (function (global) {
                 var newZone = this;
                 while (newZone) {
                     if (newZone === task.zone) {
-                        throw Error("can not reschedule task to " + this
-                            .name + " which is descendants of the original zone " + task.zone.name);
+                        throw Error("can not reschedule task to " + this.name + " which is descendants of the original zone " + task.zone.name);
                     }
                     newZone = newZone.parent;
                 }
@@ -7046,7 +7522,7 @@ var Zone$1 = (function (global) {
             return task;
         };
         Zone.prototype.scheduleMicroTask = function (source, callback, data, customSchedule) {
-            return this.scheduleTask(new ZoneTask(microTask, source, callback, data, customSchedule, null));
+            return this.scheduleTask(new ZoneTask(microTask, source, callback, data, customSchedule, undefined));
         };
         Zone.prototype.scheduleMacroTask = function (source, callback, data, customSchedule, customCancel) {
             return this.scheduleTask(new ZoneTask(macroTask, source, callback, data, customSchedule, customCancel));
@@ -7087,16 +7563,14 @@ var Zone$1 = (function (global) {
     }());
     var DELEGATE_ZS = {
         name: '',
-        onHasTask: function (delegate, _, target, hasTaskState) {
-            return delegate.hasTask(target, hasTaskState);
-        },
+        onHasTask: function (delegate, _, target, hasTaskState) { return delegate.hasTask(target, hasTaskState); },
         onScheduleTask: function (delegate, _, target, task) {
             return delegate.scheduleTask(target, task);
         },
-        onInvokeTask: function (delegate, _, target, task, applyThis, applyArgs) { return delegate.invokeTask(target, task, applyThis, applyArgs); },
-        onCancelTask: function (delegate, _, target, task) {
-            return delegate.cancelTask(target, task);
-        }
+        onInvokeTask: function (delegate, _, target, task, applyThis, applyArgs) {
+            return delegate.invokeTask(target, task, applyThis, applyArgs);
+        },
+        onCancelTask: function (delegate, _, target, task) { return delegate.cancelTask(target, task); }
     };
     var ZoneDelegate = /** @class */ (function () {
         function ZoneDelegate(zone, parentDelegate, zoneSpec) {
@@ -7124,8 +7598,8 @@ var Zone$1 = (function (global) {
                 zoneSpec && (zoneSpec.onHandleError ? this.zone : parentDelegate.zone);
             this._scheduleTaskZS =
                 zoneSpec && (zoneSpec.onScheduleTask ? zoneSpec : parentDelegate._scheduleTaskZS);
-            this._scheduleTaskDlgt =
-                zoneSpec && (zoneSpec.onScheduleTask ? parentDelegate : parentDelegate._scheduleTaskDlgt);
+            this._scheduleTaskDlgt = zoneSpec &&
+                (zoneSpec.onScheduleTask ? parentDelegate : parentDelegate._scheduleTaskDlgt);
             this._scheduleTaskCurrZone =
                 zoneSpec && (zoneSpec.onScheduleTask ? this.zone : parentDelegate.zone);
             this._invokeTaskZS =
@@ -7180,8 +7654,7 @@ var Zone$1 = (function (global) {
                 callback;
         };
         ZoneDelegate.prototype.invoke = function (targetZone, callback, applyThis, applyArgs, source) {
-            return this._invokeZS ?
-                this._invokeZS.onInvoke(this._invokeDlgt, this._invokeCurrZone, targetZone, callback, applyThis, applyArgs, source) :
+            return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this._invokeCurrZone, targetZone, callback, applyThis, applyArgs, source) :
                 callback.apply(applyThis, applyArgs);
         };
         ZoneDelegate.prototype.handleError = function (targetZone, error) {
@@ -7213,8 +7686,7 @@ var Zone$1 = (function (global) {
             return returnTask;
         };
         ZoneDelegate.prototype.invokeTask = function (targetZone, task, applyThis, applyArgs) {
-            return this._invokeTaskZS ?
-                this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, targetZone, task, applyThis, applyArgs) :
+            return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, targetZone, task, applyThis, applyArgs) :
                 task.callback.apply(applyThis, applyArgs);
         };
         ZoneDelegate.prototype.cancelTask = function (targetZone, task) {
@@ -7234,7 +7706,7 @@ var Zone$1 = (function (global) {
             // hasTask should not throw error so other ZoneDelegate
             // can still trigger hasTask callback
             try {
-                return this._hasTaskZS &&
+                this._hasTaskZS &&
                     this._hasTaskZS.onHasTask(this._hasTaskDlgt, this._hasTaskCurrZone, targetZone, isEmpty);
             }
             catch (err) {
@@ -7324,14 +7796,12 @@ var Zone$1 = (function (global) {
                 }
             }
             else {
-                throw new Error(this.type + " '" + this.source + "': can not transition to '" + toState + "', expecting state '" + fromState1 + "'" + (fromState2 ?
-                    ' or \'' + fromState2 + '\'' :
-                    '') + ", was '" + this._state + "'.");
+                throw new Error(this.type + " '" + this.source + "': can not transition to '" + toState + "', expecting state '" + fromState1 + "'" + (fromState2 ? ' or \'' + fromState2 + '\'' : '') + ", was '" + this._state + "'.");
             }
         };
         ZoneTask.prototype.toString = function () {
             if (this.data && typeof this.data.handleId !== 'undefined') {
-                return this.data.handleId;
+                return this.data.handleId.toString();
             }
             else {
                 return Object.prototype.toString.call(this);
@@ -7372,7 +7842,13 @@ var Zone$1 = (function (global) {
                 }
             }
             if (nativeMicroTaskQueuePromise) {
-                nativeMicroTaskQueuePromise[symbolThen](drainMicroTaskQueue);
+                var nativeThen = nativeMicroTaskQueuePromise[symbolThen];
+                if (!nativeThen) {
+                    // native Promise is not patchable, we need to use `then` directly
+                    // issue 1078
+                    nativeThen = nativeMicroTaskQueuePromise['then'];
+                }
+                nativeThen.call(nativeMicroTaskQueuePromise, drainMicroTaskQueue);
             }
             else {
                 global[symbolSetTimeout](drainMicroTaskQueue, 0);
@@ -7419,12 +7895,13 @@ var Zone$1 = (function (global) {
         patchEventTarget: function () { return []; },
         patchOnProperties: noop,
         patchMethod: function () { return noop; },
-        bindArguments: function () { return null; },
+        bindArguments: function () { return []; },
+        patchThen: function () { return noop; },
         setNativePromise: function (NativePromise) {
             // sometimes NativePromise.resolve static function
             // is not ready yet, (such as core-js/es6.promise)
             // so we need to check here.
-            if (NativePromise && typeof NativePromise.resolve === FUNCTION) {
+            if (NativePromise && typeof NativePromise.resolve === 'function') {
                 nativeMicroTaskQueuePromise = NativePromise.resolve(0);
             }
         },
@@ -7440,6 +7917,16 @@ var Zone$1 = (function (global) {
     return global['Zone'] = Zone;
 })(typeof window !== 'undefined' && window || typeof self !== 'undefined' && self || global);
 
+var __values = (undefined && undefined.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
     var ObjectDefineProperty = Object.defineProperty;
@@ -7582,7 +8069,7 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                 var queue = promise[symbolValue];
                 promise[symbolValue] = value;
                 if (promise[symbolFinally] === symbolFinally) {
-                    // the promise is generated by Promise.prototype.finally          
+                    // the promise is generated by Promise.prototype.finally
                     if (state === RESOLVED) {
                         // the state is resolved, should ignore the value
                         // and use parent promise value
@@ -7666,7 +8153,9 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                     chainPromise[symbolParentPromiseState] = promiseState;
                 }
                 // should not pass value to finally callback
-                var value = zone.run(delegate, undefined, isFinallyPromise && delegate !== forwardRejection && delegate !== forwardResolution ? [] : [parentPromiseValue]);
+                var value = zone.run(delegate, undefined, isFinallyPromise && delegate !== forwardRejection && delegate !== forwardResolution ?
+                    [] :
+                    [parentPromiseValue]);
                 resolvePromise(chainPromise, true, value);
             }
             catch (error) {
@@ -7701,6 +8190,7 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
             return resolvePromise(new this(null), REJECTED, error);
         };
         ZoneAwarePromise.race = function (values) {
+            var e_1, _a;
             var resolve;
             var reject;
             var promise = new this(function (res, rej) {
@@ -7708,45 +8198,75 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                 reject = rej;
             });
             function onResolve(value) {
-                promise && (promise = null || resolve(value));
+                promise && (promise =  false || resolve(value));
             }
             function onReject(error) {
-                promise && (promise = null || reject(error));
+                promise && (promise =  false || reject(error));
             }
-            for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
-                var value = values_1[_i];
-                if (!isThenable(value)) {
-                    value = this.resolve(value);
+            try {
+                for (var values_1 = __values(values), values_1_1 = values_1.next(); !values_1_1.done; values_1_1 = values_1.next()) {
+                    var value = values_1_1.value;
+                    if (!isThenable(value)) {
+                        value = this.resolve(value);
+                    }
+                    value.then(onResolve, onReject);
                 }
-                value.then(onResolve, onReject);
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (values_1_1 && !values_1_1.done && (_a = values_1.return)) _a.call(values_1);
+                }
+                finally { if (e_1) throw e_1.error; }
             }
             return promise;
         };
         ZoneAwarePromise.all = function (values) {
+            var e_2, _a;
             var resolve;
             var reject;
             var promise = new this(function (res, rej) {
                 resolve = res;
                 reject = rej;
             });
-            var count = 0;
+            // Start at 2 to prevent prematurely resolving if .then is called immediately.
+            var unresolvedCount = 2;
+            var valueIndex = 0;
             var resolvedValues = [];
-            for (var _i = 0, values_2 = values; _i < values_2.length; _i++) {
-                var value = values_2[_i];
+            var _loop_2 = function (value) {
                 if (!isThenable(value)) {
-                    value = this.resolve(value);
+                    value = this_1.resolve(value);
                 }
-                value.then((function (index) { return function (value) {
-                    resolvedValues[index] = value;
-                    count--;
-                    if (!count) {
+                var curValueIndex = valueIndex;
+                value.then(function (value) {
+                    resolvedValues[curValueIndex] = value;
+                    unresolvedCount--;
+                    if (unresolvedCount === 0) {
                         resolve(resolvedValues);
                     }
-                }; })(count), reject);
-                count++;
+                }, reject);
+                unresolvedCount++;
+                valueIndex++;
+            };
+            var this_1 = this;
+            try {
+                for (var values_2 = __values(values), values_2_1 = values_2.next(); !values_2_1.done; values_2_1 = values_2.next()) {
+                    var value = values_2_1.value;
+                    _loop_2(value);
+                }
             }
-            if (!count)
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (values_2_1 && !values_2_1.done && (_a = values_2.return)) _a.call(values_2);
+                }
+                finally { if (e_2) throw e_2.error; }
+            }
+            // Make the unresolvedCount zero-based again.
+            unresolvedCount -= 2;
+            if (unresolvedCount === 0) {
                 resolve(resolvedValues);
+            }
             return promise;
         };
         ZoneAwarePromise.prototype.then = function (onFulfilled, onRejected) {
@@ -7842,29 +8362,110 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
         };
         Ctor[symbolThenPatched] = true;
     }
-    function zoneify(fn) {
-        return function () {
-            var resultPromise = fn.apply(this, arguments);
-            if (resultPromise instanceof ZoneAwarePromise) {
-                return resultPromise;
-            }
-            var ctor = resultPromise.constructor;
-            if (!ctor[symbolThenPatched]) {
-                patchThen(ctor);
-            }
-            return resultPromise;
-        };
-    }
+    api.patchThen = patchThen;
     if (NativePromise) {
         patchThen(NativePromise);
-        var fetch_1 = global['fetch'];
-        if (typeof fetch_1 == 'function') {
-            global['fetch'] = zoneify(fetch_1);
-        }
     }
     // This is not part of public API, but it is useful for tests, so we expose it.
     Promise[Zone.__symbol__('uncaughtPromiseErrors')] = _uncaughtPromiseErrors;
     return ZoneAwarePromise;
+});
+
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+Zone.__load_patch('fetch', function (global, Zone, api) {
+    var fetch = global['fetch'];
+    var ZoneAwarePromise = global.Promise;
+    var symbolThenPatched = api.symbol('thenPatched');
+    var fetchTaskScheduling = api.symbol('fetchTaskScheduling');
+    var fetchTaskAborting = api.symbol('fetchTaskAborting');
+    if (typeof fetch !== 'function') {
+        return;
+    }
+    var OriginalAbortController = global['AbortController'];
+    var supportAbort = typeof OriginalAbortController === 'function';
+    var abortNative = null;
+    if (supportAbort) {
+        global['AbortController'] = function () {
+            var abortController = new OriginalAbortController();
+            var signal = abortController.signal;
+            signal.abortController = abortController;
+            return abortController;
+        };
+        abortNative = api.patchMethod(OriginalAbortController.prototype, 'abort', function (delegate) { return function (self, args) {
+            if (self.task) {
+                return self.task.zone.cancelTask(self.task);
+            }
+            return delegate.apply(self, args);
+        }; });
+    }
+    var placeholder = function () { };
+    global['fetch'] = function () {
+        var _this = this;
+        var args = Array.prototype.slice.call(arguments);
+        var options = args.length > 1 ? args[1] : null;
+        var signal = options && options.signal;
+        return new Promise(function (res, rej) {
+            var task = Zone.current.scheduleMacroTask('fetch', placeholder, args, function () {
+                var fetchPromise;
+                var zone = Zone.current;
+                try {
+                    zone[fetchTaskScheduling] = true;
+                    fetchPromise = fetch.apply(_this, args);
+                }
+                catch (error) {
+                    rej(error);
+                    return;
+                }
+                finally {
+                    zone[fetchTaskScheduling] = false;
+                }
+                if (!(fetchPromise instanceof ZoneAwarePromise)) {
+                    var ctor = fetchPromise.constructor;
+                    if (!ctor[symbolThenPatched]) {
+                        api.patchThen(ctor);
+                    }
+                }
+                fetchPromise.then(function (resource) {
+                    if (task.state !== 'notScheduled') {
+                        task.invoke();
+                    }
+                    res(resource);
+                }, function (error) {
+                    if (task.state !== 'notScheduled') {
+                        task.invoke();
+                    }
+                    rej(error);
+                });
+            }, function () {
+                if (!supportAbort) {
+                    rej('No AbortController supported, can not cancel fetch');
+                    return;
+                }
+                if (signal && signal.abortController && !signal.aborted &&
+                    typeof signal.abortController.abort === 'function' && abortNative) {
+                    try {
+                        Zone.current[fetchTaskAborting] = true;
+                        abortNative.call(signal.abortController);
+                    }
+                    finally {
+                        Zone.current[fetchTaskAborting] = false;
+                    }
+                }
+                else {
+                    rej('cancel fetch need a AbortController.signal');
+                }
+            });
+            if (signal && signal.abortController) {
+                signal.abortController.task = task;
+            }
+        });
+    };
 });
 
 /**
@@ -7982,9 +8583,23 @@ var wrapFn = function (event) {
     }
     var target = this || event.target || _global;
     var listener = target[eventNameSymbol];
-    var result = listener && listener.apply(this, arguments);
-    if (result != undefined && !result) {
-        event.preventDefault();
+    var result;
+    if (isBrowser && target === internalWindow && event.type === 'error') {
+        // window.onerror have different signiture
+        // https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror#window.onerror
+        // and onerror callback will prevent default when callback return true
+        var errorEvent = event;
+        result = listener &&
+            listener.call(this, errorEvent.message, errorEvent.filename, errorEvent.lineno, errorEvent.colno, errorEvent.error);
+        if (result === true) {
+            event.preventDefault();
+        }
+    }
+    else {
+        result = listener && listener.apply(this, arguments);
+        if (result != undefined && !result) {
+            event.preventDefault();
+        }
     }
     return result;
 };
@@ -8000,6 +8615,10 @@ function patchProperty(obj, prop, prototype) {
     // if the descriptor not exists or is not configurable
     // just return
     if (!desc || !desc.configurable) {
+        return;
+    }
+    var onPropPatchedSymbol = zoneSymbol('on' + prop + 'patched');
+    if (obj.hasOwnProperty(onPropPatchedSymbol) && obj[onPropPatchedSymbol]) {
         return;
     }
     // A property descriptor cannot have getter/setter and be writable
@@ -8079,6 +8698,7 @@ function patchProperty(obj, prop, prototype) {
         return null;
     };
     ObjectDefineProperty(obj, prop, desc);
+    obj[onPropPatchedSymbol] = true;
 }
 function patchOnProperties(obj, properties, prototype) {
     if (properties) {
@@ -8169,6 +8789,31 @@ function patchClass(className) {
         }
     }
 }
+function copySymbolProperties(src, dest) {
+    if (typeof Object.getOwnPropertySymbols !== 'function') {
+        return;
+    }
+    var symbols = Object.getOwnPropertySymbols(src);
+    symbols.forEach(function (symbol) {
+        var desc = Object.getOwnPropertyDescriptor(src, symbol);
+        Object.defineProperty(dest, symbol, {
+            get: function () {
+                return src[symbol];
+            },
+            set: function (value) {
+                if (desc && (!desc.writable || typeof desc.set !== 'function')) {
+                    // if src[symbol] is not writable or not have a setter, just return
+                    return;
+                }
+                src[symbol] = value;
+            },
+            enumerable: desc ? desc.enumerable : true,
+            configurable: desc ? desc.configurable : true
+        });
+    });
+}
+var shouldCopySymbolProperties = false;
+
 function patchMethod(target, name, patchFn) {
     var proto = target;
     while (proto && !proto.hasOwnProperty(name)) {
@@ -8179,7 +8824,7 @@ function patchMethod(target, name, patchFn) {
         proto = target;
     }
     var delegateName = zoneSymbol(name);
-    var delegate;
+    var delegate = null;
     if (proto && !(delegate = proto[delegateName])) {
         delegate = proto[delegateName] = proto[name];
         // check whether proto[name] is writable
@@ -8191,6 +8836,9 @@ function patchMethod(target, name, patchFn) {
                 return patchDelegate_1(this, arguments);
             };
             attachOriginToPatched(proto[name], delegate);
+            if (shouldCopySymbolProperties) {
+                copySymbolProperties(delegate, proto[name]);
+            }
         }
     }
     return delegate;
@@ -8209,7 +8857,7 @@ function patchMacroTask(obj, funcName, metaCreator) {
     setNative = patchMethod(obj, funcName, function (delegate) { return function (self, args) {
         var meta = metaCreator(self, args);
         if (meta.cbIdx >= 0 && typeof args[meta.cbIdx] === 'function') {
-            return scheduleMacroTaskWithCurrentZone(meta.name, args[meta.cbIdx], meta, scheduleTask, null);
+            return scheduleMacroTaskWithCurrentZone(meta.name, args[meta.cbIdx], meta, scheduleTask);
         }
         else {
             // cause an error by calling it directly.
@@ -8223,6 +8871,17 @@ function attachOriginToPatched(patched, original) {
 }
 var isDetectedIEOrEdge = false;
 var ieOrEdge = false;
+function isIE() {
+    try {
+        var ua = internalWindow.navigator.userAgent;
+        if (ua.indexOf('MSIE ') !== -1 || ua.indexOf('Trident/') !== -1) {
+            return true;
+        }
+    }
+    catch (error) {
+    }
+    return false;
+}
 function isIEOrEdge() {
     if (isDetectedIEOrEdge) {
         return ieOrEdge;
@@ -8304,6 +8963,21 @@ Zone.__load_patch('toString', function (global) {
  * @fileoverview
  * @suppress {missingRequire}
  */
+var passiveSupported = false;
+if (typeof window !== 'undefined') {
+    try {
+        var options = Object.defineProperty({}, 'passive', {
+            get: function () {
+                passiveSupported = true;
+            }
+        });
+        window.addEventListener('test', options, options);
+        window.removeEventListener('test', options, options);
+    }
+    catch (err) {
+        passiveSupported = false;
+    }
+}
 // an identifier to tell ZoneTask do not create a new invoke closure
 var OPTIMIZED_ZONE_EVENT_TASK_DATA = {
     useG: true
@@ -8439,6 +9113,7 @@ function patchEventTarget(_global, apis, patchOptions) {
         if (proto[zoneSymbolAddEventListener]) {
             return false;
         }
+        var eventNameToString = patchOptions && patchOptions.eventNameToString;
         // a shared global taskData to pass data for scheduleEventTask
         // so we do not need to create a new object just for pass some data
         var taskData = {};
@@ -8454,12 +9129,24 @@ function patchEventTarget(_global, apis, patchOptions) {
             nativePrependEventListener = proto[zoneSymbol(patchOptions.prepend)] =
                 proto[patchOptions.prepend];
         }
-        var customScheduleGlobal = function () {
+        function checkIsPassive(task) {
+            if (!passiveSupported && typeof taskData.options !== 'boolean' &&
+                typeof taskData.options !== 'undefined' && taskData.options !== null) {
+                // options is a non-null non-undefined object
+                // passive is not supported
+                // don't pass options as object
+                // just pass capture as a boolean
+                task.options = !!taskData.options.capture;
+                taskData.options = task.options;
+            }
+        }
+        var customScheduleGlobal = function (task) {
             // if there is already a task for the eventName + capture,
             // just return, because we use the shared globalZoneAwareCallback here.
             if (taskData.isExisting) {
                 return;
             }
+            checkIsPassive(task);
             return nativeAddEventListener.call(taskData.target, taskData.eventName, taskData.capture ? globalZoneAwareCaptureCallback : globalZoneAwareCallback, taskData.options);
         };
         var customCancelGlobal = function (task) {
@@ -8500,6 +9187,7 @@ function patchEventTarget(_global, apis, patchOptions) {
             return nativeRemoveEventListener.call(task.target, task.eventName, task.capture ? globalZoneAwareCaptureCallback : globalZoneAwareCallback, task.options);
         };
         var customScheduleNonGlobal = function (task) {
+            checkIsPassive(task);
             return nativeAddEventListener.call(taskData.target, taskData.eventName, task.invoke, taskData.options);
         };
         var customSchedulePrepend = function (task) {
@@ -8522,8 +9210,13 @@ function patchEventTarget(_global, apis, patchOptions) {
             if (prepend === void 0) { prepend = false; }
             return function () {
                 var target = this || _global;
+                var eventName = arguments[0];
                 var delegate = arguments[1];
                 if (!delegate) {
+                    return nativeListener.apply(this, arguments);
+                }
+                if (isNode && eventName === 'uncaughtException') {
+                    // don't patch uncaughtException of nodejs to prevent endless loop
                     return nativeListener.apply(this, arguments);
                 }
                 // don't create the bind delegate function for handleEvent
@@ -8539,7 +9232,6 @@ function patchEventTarget(_global, apis, patchOptions) {
                 if (validateHandler && !validateHandler(nativeListener, delegate, target, arguments)) {
                     return;
                 }
-                var eventName = arguments[0];
                 var options = arguments[2];
                 if (blackListedEvents) {
                     // check black list
@@ -8569,8 +9261,8 @@ function patchEventTarget(_global, apis, patchOptions) {
                 var symbolEventName;
                 if (!symbolEventNames) {
                     // the code is duplicate, but I just want to get some better performance
-                    var falseEventName = eventName + FALSE_STR;
-                    var trueEventName = eventName + TRUE_STR;
+                    var falseEventName = (eventNameToString ? eventNameToString(eventName) : eventName) + FALSE_STR;
+                    var trueEventName = (eventNameToString ? eventNameToString(eventName) : eventName) + TRUE_STR;
                     var symbol = ZONE_SYMBOL_PREFIX + falseEventName;
                     var symbolCapture = ZONE_SYMBOL_PREFIX + trueEventName;
                     zoneSymbolEventNames$1[eventName] = {};
@@ -8605,7 +9297,8 @@ function patchEventTarget(_global, apis, patchOptions) {
                     source = targetSource[eventName];
                 }
                 if (!source) {
-                    source = constructorName + addSource + eventName;
+                    source = constructorName + addSource +
+                        (eventNameToString ? eventNameToString(eventName) : eventName);
                 }
                 // do not create a new object as task.data to pass those things
                 // just use the global shared one
@@ -8620,7 +9313,7 @@ function patchEventTarget(_global, apis, patchOptions) {
                 taskData.capture = capture;
                 taskData.eventName = eventName;
                 taskData.isExisting = isExisting;
-                var data = useGlobalCallback ? OPTIMIZED_ZONE_EVENT_TASK_DATA : null;
+                var data = useGlobalCallback ? OPTIMIZED_ZONE_EVENT_TASK_DATA : undefined;
                 // keep taskData into data to allow onScheduleEventTask to access the task information
                 if (data) {
                     data.taskData = taskData;
@@ -8638,7 +9331,11 @@ function patchEventTarget(_global, apis, patchOptions) {
                 if (once) {
                     options.once = true;
                 }
-                task.options = options;
+                if (!(!passiveSupported && typeof task.options === 'boolean')) {
+                    // if not support passive, and we pass an option object
+                    // to addEventListener, we should save the options to task
+                    task.options = options;
+                }
                 task.target = target;
                 task.capture = capture;
                 task.eventName = eventName;
@@ -8723,7 +9420,7 @@ function patchEventTarget(_global, apis, patchOptions) {
             var target = this || _global;
             var eventName = arguments[0];
             var listeners = [];
-            var tasks = findEventTasks(target, eventName);
+            var tasks = findEventTasks(target, eventNameToString ? eventNameToString(eventName) : eventName);
             for (var i = 0; i < tasks.length; i++) {
                 var task = tasks[i];
                 var delegate = task.originalDelegate ? task.originalDelegate : task.callback;
@@ -8879,9 +9576,9 @@ function patchTimer(window, setName, cancelName, nameSuffix) {
         patchMethod(window, setName, function (delegate) { return function (self, args) {
             if (typeof args[0] === 'function') {
                 var options = {
-                    handleId: null,
                     isPeriodic: nameSuffix === 'Interval',
-                    delay: (nameSuffix === 'Timeout' || nameSuffix === 'Interval') ? args[1] || 0 : null,
+                    delay: (nameSuffix === 'Timeout' || nameSuffix === 'Interval') ? args[1] || 0 :
+                        undefined,
                     args: args
                 };
                 var task = scheduleMacroTaskWithCurrentZone(setName, args[0], options, scheduleTask, clearTask);
@@ -8996,7 +9693,7 @@ function propertyPatch() {
     };
     Object.getOwnPropertyDescriptor = function (obj, prop) {
         var desc = _getOwnPropertyDescriptor(obj, prop);
-        if (isUnconfigurable(obj, prop)) {
+        if (desc && isUnconfigurable(obj, prop)) {
             desc.configurable = false;
         }
         return desc;
@@ -9224,10 +9921,10 @@ var globalEventHandlersEventNames = [
     'wheel'
 ];
 var documentEventNames = [
-    'afterscriptexecute', 'beforescriptexecute', 'DOMContentLoaded', 'fullscreenchange',
+    'afterscriptexecute', 'beforescriptexecute', 'DOMContentLoaded', 'freeze', 'fullscreenchange',
     'mozfullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange', 'fullscreenerror',
     'mozfullscreenerror', 'webkitfullscreenerror', 'msfullscreenerror', 'readystatechange',
-    'visibilitychange'
+    'visibilitychange', 'resume'
 ];
 var windowEventNames = [
     'absolutedeviceorientation',
@@ -9339,7 +10036,7 @@ var websocketEventNames = ['close', 'error', 'open', 'message'];
 var workerEventNames = ['error', 'message'];
 var eventNames = globalEventHandlersEventNames.concat(webglEventNames, formEventNames, detailEventNames, documentEventNames, windowEventNames, htmlElementEventNames, ieElementEventNames);
 function filterProperties(target, onProperties, ignoreProperties) {
-    if (!ignoreProperties) {
+    if (!ignoreProperties || ignoreProperties.length === 0) {
         return onProperties;
     }
     var tip = ignoreProperties.filter(function (ip) { return ip.target === target; });
@@ -9364,13 +10061,14 @@ function propertyDescriptorPatch(api, _global) {
     }
     var supportsWebSocket = typeof WebSocket !== 'undefined';
     if (canPatchViaPropertyDescriptor()) {
-        var ignoreProperties = _global.__Zone_ignore_on_properties;
+        var ignoreProperties = _global['__Zone_ignore_on_properties'];
         // for browsers that we can patch the descriptor:  Chrome & Firefox
         if (isBrowser) {
             var internalWindow = window;
+            var ignoreErrorProperties = isIE ? [{ target: internalWindow, ignoreProperties: ['error'] }] : [];
             // in IE/Edge, onProp not exist in window object, but in WindowPrototype
             // so we need to pass WindowPrototype to check onProp exist or not
-            patchFilteredProperties(internalWindow, eventNames.concat(['messageerror']), ignoreProperties, ObjectGetPrototypeOf(internalWindow));
+            patchFilteredProperties(internalWindow, eventNames.concat(['messageerror']), ignoreProperties ? ignoreProperties.concat(ignoreErrorProperties) : ignoreProperties, ObjectGetPrototypeOf(internalWindow));
             patchFilteredProperties(Document.prototype, eventNames, ignoreProperties);
             if (typeof internalWindow['SVGElement'] !== 'undefined') {
                 patchFilteredProperties(internalWindow['SVGElement'].prototype, eventNames, ignoreProperties);
@@ -9392,9 +10090,9 @@ function propertyDescriptorPatch(api, _global) {
             }
         }
         patchFilteredProperties(XMLHttpRequest.prototype, XMLHttpRequestEventNames, ignoreProperties);
-        var XMLHttpRequestEventTarget = _global['XMLHttpRequestEventTarget'];
-        if (XMLHttpRequestEventTarget) {
-            patchFilteredProperties(XMLHttpRequestEventTarget && XMLHttpRequestEventTarget.prototype, XMLHttpRequestEventNames, ignoreProperties);
+        var XMLHttpRequestEventTarget_1 = _global['XMLHttpRequestEventTarget'];
+        if (XMLHttpRequestEventTarget_1) {
+            patchFilteredProperties(XMLHttpRequestEventTarget_1 && XMLHttpRequestEventTarget_1.prototype, XMLHttpRequestEventNames, ignoreProperties);
         }
         if (typeof IDBIndex !== 'undefined') {
             patchFilteredProperties(IDBIndex.prototype, IDBIndexEventNames, ignoreProperties);
@@ -9609,16 +10307,16 @@ function patchEvent(global, api) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-function registerElementPatch(_global) {
-    if ((!isBrowser && !isMix) || !('registerElement' in _global.document)) {
+function patchCallbacks(target, targetName, method, callbacks) {
+    var symbol = Zone.__symbol__(method);
+    if (target[symbol]) {
         return;
     }
-    var _registerElement = document.registerElement;
-    var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
-    document.registerElement = function (name, opts) {
+    var nativeDelegate = target[symbol] = target[method];
+    target[method] = function (name, opts, options) {
         if (opts && opts.prototype) {
             callbacks.forEach(function (callback) {
-                var source = 'Document.registerElement::' + callback;
+                var source = targetName + "." + method + "::" + callback;
                 var prototype = opts.prototype;
                 if (prototype.hasOwnProperty(callback)) {
                     var descriptor = ObjectGetOwnPropertyDescriptor(prototype, callback);
@@ -9626,7 +10324,7 @@ function registerElementPatch(_global) {
                         descriptor.value = wrapWithCurrentZone(descriptor.value, source);
                         _redefineProperty(opts.prototype, callback, descriptor);
                     }
-                    else {
+                    else if (prototype[callback]) {
                         prototype[callback] = wrapWithCurrentZone(prototype[callback], source);
                     }
                 }
@@ -9635,9 +10333,23 @@ function registerElementPatch(_global) {
                 }
             });
         }
-        return _registerElement.call(document, name, opts);
+        return nativeDelegate.call(target, name, opts, options);
     };
-    attachOriginToPatched(document.registerElement, _registerElement);
+    attachOriginToPatched(target[method], nativeDelegate);
+}
+function registerElementPatch(_global) {
+    if ((!isBrowser && !isMix) || !('registerElement' in _global.document)) {
+        return;
+    }
+    var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
+    patchCallbacks(document, 'Document', 'registerElement', callbacks);
+}
+function patchCustomElements(_global) {
+    if ((!isBrowser && !isMix) || !('customElements' in _global)) {
+        return;
+    }
+    var callbacks = ['connectedCallback', 'disconnectedCallback', 'adoptedCallback', 'attributeChangedCallback'];
+    patchCallbacks(_global.customElements, 'customElements', 'define', callbacks);
 }
 
 /**
@@ -9700,7 +10412,10 @@ Zone.__load_patch('EventTarget', function (global, Zone, api) {
 Zone.__load_patch('on_property', function (global, Zone, api) {
     propertyDescriptorPatch(api, global);
     propertyPatch();
+});
+Zone.__load_patch('customElements', function (global, Zone, api) {
     registerElementPatch(global);
+    patchCustomElements(global);
 });
 Zone.__load_patch('canvas', function (global) {
     var HTMLCanvasElement = global['HTMLCanvasElement'];
@@ -9719,6 +10434,7 @@ Zone.__load_patch('XHR', function (global, Zone) {
     var XHR_LISTENER = zoneSymbol('xhrListener');
     var XHR_SCHEDULED = zoneSymbol('xhrScheduled');
     var XHR_URL = zoneSymbol('xhrURL');
+    var XHR_ERROR_BEFORE_SCHEDULED = zoneSymbol('xhrErrorBeforeScheduled');
     function patchXHR(window) {
         var XMLHttpRequestPrototype = XMLHttpRequest.prototype;
         function findPendingTask(target) {
@@ -9727,9 +10443,9 @@ Zone.__load_patch('XHR', function (global, Zone) {
         var oriAddListener = XMLHttpRequestPrototype[ZONE_SYMBOL_ADD_EVENT_LISTENER];
         var oriRemoveListener = XMLHttpRequestPrototype[ZONE_SYMBOL_REMOVE_EVENT_LISTENER];
         if (!oriAddListener) {
-            var XMLHttpRequestEventTarget = window['XMLHttpRequestEventTarget'];
-            if (XMLHttpRequestEventTarget) {
-                var XMLHttpRequestEventTargetPrototype = XMLHttpRequestEventTarget.prototype;
+            var XMLHttpRequestEventTarget_1 = window['XMLHttpRequestEventTarget'];
+            if (XMLHttpRequestEventTarget_1) {
+                var XMLHttpRequestEventTargetPrototype = XMLHttpRequestEventTarget_1.prototype;
                 oriAddListener = XMLHttpRequestEventTargetPrototype[ZONE_SYMBOL_ADD_EVENT_LISTENER];
                 oriRemoveListener = XMLHttpRequestEventTargetPrototype[ZONE_SYMBOL_REMOVE_EVENT_LISTENER];
             }
@@ -9737,9 +10453,10 @@ Zone.__load_patch('XHR', function (global, Zone) {
         var READY_STATE_CHANGE = 'readystatechange';
         var SCHEDULED = 'scheduled';
         function scheduleTask(task) {
-            XMLHttpRequest[XHR_SCHEDULED] = false;
             var data = task.data;
             var target = data.target;
+            target[XHR_SCHEDULED] = false;
+            target[XHR_ERROR_BEFORE_SCHEDULED] = false;
             // remove existing event listener
             var listener = target[XHR_LISTENER];
             if (!oriAddListener) {
@@ -9753,8 +10470,35 @@ Zone.__load_patch('XHR', function (global, Zone) {
                 if (target.readyState === target.DONE) {
                     // sometimes on some browsers XMLHttpRequest will fire onreadystatechange with
                     // readyState=4 multiple times, so we need to check task state here
-                    if (!data.aborted && XMLHttpRequest[XHR_SCHEDULED] && task.state === SCHEDULED) {
-                        task.invoke();
+                    if (!data.aborted && target[XHR_SCHEDULED] && task.state === SCHEDULED) {
+                        // check whether the xhr has registered onload listener
+                        // if that is the case, the task should invoke after all
+                        // onload listeners finish.
+                        var loadTasks = target['__zone_symbol__loadfalse'];
+                        if (loadTasks && loadTasks.length > 0) {
+                            var oriInvoke_1 = task.invoke;
+                            task.invoke = function () {
+                                // need to load the tasks again, because in other
+                                // load listener, they may remove themselves
+                                var loadTasks = target['__zone_symbol__loadfalse'];
+                                for (var i = 0; i < loadTasks.length; i++) {
+                                    if (loadTasks[i] === task) {
+                                        loadTasks.splice(i, 1);
+                                    }
+                                }
+                                if (!data.aborted && task.state === SCHEDULED) {
+                                    oriInvoke_1.call(task);
+                                }
+                            };
+                            loadTasks.push(task);
+                        }
+                        else {
+                            task.invoke();
+                        }
+                    }
+                    else if (!data.aborted && target[XHR_SCHEDULED] === false) {
+                        // error occurs when xhr.send()
+                        target[XHR_ERROR_BEFORE_SCHEDULED] = true;
                     }
                 }
             };
@@ -9764,7 +10508,7 @@ Zone.__load_patch('XHR', function (global, Zone) {
                 target[XHR_TASK] = task;
             }
             sendNative.apply(target, data.args);
-            XMLHttpRequest[XHR_SCHEDULED] = true;
+            target[XHR_SCHEDULED] = true;
             return task;
         }
         function placeholderCallback() { }
@@ -9781,24 +10525,32 @@ Zone.__load_patch('XHR', function (global, Zone) {
             return openNative.apply(self, args);
         }; });
         var XMLHTTPREQUEST_SOURCE = 'XMLHttpRequest.send';
+        var fetchTaskAborting = zoneSymbol('fetchTaskAborting');
+        var fetchTaskScheduling = zoneSymbol('fetchTaskScheduling');
         var sendNative = patchMethod(XMLHttpRequestPrototype, 'send', function () { return function (self, args) {
+            if (Zone.current[fetchTaskScheduling] === true) {
+                // a fetch is scheduling, so we are using xhr to polyfill fetch
+                // and because we already schedule macroTask for fetch, we should
+                // not schedule a macroTask for xhr again
+                return sendNative.apply(self, args);
+            }
             if (self[XHR_SYNC]) {
                 // if the XHR is sync there is no task to schedule, just execute the code.
                 return sendNative.apply(self, args);
             }
             else {
-                var options = {
-                    target: self,
-                    url: self[XHR_URL],
-                    isPeriodic: false,
-                    delay: null,
-                    args: args,
-                    aborted: false
-                };
-                return scheduleMacroTaskWithCurrentZone(XMLHTTPREQUEST_SOURCE, placeholderCallback, options, scheduleTask, clearTask);
+                var options = { target: self, url: self[XHR_URL], isPeriodic: false, args: args, aborted: false };
+                var task = scheduleMacroTaskWithCurrentZone(XMLHTTPREQUEST_SOURCE, placeholderCallback, options, scheduleTask, clearTask);
+                if (self && self[XHR_ERROR_BEFORE_SCHEDULED] === true && !options.aborted &&
+                    task.state === SCHEDULED) {
+                    // xhr request throw error when send
+                    // we should invoke task instead of leaving a scheduled
+                    // pending macroTask
+                    task.invoke();
+                }
             }
         }; });
-        var abortNative = patchMethod(XMLHttpRequestPrototype, 'abort', function () { return function (self) {
+        var abortNative = patchMethod(XMLHttpRequestPrototype, 'abort', function () { return function (self, args) {
             var task = findPendingTask(self);
             if (task && typeof task.type == 'string') {
                 // If the XHR has already completed, do nothing.
@@ -9809,6 +10561,10 @@ Zone.__load_patch('XHR', function (global, Zone) {
                     return;
                 }
                 task.zone.cancelTask(task);
+            }
+            else if (Zone.current[fetchTaskAborting] === true) {
+                // the abort is called from fetch polyfill, we need to call native abort of XHR.
+                return abortNative.apply(self, args);
             }
             // Otherwise, we are trying to abort an XHR which has not yet been sent, so there is no
             // task
@@ -9877,7 +10633,7 @@ module.exports = "<div class=\"btn-group\" role=\"group\" aria-label=\"Code snip
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0; }\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out; } }\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px;\n    height: calc(2.25rem + 2px); }\n    .btn-group .btn {\n      height: 100%;\n      padding-right: .5rem;\n      padding-left: .5rem; } }\n\n.snippet-wrapper {\n  position: relative; }\n\n.snippet-wrapper.exemplify-backdrop::after {\n    content: '';\n    display: block;\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    position: absolute;\n    background: rgba(0, 0, 0, 0.75);\n    z-index: 0;\n    opacity: 1; }\n\n.copy-notice {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  text-align: center;\n  color: #fff;\n  font-size: 1.25rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  max-height: 300px;\n  z-index: 1;\n  opacity: 1; }\n\n.exemplify-hidden.exemplify-backdrop::after,\n.exemplify-hidden.copy-notice {\n  transition: opacity ease-out 600ms 1400ms, z-index 1ms 1400ms, height 1ms 2000ms;\n  opacity: 0;\n  z-index: 0;\n  height: 0; }\n"
+module.exports = ".btn-group {\n  position: absolute;\n  top: 0;\n  right: 0;\n}\n\n@media only screen and (min-width: 576px) {\n  .btn-group {\n    opacity: 0;\n    margin-top: 2px;\n    -webkit-transform: translate3d(0, 10px, 0);\n            transform: translate3d(0, 10px, 0);\n    transition: opacity 400ms ease-in-out, -webkit-transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out;\n    transition: opacity 400ms ease-in-out, transform 400ms ease-out, -webkit-transform 400ms ease-out;\n  }\n}\n\n@media only screen and (max-width: 576px) {\n  .btn-group {\n    width: 114px;\n    height: calc(2.25rem + 2px);\n  }\n  .btn-group .btn {\n    height: 100%;\n    padding-right: 0.5rem;\n    padding-left: 0.5rem;\n  }\n}\n\n.snippet-wrapper {\n  position: relative;\n}\n\n.snippet-wrapper.exemplify-backdrop::after {\n  content: \"\";\n  display: block;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  left: 0;\n  position: absolute;\n  background: rgba(0, 0, 0, 0.75);\n  z-index: 0;\n  opacity: 1;\n}\n\n.copy-notice {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  text-align: center;\n  color: #fff;\n  font-size: 1.25rem;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  max-height: 300px;\n  z-index: 1;\n  opacity: 1;\n}\n\n.exemplify-hidden.exemplify-backdrop::after,\n.exemplify-hidden.copy-notice {\n  transition: opacity ease-out 600ms 1400ms, z-index 1ms 1400ms, height 1ms 2000ms;\n  opacity: 0;\n  z-index: 0;\n  height: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3RyYXZpcy9idWlsZC9oamFsbWVycy9hbmd1bGFyLWV4ZW1wbGlmeS9wcm9qZWN0cy9leGVtcGxpZnkvc3JjL2xpYi9jb21wb25lbnRzL2NvZGUtc25pcHBldC9jb2RlLXNuaXBwZXQuY29tcG9uZW50LnNjc3MiLCJwcm9qZWN0cy9leGVtcGxpZnkvc3JjL2xpYi9jb21wb25lbnRzL2NvZGUtc25pcHBldC9jb2RlLXNuaXBwZXQuY29tcG9uZW50LnNjc3MiLCIvaG9tZS90cmF2aXMvYnVpbGQvaGphbG1lcnMvYW5ndWxhci1leGVtcGxpZnkvcHJvamVjdHMvZXhlbXBsaWZ5L3NyYy9saWIvc2Nzcy9leGVtcGxpZnktdmFyaWFibGVzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7RUFDRSxtQkFBQTtFQUNBLE9BQUE7RUFDQSxTQUFBO0NDQUQ7O0FERUQ7RUFDRTtJQUNFLFdBQUE7SUFDQSxnQkFBQTtJQUNBLDJDQUFBO1lBQUEsbUNBQUE7SUFDQSx3RUFBQTtJQUFBLGdFQUFBO0lBQUEsa0dBQUE7R0NDRDtDQUNGOztBRENEO0VBQ0U7SUFDRSxhRVA2QjtJRlE3Qiw0QkVUNkI7R0RVOUI7RURBQztJQUNFLGFBQUE7SUFDQSxzQkFBQTtJQUNBLHFCQUFBO0dDRUg7Q0FDRjs7QURDRDtFQUNFLG1CQUFBO0NDQ0Q7O0FEQUM7RUFDRSxZQUFBO0VBQ0EsZUFBQTtFQUNBLGFBQUE7RUFDQSxZQUFBO0VBQ0EsT0FBQTtFQUNBLFFBQUE7RUFDQSxtQkFBQTtFQUNBLGdDQUFBO0VBQ0EsV0FBQTtFQUNBLFdBQUE7Q0NFSDs7QURDRDtFQUNFLG1CQUFBO0VBQ0EsYUFBQTtFQUNBLFlBQUE7RUFDQSxPQUFBO0VBQ0EsbUJBQUE7RUFDQSxZQUFBO0VBQ0EsbUJBQUE7RUFDQSxjQUFBO0VBQ0Esd0JBQUE7RUFDQSxvQkFBQTtFQUNBLGtCQUFBO0VBQ0EsV0FBQTtFQUNBLFdBQUE7Q0NFRDs7QURDRDs7RUFFRSxpRkFBQTtFQUNBLFdBQUE7RUFDQSxXQUFBO0VBQ0EsVUFBQTtDQ0VEIiwiZmlsZSI6InByb2plY3RzL2V4ZW1wbGlmeS9zcmMvbGliL2NvbXBvbmVudHMvY29kZS1zbmlwcGV0L2NvZGUtc25pcHBldC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIkBpbXBvcnQgXCIuLi8uLi9zY3NzL2V4ZW1wbGlmeS12YXJpYWJsZXNcIjtcbi5idG4tZ3JvdXAge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIHRvcDogMDtcbiAgcmlnaHQ6IDA7XG59XG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtaW4td2lkdGggOiAkZXhlbXBsaWZ5LW1vYmlsZS13aWR0aCkge1xuICAuYnRuLWdyb3VwIHtcbiAgICBvcGFjaXR5OiAwO1xuICAgIG1hcmdpbi10b3A6IDJweDtcbiAgICB0cmFuc2Zvcm06IHRyYW5zbGF0ZTNkKDAsIDEwcHgsIDApO1xuICAgIHRyYW5zaXRpb246IG9wYWNpdHkgNDAwbXMgZWFzZS1pbi1vdXQsIHRyYW5zZm9ybSA0MDBtcyBlYXNlLW91dDtcbiAgfVxufVxuQG1lZGlhIG9ubHkgc2NyZWVuIGFuZCAobWF4LXdpZHRoIDogJGV4ZW1wbGlmeS1tb2JpbGUtd2lkdGgpIHtcbiAgLmJ0bi1ncm91cCB7XG4gICAgd2lkdGg6ICRleGVtcGxpZnktY3VzdG9tLXRvb2xiYXItd2lkdGg7XG4gICAgaGVpZ2h0OiAkZXhlbXBsaWZ5LWN1c3RvbS1zZWxlY3QtaGVpZ2h0O1xuICAgIC5idG4ge1xuICAgICAgaGVpZ2h0OiAxMDAlO1xuICAgICAgcGFkZGluZy1yaWdodDogLjVyZW07XG4gICAgICBwYWRkaW5nLWxlZnQ6IC41cmVtO1xuICAgIH1cbiAgfVxufVxuLnNuaXBwZXQtd3JhcHBlciB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgJi5leGVtcGxpZnktYmFja2Ryb3A6OmFmdGVyIHtcbiAgICBjb250ZW50OiAnJztcbiAgICBkaXNwbGF5OiBibG9jaztcbiAgICBoZWlnaHQ6IDEwMCU7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgdG9wOiAwO1xuICAgIGxlZnQ6IDA7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIGJhY2tncm91bmQ6IHJnYmEoMCwwLDAsLjc1KTtcbiAgICB6LWluZGV4OiAwO1xuICAgIG9wYWNpdHk6IDE7XG4gIH1cbn1cbi5jb3B5LW5vdGljZSB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgaGVpZ2h0OiAxMDAlO1xuICB3aWR0aDogMTAwJTtcbiAgdG9wOiAwO1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIGNvbG9yOiAjZmZmO1xuICBmb250LXNpemU6IDEuMjVyZW07XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICBhbGlnbi1pdGVtczogY2VudGVyO1xuICBtYXgtaGVpZ2h0OiAzMDBweDtcbiAgei1pbmRleDogMTtcbiAgb3BhY2l0eTogMTtcbn1cblxuLmV4ZW1wbGlmeS1oaWRkZW4uZXhlbXBsaWZ5LWJhY2tkcm9wOjphZnRlcixcbi5leGVtcGxpZnktaGlkZGVuLmNvcHktbm90aWNlIHtcbiAgdHJhbnNpdGlvbjogb3BhY2l0eSBlYXNlLW91dCAkZXhlbXBsaWZ5LWNvcHktbm90aWNlLXRyYW5zaXRpb24tdGltZSAkZXhlbXBsaWZ5LWNvcHktbm90aWNlLWR1cmF0aW9uLCB6LWluZGV4IDFtcyAkZXhlbXBsaWZ5LWNvcHktbm90aWNlLWR1cmF0aW9uLCBoZWlnaHQgMW1zICgkZXhlbXBsaWZ5LWNvcHktbm90aWNlLXRyYW5zaXRpb24tdGltZSArICRleGVtcGxpZnktY29weS1ub3RpY2UtZHVyYXRpb24pO1xuICBvcGFjaXR5OiAwO1xuICB6LWluZGV4OiAwO1xuICBoZWlnaHQ6IDA7XG59XG5cbiIsIi5idG4tZ3JvdXAge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIHRvcDogMDtcbiAgcmlnaHQ6IDA7XG59XG5cbkBtZWRpYSBvbmx5IHNjcmVlbiBhbmQgKG1pbi13aWR0aDogNTc2cHgpIHtcbiAgLmJ0bi1ncm91cCB7XG4gICAgb3BhY2l0eTogMDtcbiAgICBtYXJnaW4tdG9wOiAycHg7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUzZCgwLCAxMHB4LCAwKTtcbiAgICB0cmFuc2l0aW9uOiBvcGFjaXR5IDQwMG1zIGVhc2UtaW4tb3V0LCB0cmFuc2Zvcm0gNDAwbXMgZWFzZS1vdXQ7XG4gIH1cbn1cbkBtZWRpYSBvbmx5IHNjcmVlbiBhbmQgKG1heC13aWR0aDogNTc2cHgpIHtcbiAgLmJ0bi1ncm91cCB7XG4gICAgd2lkdGg6IDExNHB4O1xuICAgIGhlaWdodDogY2FsYygyLjI1cmVtICsgMnB4KTtcbiAgfVxuICAuYnRuLWdyb3VwIC5idG4ge1xuICAgIGhlaWdodDogMTAwJTtcbiAgICBwYWRkaW5nLXJpZ2h0OiAwLjVyZW07XG4gICAgcGFkZGluZy1sZWZ0OiAwLjVyZW07XG4gIH1cbn1cbi5zbmlwcGV0LXdyYXBwZXIge1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG59XG4uc25pcHBldC13cmFwcGVyLmV4ZW1wbGlmeS1iYWNrZHJvcDo6YWZ0ZXIge1xuICBjb250ZW50OiBcIlwiO1xuICBkaXNwbGF5OiBibG9jaztcbiAgaGVpZ2h0OiAxMDAlO1xuICB3aWR0aDogMTAwJTtcbiAgdG9wOiAwO1xuICBsZWZ0OiAwO1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIGJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC43NSk7XG4gIHotaW5kZXg6IDA7XG4gIG9wYWNpdHk6IDE7XG59XG5cbi5jb3B5LW5vdGljZSB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgaGVpZ2h0OiAxMDAlO1xuICB3aWR0aDogMTAwJTtcbiAgdG9wOiAwO1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIGNvbG9yOiAjZmZmO1xuICBmb250LXNpemU6IDEuMjVyZW07XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICBhbGlnbi1pdGVtczogY2VudGVyO1xuICBtYXgtaGVpZ2h0OiAzMDBweDtcbiAgei1pbmRleDogMTtcbiAgb3BhY2l0eTogMTtcbn1cblxuLmV4ZW1wbGlmeS1oaWRkZW4uZXhlbXBsaWZ5LWJhY2tkcm9wOjphZnRlcixcbi5leGVtcGxpZnktaGlkZGVuLmNvcHktbm90aWNlIHtcbiAgdHJhbnNpdGlvbjogb3BhY2l0eSBlYXNlLW91dCA2MDBtcyAxNDAwbXMsIHotaW5kZXggMW1zIDE0MDBtcywgaGVpZ2h0IDFtcyAyMDAwbXM7XG4gIG9wYWNpdHk6IDA7XG4gIHotaW5kZXg6IDA7XG4gIGhlaWdodDogMDtcbn0iLCIkZXhlbXBsaWZ5LWZvbnQtZmFtaWx5OiBTRk1vbm8tUmVndWxhciwgTWVubG8sIE1vbmFjbywgQ29uc29sYXMsIFwiTGliZXJhdGlvbiBNb25vXCIsIFwiQ291cmllciBOZXdcIiwgbW9ub3NwYWNlICFkZWZhdWx0OyAvLyBkZWZhdWx0IGZvbnQtZmFtaWx5XG4kZXhlbXBsaWZ5LWNvZGUtZm9udC1zaXplOiAxNHB4ICFkZWZhdWx0OyAvLyBkZWZhdWx0IGZvbnQgc2l6ZSBmb3IgY29kZSBzbmlwcGV0XG4kZXhlbXBsaWZ5LWJvcmRlci1jb2xvcjogIzAzN2FmZiAhZGVmYXVsdDsgLy8gYm9yZGVyIGNvbG9yIG9mIGxlZnQgYm9yZGVyXG4kZXhlbXBsaWZ5LXRhYi1ib3JkZXItY29sb3I6ICNlMWUxZTEgIWRlZmF1bHQ7IC8vIHRhYiBib3JkZXIgY29sb3JcbiRleGVtcGxpZnktY29sb3I6ICMwMDAgIWRlZmF1bHQ7IC8vIGRlZmF1bHQgdGV4dCBjb2xvclxuJGV4ZW1wbGlmeS1saW5rLWNvbG9yOiAkZXhlbXBsaWZ5LWJvcmRlci1jb2xvciAhZGVmYXVsdDsgLy8gbGluayBjb2xvciBmb3IgbmF2IGVsZW1lbnRzIGFuZCBsaW5rc1xuJGV4ZW1wbGlmeS1tb2JpbGUtd2lkdGg6IDU3NnB4ICFkZWZhdWx0OyAvLyBicmVha3BvaW50IGZvciBtb2JpbGUgbGF5b3V0XG4kZXhlbXBsaWZ5LXN0cmlwZS1jb2xvcjogI2YxZjFmMSAhZGVmYXVsdDsgLy8gc3RyaXBlIGNvbG9yIG9mIGNvZGUgc25pcHBldCBiYWNrZ3JvdW5kXG4kZXhlbXBsaWZ5LWN1c3RvbS1zZWxlY3QtaGVpZ2h0OiBjYWxjKDIuMjVyZW0gKyAycHgpICFkZWZhdWx0OyAvLyB0aGUgaGVpZ2h0IGZvciBzZWxlY3QgZWxlbWVudFxuJGV4ZW1wbGlmeS1jdXN0b20tdG9vbGJhci13aWR0aDogMTE0cHggIWRlZmF1bHQ7IC8vIHRoZSB3aWR0aCBuZWVkIGZvciBjb3B5IGFuZCB0b2dnbGUgc2hvdy9oaWRlIGJ1dHRvbnNcbiRleGVtcGxpZnktY29weS1ub3RpY2UtZHVyYXRpb246IDE0MDBtcyAhZGVmYXVsdDsgLy8gZHVyYXRpb24gd2hlbiBjb3B5IG5vdGljZSBpcyBkaXNwbGF5ZWRcbiRleGVtcGxpZnktY29weS1ub3RpY2UtdHJhbnNpdGlvbi10aW1lOiA2MDBtcyAhZGVmYXVsdDsgLy8gY29weSBub3RpY2UgdHJhbnNpdGlvbiB0aW1lXG5cbi8vIGRlZmF1bHQgY29sb3JzIGZvciBjb2RlIHNuaXBwZXQgdGFnc1xuJGV4ZW1wbGlmeS1jb2xvcnM6XG4gIChcbiAgICBvbmU6ICM2NjEwZjIsXG4gICAgdHdvOiAjMDBhOTg1LFxuICAgIHRocmVlOiAjMTdhMmI4LFxuICAgIGZvdXI6ICMwMDkyRTEsXG4gICAgZml2ZTogI2U4M2U4Y1xuICApICFkZWZhdWx0O1xuIl19 */"
 
 /***/ }),
 
@@ -9898,13 +10654,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_code_highlight_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/code-highlight.service */ "./projects/exemplify/src/lib/services/code-highlight.service.ts");
 /* harmony import */ var _services_utilities_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/utilities.service */ "./projects/exemplify/src/lib/services/utilities.service.ts");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9993,7 +10752,7 @@ var CodeSnippetComponent = /** @class */ (function () {
             // guess file extension based on source file, note this won't work when source is inline or when raw-loader is used
             var e = snippet.src.split('.');
             var extension = e[e.length - 1];
-            this._snippet = __assign({}, snippet, { code: snippet.src.indexOf('http') !== -1 ? this.getSourceCode(snippet.src, snippet.selector) : Object(rxjs__WEBPACK_IMPORTED_MODULE_6__["of"])(snippet.src), lang: snippet.lang || (extension.length > 4 ? 'markup' : extension) // if lang is omitted use extension if length is not greater than 4 otherwise default to markup
+            this._snippet = __assign({}, snippet, { code: snippet.src.substring(0, 4) === 'http' ? this.getSourceCode(snippet.src, snippet.selector) : Object(rxjs__WEBPACK_IMPORTED_MODULE_6__["of"])(snippet.src), lang: snippet.lang || (extension.length > 4 ? 'markup' : extension) // if lang is omitted use extension if length is not greater than 4 otherwise default to markup
              });
             // when snippet has loaded highlight the code and store the string representation too (needed for copying etc).
             this.snippet.code
@@ -10015,7 +10774,7 @@ var CodeSnippetComponent = /** @class */ (function () {
     CodeSnippetComponent.prototype.getSourceCode = function (url, selector) {
         var _this = this;
         return this.http.get(url, { responseType: 'text' })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(function (data) {
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (data) {
             if (selector) {
                 return _this.utilities.parseHtml(data, selector);
             }
@@ -10073,7 +10832,7 @@ var CodeSnippetComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"nav-item\" *ngFor=\"let snippet of sources\">\n    <button class=\"btn-link nav-link\" [ngClass]=\"{'active': snippet.name === activeSnippet.name}\"\n            (click)=\"setActiveSnippet(snippet)\">{{snippet.name}}\n    </button>\n  </li>\n</ul>\n<select class=\"custom-select d-sm-none\" [compareWith]=\"compareFn\" [(ngModel)]=\"activeSnippet\">\n  <option *ngFor=\"let snippet of sources\" [ngValue]=\"snippet\">{{snippet.name}}</option>\n</select>\n<code-snippet [snippet]=\"activeSnippet\" [texts]=\"texts\"></code-snippet>\n"
+module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"nav-item\" *ngFor=\"let snippet of sources\">\n    <button class=\"nav-link\" [ngClass]=\"{'active': snippet.name === activeSnippet.name}\"\n            (click)=\"setActiveSnippet(snippet)\">{{snippet.name}}\n    </button>\n  </li>\n</ul>\n<select class=\"custom-select d-sm-none\" [compareWith]=\"compareFn\" [(ngModel)]=\"activeSnippet\">\n  <option *ngFor=\"let snippet of sources\" [ngValue]=\"snippet\">{{snippet.name}}</option>\n</select>\n<code-snippet [snippet]=\"activeSnippet\" [texts]=\"texts\"></code-snippet>\n"
 
 /***/ }),
 
@@ -10084,7 +10843,7 @@ module.exports = "<ul class=\"nav nav-tabs d-none d-sm-flex\">\n  <li class=\"na
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  display: block;\n  position: relative;\n  margin-top: 1rem; }\n  :host:hover ::ng-deep.btn-group {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0); }\n  :host:hover ::ng-deep.btn-group .btn.not-active {\n      text-decoration: underline; }\n  @media only screen and (max-width: 576px) {\n  .custom-select {\n    padding-right: 114px;\n    background-position-x: calc(100% - 114px - 8px); } }\n"
+module.exports = ":host {\n  display: block;\n  position: relative;\n  margin-top: 1rem;\n}\n:host:hover ::ng-deep.btn-group {\n  opacity: 1;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n}\n:host:hover ::ng-deep.btn-group .btn.not-active {\n  text-decoration: underline;\n}\n.nav-link:not(.active) {\n  border-bottom: inherit;\n}\n@media only screen and (max-width: 576px) {\n  .custom-select {\n    padding-right: 114px;\n    background-position-x: calc(100% - 114px - 8px);\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3RyYXZpcy9idWlsZC9oamFsbWVycy9hbmd1bGFyLWV4ZW1wbGlmeS9wcm9qZWN0cy9leGVtcGxpZnkvc3JjL2xpYi9jb21wb25lbnRzL2V4ZW1wbGlmeS9leGVtcGxpZnkuY29tcG9uZW50LnNjc3MiLCJwcm9qZWN0cy9leGVtcGxpZnkvc3JjL2xpYi9jb21wb25lbnRzL2V4ZW1wbGlmeS9leGVtcGxpZnkuY29tcG9uZW50LnNjc3MiLCIvaG9tZS90cmF2aXMvYnVpbGQvaGphbG1lcnMvYW5ndWxhci1leGVtcGxpZnkvcHJvamVjdHMvZXhlbXBsaWZ5L3NyYy9saWIvc2Nzcy9leGVtcGxpZnktdmFyaWFibGVzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7RUFDRSxlQUFBO0VBQ0EsbUJBQUE7RUFDQSxpQkFBQTtDQ0FEO0FEQ0M7RUFDRSxXQUFBO0VBQ0Esd0NBQUE7VUFBQSxnQ0FBQTtDQ0NIO0FEQUc7RUFDRSwyQkFBQTtDQ0VMO0FER0Q7RUFDRSx1QkFBQTtDQ0FEO0FER0Q7RUFDRTtJQUNFLHFCRVg2QjtJRlk3QixnREFBQTtHQ0FEO0NBQ0YiLCJmaWxlIjoicHJvamVjdHMvZXhlbXBsaWZ5L3NyYy9saWIvY29tcG9uZW50cy9leGVtcGxpZnkvZXhlbXBsaWZ5LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCBcIi4uLy4uL3Njc3MvZXhlbXBsaWZ5LXZhcmlhYmxlc1wiO1xuOmhvc3Qge1xuICBkaXNwbGF5OiBibG9jaztcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBtYXJnaW4tdG9wOiAxcmVtO1xuICAmOmhvdmVyIDo6bmctZGVlcC5idG4tZ3JvdXAge1xuICAgIG9wYWNpdHk6IDE7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUzZCgwLCAwLCAwKTtcbiAgICAuYnRuLm5vdC1hY3RpdmUge1xuICAgICAgdGV4dC1kZWNvcmF0aW9uOiB1bmRlcmxpbmU7XG4gICAgfVxuICB9XG59XG5cbi5uYXYtbGluazpub3QoLmFjdGl2ZSkge1xuICBib3JkZXItYm90dG9tOiBpbmhlcml0O1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGggOiAkZXhlbXBsaWZ5LW1vYmlsZS13aWR0aCkge1xuICAuY3VzdG9tLXNlbGVjdCB7XG4gICAgcGFkZGluZy1yaWdodDogJGV4ZW1wbGlmeS1jdXN0b20tdG9vbGJhci13aWR0aDtcbiAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uLXg6IGNhbGMoMTAwJSAtICN7JGV4ZW1wbGlmeS1jdXN0b20tdG9vbGJhci13aWR0aH0gLSA4cHgpO1xuICB9XG59XG4iLCI6aG9zdCB7XG4gIGRpc3BsYXk6IGJsb2NrO1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIG1hcmdpbi10b3A6IDFyZW07XG59XG46aG9zdDpob3ZlciA6Om5nLWRlZXAuYnRuLWdyb3VwIHtcbiAgb3BhY2l0eTogMTtcbiAgdHJhbnNmb3JtOiB0cmFuc2xhdGUzZCgwLCAwLCAwKTtcbn1cbjpob3N0OmhvdmVyIDo6bmctZGVlcC5idG4tZ3JvdXAgLmJ0bi5ub3QtYWN0aXZlIHtcbiAgdGV4dC1kZWNvcmF0aW9uOiB1bmRlcmxpbmU7XG59XG5cbi5uYXYtbGluazpub3QoLmFjdGl2ZSkge1xuICBib3JkZXItYm90dG9tOiBpbmhlcml0O1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6IDU3NnB4KSB7XG4gIC5jdXN0b20tc2VsZWN0IHtcbiAgICBwYWRkaW5nLXJpZ2h0OiAxMTRweDtcbiAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uLXg6IGNhbGMoMTAwJSAtIDExNHB4IC0gOHB4KTtcbiAgfVxufSIsIiRleGVtcGxpZnktZm9udC1mYW1pbHk6IFNGTW9uby1SZWd1bGFyLCBNZW5sbywgTW9uYWNvLCBDb25zb2xhcywgXCJMaWJlcmF0aW9uIE1vbm9cIiwgXCJDb3VyaWVyIE5ld1wiLCBtb25vc3BhY2UgIWRlZmF1bHQ7IC8vIGRlZmF1bHQgZm9udC1mYW1pbHlcbiRleGVtcGxpZnktY29kZS1mb250LXNpemU6IDE0cHggIWRlZmF1bHQ7IC8vIGRlZmF1bHQgZm9udCBzaXplIGZvciBjb2RlIHNuaXBwZXRcbiRleGVtcGxpZnktYm9yZGVyLWNvbG9yOiAjMDM3YWZmICFkZWZhdWx0OyAvLyBib3JkZXIgY29sb3Igb2YgbGVmdCBib3JkZXJcbiRleGVtcGxpZnktdGFiLWJvcmRlci1jb2xvcjogI2UxZTFlMSAhZGVmYXVsdDsgLy8gdGFiIGJvcmRlciBjb2xvclxuJGV4ZW1wbGlmeS1jb2xvcjogIzAwMCAhZGVmYXVsdDsgLy8gZGVmYXVsdCB0ZXh0IGNvbG9yXG4kZXhlbXBsaWZ5LWxpbmstY29sb3I6ICRleGVtcGxpZnktYm9yZGVyLWNvbG9yICFkZWZhdWx0OyAvLyBsaW5rIGNvbG9yIGZvciBuYXYgZWxlbWVudHMgYW5kIGxpbmtzXG4kZXhlbXBsaWZ5LW1vYmlsZS13aWR0aDogNTc2cHggIWRlZmF1bHQ7IC8vIGJyZWFrcG9pbnQgZm9yIG1vYmlsZSBsYXlvdXRcbiRleGVtcGxpZnktc3RyaXBlLWNvbG9yOiAjZjFmMWYxICFkZWZhdWx0OyAvLyBzdHJpcGUgY29sb3Igb2YgY29kZSBzbmlwcGV0IGJhY2tncm91bmRcbiRleGVtcGxpZnktY3VzdG9tLXNlbGVjdC1oZWlnaHQ6IGNhbGMoMi4yNXJlbSArIDJweCkgIWRlZmF1bHQ7IC8vIHRoZSBoZWlnaHQgZm9yIHNlbGVjdCBlbGVtZW50XG4kZXhlbXBsaWZ5LWN1c3RvbS10b29sYmFyLXdpZHRoOiAxMTRweCAhZGVmYXVsdDsgLy8gdGhlIHdpZHRoIG5lZWQgZm9yIGNvcHkgYW5kIHRvZ2dsZSBzaG93L2hpZGUgYnV0dG9uc1xuJGV4ZW1wbGlmeS1jb3B5LW5vdGljZS1kdXJhdGlvbjogMTQwMG1zICFkZWZhdWx0OyAvLyBkdXJhdGlvbiB3aGVuIGNvcHkgbm90aWNlIGlzIGRpc3BsYXllZFxuJGV4ZW1wbGlmeS1jb3B5LW5vdGljZS10cmFuc2l0aW9uLXRpbWU6IDYwMG1zICFkZWZhdWx0OyAvLyBjb3B5IG5vdGljZSB0cmFuc2l0aW9uIHRpbWVcblxuLy8gZGVmYXVsdCBjb2xvcnMgZm9yIGNvZGUgc25pcHBldCB0YWdzXG4kZXhlbXBsaWZ5LWNvbG9yczpcbiAgKFxuICAgIG9uZTogIzY2MTBmMixcbiAgICB0d286ICMwMGE5ODUsXG4gICAgdGhyZWU6ICMxN2EyYjgsXG4gICAgZm91cjogIzAwOTJFMSxcbiAgICBmaXZlOiAjZTgzZThjXG4gICkgIWRlZmF1bHQ7XG4iXX0= */"
 
 /***/ }),
 
@@ -10100,13 +10859,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExemplifyComponent", function() { return ExemplifyComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _services_utilities_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/utilities.service */ "./projects/exemplify/src/lib/services/utilities.service.ts");
-var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -10518,7 +11280,7 @@ module.exports = "<div class=\"container-fluid\">\n  <br>\n  <h1>\n    Angular E
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container-fluid {\n  max-width: 920px; }\n"
+module.exports = ".container-fluid {\n  max-width: 900px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3RyYXZpcy9idWlsZC9oamFsbWVycy9hbmd1bGFyLWV4ZW1wbGlmeS9zcmMvYXBwL2FwcC5jb21wb25lbnQuc2NzcyIsInNyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsaUJBQUE7Q0NDRCIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jb250YWluZXItZmx1aWQge1xuICBtYXgtd2lkdGg6IDkwMHB4O1xufVxuIiwiLmNvbnRhaW5lci1mbHVpZCB7XG4gIG1heC13aWR0aDogOTAwcHg7XG59Il19 */"
 
 /***/ }),
 
@@ -10554,8 +11316,8 @@ var AppComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
-            styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/app.component.scss")],
-            encapsulation: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewEncapsulation"].Emulated
+            encapsulation: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewEncapsulation"].Emulated,
+            styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/app.component.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], AppComponent);
@@ -10788,8 +11550,7 @@ var InlineSnippetComponent = /** @class */ (function () {
     InlineSnippetComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'inline-snippet',
-            template: __webpack_require__(/*! ./inline-snippet.component.html */ "./src/app/components/inline-snippet/inline-snippet.component.html"),
-            styles: []
+            template: __webpack_require__(/*! ./inline-snippet.component.html */ "./src/app/components/inline-snippet/inline-snippet.component.html")
         }),
         __metadata("design:paramtypes", [])
     ], InlineSnippetComponent);
@@ -10807,7 +11568,7 @@ var InlineSnippetComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".foo {\n  background: pink;\n}\n\n.bar {\n  color: purple;\n}\n"
+module.exports = ".foo {\n  background: pink;\n}\n\n.bar {\n  color: purple;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9yYXctbG9hZGVyL2Zvby5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsaUJBQWlCO0NBQ2xCOztBQUVEO0VBQ0UsY0FBYztDQUNmIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50cy9yYXctbG9hZGVyL2Zvby5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmZvbyB7XG4gIGJhY2tncm91bmQ6IHBpbms7XG59XG5cbi5iYXIge1xuICBjb2xvcjogcHVycGxlO1xufVxuIl19 */"
 
 /***/ }),
 
@@ -10928,7 +11689,7 @@ var RawLoaderComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4 class=\"mt-5\">The less basic reality</h4>\n<p>A real app or library is usually more complex and most often our code is split in to multiple files (JavaScript, TypeScript, html, css etc.), which is a good practice for organizing our code but i also poses a problem when we're trying to keep examples up to date. So how do we solve that last problem now that our code is split into multiple files?</p>\n<p class=\"alert alert-info\">The following example loads external sources and displays them in tabs once they're fetched. One thing that's great with this approach is that we don't need to think about escaping strings in html templates (for more info on that topic scroll down). However, we can still target specific parts of the code by passing a selector with config so we could have multiple examples in the same html template but display them individually.</p>\n<p>For the sake of demonstrating the concept I've added an example inside another example so the first one is what you want to achieve and the second code block is actually how you'd set it up.</p>\n<strong class=\"text-muted\">Example:</strong>\n<div class=\"card mb-4\" id=\"metaFormExample\">\n  <div class=\"card-body\">\n    <form id=\"formExample\">\n      <div class=\"form-group row\">\n        <label for=\"inputEmail3\" class=\"col-sm-2 col-form-label\">Email</label>\n        <div class=\"col-sm-10\">\n          <input type=\"email\" class=\"form-control\" id=\"inputEmail3\" placeholder=\"Email\">\n        </div>\n      </div>\n      <div class=\"form-group row\">\n        <label for=\"inputPassword3\" class=\"col-sm-2 col-form-label\">Password</label>\n        <div class=\"col-sm-10\">\n          <input type=\"password\" class=\"form-control\" id=\"inputPassword3\" placeholder=\"Password\">\n        </div>\n      </div>\n      <fieldset class=\"form-group row\">\n        <legend class=\"col-form-legend col-sm-2\">Radios</legend>\n        <div class=\"col-sm-10\">\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios1\" value=\"option1\" checked>\n              Option one is this and that&mdash;be sure to include why it's great\n            </label>\n          </div>\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios2\" value=\"option2\">\n              Option two can be something else and selecting it will deselect option one\n            </label>\n          </div>\n          <div class=\"form-check disabled\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios3\" value=\"option3\" disabled>\n              Option three is disabled\n            </label>\n          </div>\n        </div>\n      </fieldset>\n      <div class=\"form-group row\">\n        <label class=\"col-sm-2\">Checkbox</label>\n        <div class=\"col-sm-10\">\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"checkbox\"> Check me out\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group row\">\n        <div class=\"offset-sm-2 col-sm-10\">\n          <button type=\"submit\" class=\"btn btn-primary btn-custom\" (click)=\"signIn()\">Sign in</button>\n        </div>\n      </div>\n    </form>\n    <exemplify [sources]=\"externalSources\"></exemplify>\n  </div>\n</div>\n<strong class=\"text-muted\">Meta code example</strong>\n<exemplify [selector]=\"'#metaFormExample'\" [show]=\"false\"></exemplify>\n"
+module.exports = "<h4 class=\"mt-5\">The less basic reality</h4>\n<p>A real app or library is usually more complex and most often our code is split in to multiple files (JavaScript, TypeScript, html, css etc.), which is a good practice for organizing our code but i also poses a problem when we're trying to keep examples up to date. So how do we solve that last problem now that our code is split into multiple files?</p>\n<p class=\"alert alert-info\">The following example loads external sources and displays them in tabs once they're fetched. One thing that's great with this approach is that we don't need to think about escaping strings in html templates (for more info on that topic scroll down). However, we can still target specific parts of the code by passing a selector with config so we could have multiple examples in the same html template but display them individually.</p>\n<p>For the sake of demonstrating the concept I've added an example inside another example so the first one is what you want to achieve and the second code block is actually how you'd set it up.</p>\n<strong class=\"text-muted\">Example:</strong>\n<div class=\"card mb-4\" id=\"metaFormExample\">\n  <div class=\"card-body\">\n    <form id=\"formExample\">\n      <div class=\"form-group row\">\n        <label for=\"inputEmail3\" class=\"col-sm-2 col-form-label\">Email</label>\n        <div class=\"col-sm-10\">\n          <input type=\"email\" class=\"form-control\" id=\"inputEmail3\" placeholder=\"Email\">\n        </div>\n      </div>\n      <div class=\"form-group row\">\n        <label for=\"inputPassword3\" class=\"col-sm-2 col-form-label\">Password</label>\n        <div class=\"col-sm-10\">\n          <input type=\"password\" class=\"form-control\" id=\"inputPassword3\" placeholder=\"Password\">\n        </div>\n      </div>\n      <fieldset class=\"form-group row\">\n        <legend class=\"col-form-legend col-sm-2\">Radios</legend>\n        <div class=\"col-sm-10\">\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios1\" value=\"option1\" checked>\n              Option one is this and that&mdash;be sure to include why it's great\n            </label>\n          </div>\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios2\" value=\"option2\">\n              Option two can be something else and selecting it will deselect option one\n            </label>\n          </div>\n          <div class=\"form-check disabled\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"radio\" name=\"gridRadios\" id=\"gridRadios3\" value=\"option3\" disabled>\n              Option three is disabled\n            </label>\n          </div>\n        </div>\n      </fieldset>\n      <div class=\"form-group row\">\n        <label class=\"col-sm-2\">Checkbox</label>\n        <div class=\"col-sm-10\">\n          <div class=\"form-check\">\n            <label class=\"form-check-label\">\n              <input class=\"form-check-input\" type=\"checkbox\"> Check me out\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group row\">\n        <div class=\"offset-sm-2 col-sm-10\">\n          <button type=\"submit\" class=\"btn btn-primary btn-custom\" (click)=\"signIn()\">Sign in</button>\n        </div>\n      </div>\n    </form>\n    <exemplify [sources]=\"externalSources\"></exemplify>\n  </div>\n</div>\n<strong class=\"text-muted\">Meta code example</strong>\n<exemplify [selector]=\"'#metaFormExample'\" [sources]=\"metaExampleConfig\"></exemplify>\n"
 
 /***/ }),
 
@@ -10939,7 +11700,7 @@ module.exports = "<h4 class=\"mt-5\">The less basic reality</h4>\n<p>A real app 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".btn-custom {\n  background: lightseagreen;\n  border: teal; }\n\n.btn-custom:active {\n  background: teal;\n  border: teal; }\n"
+module.exports = ".btn-custom {\n  background: lightseagreen;\n  border: teal;\n}\n\n.btn-custom:active {\n  background: teal;\n  border: teal;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3RyYXZpcy9idWlsZC9oamFsbWVycy9hbmd1bGFyLWV4ZW1wbGlmeS9zcmMvYXBwL2NvbXBvbmVudHMvc291cmNlcy9mb3JtLmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9jb21wb25lbnRzL3NvdXJjZXMvZm9ybS5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLDBCQUFBO0VBQ0EsYUFBQTtDQ0NEOztBREVEO0VBQ0UsaUJBQUE7RUFDQSxhQUFBO0NDQ0QiLCJmaWxlIjoic3JjL2FwcC9jb21wb25lbnRzL3NvdXJjZXMvZm9ybS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5idG4tY3VzdG9tIHtcbiAgYmFja2dyb3VuZDogbGlnaHRzZWFncmVlbjtcbiAgYm9yZGVyOiB0ZWFsO1xufVxuXG4uYnRuLWN1c3RvbTphY3RpdmUge1xuICBiYWNrZ3JvdW5kOiB0ZWFsO1xuICBib3JkZXI6IHRlYWw7XG59XG4iLCIuYnRuLWN1c3RvbSB7XG4gIGJhY2tncm91bmQ6IGxpZ2h0c2VhZ3JlZW47XG4gIGJvcmRlcjogdGVhbDtcbn1cblxuLmJ0bi1jdXN0b206YWN0aXZlIHtcbiAgYmFja2dyb3VuZDogdGVhbDtcbiAgYm9yZGVyOiB0ZWFsO1xufSJdfQ== */"
 
 /***/ }),
 
@@ -10969,7 +11730,8 @@ var FormComponent = /** @class */ (function () {
         this.externalSources = [{
                 name: 'form.component.html',
                 src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.html',
-                lang: 'markup'
+                lang: 'markup',
+                selector: 'form'
             }, {
                 name: 'form.component.ts',
                 src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.ts',
@@ -10984,6 +11746,14 @@ var FormComponent = /** @class */ (function () {
                 lang: 'markup',
                 selector: '.alert.alert-info'
             }];
+        /* load meta example */
+        this.metaExampleConfig = [
+            {
+                name: 'source config',
+                src: "\n  externalSources = [{\n    name: 'form.component.html',\n    src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.html',\n    lang: 'markup',\n    selector: 'form'\n  }, {\n    name: 'form.component.ts',\n    src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.ts',\n    lang: 'typescript'\n  }, {\n    name: 'form.component.scss',\n    src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.scss',\n    lang: 'css'\n  }, {\n    name: 'markup for alert',\n    src: 'https://raw.githubusercontent.com/hjalmers/angular-markup-example/master/src/app/components/sources/form.component.html',\n    lang: 'markup',\n    selector: '.alert.alert-info'\n  }]\n    ",
+                lang: 'javascript'
+            }
+        ];
         this.signIn = function () {
             console.log('you clicked sign in');
         };
@@ -11028,7 +11798,7 @@ var environment = {
         }
         return version;
     })(),
-    travis_build_number: '176'
+    travis_build_number: '532'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
