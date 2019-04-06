@@ -70,7 +70,7 @@
     "@types/jasminewd2": "2.0.6",
     "@types/node": "8.10.45",
     "autoprefixer": "9.5.0",
-    "clean-css-cli": "4.2.1",
+    "clean-css-cli": "4.3.0",
     "codelyzer": "5.0.0",
     "commitizen": "3.0.7",
     "copyfiles": "2.1.0",
