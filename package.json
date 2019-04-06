@@ -87,7 +87,7 @@
     "postcss-cli": "6.1.2",
     "prismjs": "1.16.0",
     "protractor": "5.4.2",
-    "raw-loader": "^1.0.0",
+    "raw-loader": "1.0.0",
     "replace": "1.1.0",
     "rimraf": "2.6.3",
     "semantic-release": "15.13.3",
@@ -97,7 +97,7 @@
     "tsickle": "0.34.3",
     "tslib": "1.9.3",
     "tslint": "5.15.0",
-    "typescript": "^3.2.4"
+    "typescript": "3.2.4"
   },
   "dependencies": {
     "@angular/common": "7.2.12",
@@ -111,6 +111,6 @@
     "bootstrap": "4.3.1",
     "core-js": "2.6.5",
     "rxjs": "6.4.0",
-    "zone.js": "^0.8.29"
+    "zone.js": "0.8.29"
   }
 }
