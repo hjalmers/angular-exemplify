@@ -1,14 +1,14 @@
-import { AngularMarkupExamplePage } from './app.po';
+import { AngularExemplifyPage } from './app.po';
 
-describe('angular-markup-example App', function() {
-  let page: AngularMarkupExamplePage;
+describe('angular-exemplify App', function() {
+  let page: AngularExemplifyPage;
 
   beforeEach(() => {
-    page = new AngularMarkupExamplePage();
+    page = new AngularExemplifyPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message saying Angular Exemplify', async () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Angular Exemplify');
   });
 });

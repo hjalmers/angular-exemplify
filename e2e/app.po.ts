@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class AngularMarkupExamplePage {
+export class AngularExemplifyPage {
   navigateTo() {
     return browser.get('/');
   }
