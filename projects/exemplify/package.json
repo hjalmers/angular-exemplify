@@ -4,8 +4,8 @@
   "author": "Robert Hjalmers <opensource@rhj.se> (http://www.linkedin.com/in/robert-hjalmers/)",
   "version": "0.0.0-semantically-released",
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^11.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^11.0.0",
     "prismjs": "^1.15.0"
   }
 }
