@@ -63,7 +63,7 @@
     "@angular-devkit/build-angular": "0.13.8",
     "@angular-devkit/build-ng-packagr": "0.13.8",
     "@angular/cli": "7.3.8",
-    "@angular/compiler-cli": "7.2.12",
+    "@angular/compiler-cli": "7.2.16",
     "@commitlint/cli": "7.5.2",
     "@commitlint/config-conventional": "7.5.0",
     "@types/jasmine": "3.3.12",
@@ -100,17 +100,17 @@
     "typescript": "3.2.4"
   },
   "dependencies": {
-    "@angular/common": "7.2.12",
-    "@angular/compiler": "7.2.12",
-    "@angular/core": "7.2.12",
-    "@angular/forms": "7.2.12",
-    "@angular/http": "7.2.12",
-    "@angular/platform-browser": "7.2.12",
-    "@angular/platform-browser-dynamic": "7.2.12",
-    "@angular/router": "7.2.12",
+    "@angular/common": "7.2.16",
+    "@angular/compiler": "7.2.16",
+    "@angular/core": "7.2.16",
+    "@angular/forms": "7.2.16",
+    "@angular/http": "7.2.16",
+    "@angular/platform-browser": "7.2.16",
+    "@angular/platform-browser-dynamic": "7.2.16",
+    "@angular/router": "7.2.16",
     "bootstrap": "4.3.1",
     "core-js": "2.6.5",
     "rxjs": "6.4.0",
-    "zone.js": "0.8.29"
+    "zone.js": "0.15.0"
   }
 }
